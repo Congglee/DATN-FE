@@ -16,6 +16,12 @@ export default defineNuxtConfig({
   googleFonts: {
     // Options
   },
+  runtimeConfig: {
+    public: {
+      URL_API: process.env.URL_API,
+      USER_API: process.env.USER_API,
+    },
+  },
   postcss: {
     plugins: {
       tailwindcss: {},
