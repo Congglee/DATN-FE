@@ -1,19 +1,28 @@
-import { AUTH } from "./../utils/endpoint";
 import { defineStore } from "pinia";
 
-interface ILogin {
-  username: string;
-  password: string;
-}
-
 export const useTestStore = defineStore({
-  id: "auth",
-  state: () => ({}),
+  id: "test",
+  state: () => ({
+    users: [],
+  }),
   actions: {
-    async getUsers(payload: ILogin) {
-      const res = await useFetchUser(`users`, {
-        method: "GET",
-      });
+    async getUsers(payload: any) {
+      const res = await useFetchUser(
+        `https://jsonplaceholder.typicode.com/users`,
+        {
+          method: "GET",
+        }
+      );
+      return res;
+    },
+    async addUser(payload: any) {
+      const res = await useFetchUser(
+        `https://jsonplaceholder.typicode.com/users`,
+        {
+          method: "POST",
+          body: payload,
+        }
+      );
       return res;
     },
   },

@@ -1,4 +1,5 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
+import svgLoader from "vite-svg-loader";
 export default defineNuxtConfig({
   devtools: { enabled: true },
   css: [
@@ -6,21 +7,25 @@ export default defineNuxtConfig({
     "@mdi/font/css/materialdesignicons.min.css",
     "~/assets/css/main.css",
   ],
-  modules: ["@pinia/nuxt", "@nuxtjs/google-fonts"],
+  modules: ["@pinia/nuxt", "@nuxtjs/google-fonts", "@vueuse/nuxt"],
   pinia: {
     autoImports: [
       // automatically imports `defineStore`
       ["defineStore", "definePiniaStore"], // import { defineStore as definePiniaStore } from 'pinia'
     ],
   },
-  googleFonts: {
-    // Options
+  components: {
+    global: true,
+    dirs: [{ path: "~/components/global", prefix: "g-" }],
   },
   runtimeConfig: {
     public: {
       URL_API: process.env.URL_API,
       USER_API: process.env.USER_API,
     },
+  },
+  vite: {
+    plugins: [svgLoader({})],
   },
   postcss: {
     plugins: {

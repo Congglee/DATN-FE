@@ -1,9 +1,13 @@
 <script setup>
 import Sidebar from "@/components/layouts/Sidebar/index.vue";
-
+import HomePageHeader from "@/components/layouts/HomePageHeader/index.vue";
+const route = useRoute();
 </script>
 <template>
-  <div class="tw-flex tw-h-screen tw-overflow-hidden">
+  <div
+    class="tw-flex tw-h-screen tw-overflow-hidden"
+    v-if="route.fullPath.includes('/quan-ly')"
+  >
     <Sidebar />
     <div
       class="tw-relative tw-flex tw-flex-1 tw-flex-col tw-overflow-y-auto tw-overflow-x-hidden"
@@ -14,4 +18,5 @@ import Sidebar from "@/components/layouts/Sidebar/index.vue";
       </div>
     </div>
   </div>
+  <slot/>
 </template>
