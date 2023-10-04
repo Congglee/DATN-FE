@@ -1,15 +1,16 @@
 <script setup>
-import { useTestStore } from "@/store/test.ts";
+// import { useTestStore } from "@/store/test.ts";
 
-const testStore = useTestStore();
+// const testStore = useTestStore();
 
-const fetch = async () => {
-  const res = await testStore.getUsers();
-  if (res.data) {
-    console.log(res.data);
-  }
-};
+// const fetch = async () => {
+//   const res = await testStore.getUsers();
+//   if (res.data) {
+//     console.log(res.data);
+//   }
+// };
 
-fetch();
+// fetch();
+
 </script>
 <template></template>

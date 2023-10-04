@@ -2,7 +2,6 @@
 
 //route
 const route = useRoute();
-console.log(route.params.roomId)
 //state
 
 //store

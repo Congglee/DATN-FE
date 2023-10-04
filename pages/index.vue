@@ -1,6 +1,7 @@
-<script setup></script>
+<script setup>
+navigateTo('/trang-chu')
+</script>
 <template>
-    <div>
-        <p class="tw-text-red-500">asdask</p>
-    </div>
+  <div>
+  </div>
 </template>
