@@ -1,12 +1,12 @@
 <script setup>
 import Sidebar from "@/components/layouts/Sidebar/index.vue";
-import HomePageHeader from "@/components/layouts/HomePageHeader/index.vue";
 const route = useRoute();
+
 </script>
 <template>
   <div
     class="tw-flex tw-h-screen tw-overflow-hidden"
-    v-if="route.fullPath.includes('/quan-ly')"
+    v-if="route.params.roomId"
   >
     <Sidebar />
     <div

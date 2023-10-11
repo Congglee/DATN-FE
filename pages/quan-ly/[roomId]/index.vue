@@ -1,16 +1,23 @@
-<script setup>
-// import { useTestStore } from "@/store/test.ts";
+<script lang="ts">
+import {
+  Chart as ChartJS,
+  Tooltip,
+  Legend,
+  PointElement,
+  LinearScale,
+} from "chart.js";
+import { Bubble } from "vue-chartjs";
+import * as chartConfig from "./chartConfig.js";
 
-// const testStore = useTestStore();
+ChartJS.register(LinearScale, PointElement, Tooltip, Legend);
 
-// const fetch = async () => {
-//   const res = await testStore.getUsers();
-//   if (res.data) {
-//     console.log(res.data);
-//   }
-// };
-
-// fetch();
-
+export default {
+  name: "App",
+  components: {
+    Bubble,
+  },
+  data() {
+    return chartConfig;
+  },
+};
 </script>
-<template></template>
