@@ -1,6 +1,7 @@
 <script setup>
 import listMenu from "@/components/layouts/Sidebar/menu";
 import { mdiChevronRight } from "@mdi/js";
+import IconArrowLeft from "@/assets/svg/arrow-left.svg";
 //store
 
 //composable
@@ -11,8 +12,25 @@ import { mdiChevronRight } from "@mdi/js";
 </script>
 <template>
   <div
-    class="tw-h-screen tw-max-w-[232px] tw-bg-white tw-rounded-r-2xl tw-shadow-[4px_0px_50px_0px_rgba(0,0,0,0.15)] tw-relative tw-w-full tw-ease-in tw-duration-150"
+    class="tw-h-screen tw-max-w-[280px] tw-shadow-[4px_0px_50px_0px_rgba(0,0,0,0.15)] tw-relative tw-w-full tw-ease-in tw-duration-150 tw-pt-4 tw-px-4"
   >
+    <div
+      class="tw-mb-4 tw-flex tw-flex-col tw-gap-y-1 tw-items-center tw-cursor-pointer"
+    >
+      <span class="tw-text-[20px] tw-font-extrabold tw-uppercase"
+        >Quản lý phòng trọ</span
+      >
+      <span
+        class="tw-text-[20px] tw-font-extrabold tw-uppercase tw-text-[#f88125]"
+        >Poly Home Rent</span
+      >
+    </div>
+    <g-button size="none" class="tw-w-full tw-py-2" rounded="full">
+      <template #prepend>
+        <IconArrowLeft />
+      </template>
+      <span>Trở lại</span>
+    </g-button>
     <ul
       class="tw-my-5 tw-px-2 menu-nav tw-overflow-y-auto tw-max-h-[calc(100vh-252px)]"
     >
@@ -46,28 +64,9 @@ import { mdiChevronRight } from "@mdi/js";
               </span>
             </span>
           </nuxt-link>
-          <template #popper>
-            <ul class="tw-px-4 tw-py-1" v-for="(subMenu, idx) in item.subMenu">
-              <li :key="idx">
-                <nuxt-link
-                  class="tw-flex tw-items-center tw-w-full tw-py-2 tw-rounded-2xl"
-                  :class="[
-                    $route.path === subMenu.path
-                      ? 'tw-text-primary'
-                      : 'tw-text-[#828282]',
-                  ]"
-                  :to="subMenu.path"
-                >
-                  <span class="tw-px-2">
-                    {{ subMenu.text }}
-                  </span>
-                </nuxt-link>
-              </li>
-            </ul>
-          </template>
         </SMenu>
       </li>
-      <hr />
+      <hr class="tw-my-3" />
       <li
         class="tw-flex tw-items-center tw-w-full tw-p-3 tw-rounded-[10px] tw-cursor-pointer"
         @click="handleLogout"
@@ -77,50 +76,4 @@ import { mdiChevronRight } from "@mdi/js";
     </ul>
   </div>
 </template>
-<style lang="scss">
-.v-popper--theme-menu .v-popper__inner {
-  border: none;
-}
-
-.dark .v-popper--theme-menu .v-popper__inner {
-  background: transparent;
-  border: 1px solid #474747;
-}
-
-.v-popper__arrow-container {
-  display: none;
-}
-
-.menu-profile-wrapper {
-  width: 232px;
-  height: 232px;
-  position: relative;
-}
-
-.menu-profile-wrapper-bg {
-  background: linear-gradient(
-    0deg,
-    rgba(0, 0, 0, 0.4) 0%,
-    rgba(0, 0, 0, 0.4) 100%
-  );
-
-  &:hover {
-    background: linear-gradient(
-        180deg,
-        rgba(0, 0, 0, 0) 0%,
-        rgba(0, 0, 0, 0.45) 77.08%
-      ),
-      linear-gradient(0deg, rgba(0, 0, 0, 0.1) 0%, rgba(0, 0, 0, 0.1) 100%);
-  }
-}
-
-.menu-nav li a:hover {
-  background: var(
-    --global-hover,
-    linear-gradient(0deg, rgba(0, 0, 0, 0.16) 0%, rgba(0, 0, 0, 0.16) 100%),
-    rgba(214, 214, 214, 0.25)
-  );
-  background-blend-mode: overlay, normal;
-  border-radius: 10px;
-}
-</style>
+<style lang="scss"></style>

@@ -1,5 +1,5 @@
 <script setup>
-navigateTo('/trang-chu')
+
 </script>
 <template>
   <div>
