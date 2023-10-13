@@ -30,22 +30,18 @@ const payingStatusOptions = ref([
 </script>
 <template>
   <div class="tw-w-full">
+    <div class="tw-flex tw-items-center tw-gap-x-3 tw-justify-between tw-mb-3">
+      <g-button variant="bezeled" @click="isShowFilter = !isShowFilter">
+        <template #default>
+          <IconFilter />
+        </template>
+      </g-button>
+    </div>
     <div
       class="tw-w-full tw-p-5 tw-bg-white tw-rounded-xl tw-flex tw-flex-col tw-gap-y-3"
+      v-if="isShowFilter"
     >
-      <div class="tw-flex tw-items-center tw-gap-x-3 tw-justify-between">
-        <span class="tw-text-[20px] tw-font-semibold">Danh sách phòng</span>
-        <g-button variant="bezeled" @click="isShowFilter = !isShowFilter">
-          <template #default>
-            <IconFilter />
-          </template>
-        </g-button>
-      </div>
-
-      <div
-        class="tw-flex tw-items-center tw-justify-between"
-        v-if="isShowFilter"
-      >
+      <div class="tw-flex tw-items-center tw-justify-between">
         <div class="tw-flex tw-items-center tw-gap-x-4">
           <!-- <select name="" id="" class="tw-py-2 tw-pl-4 tw-pr-10 tw-bg-[#e3e3e3] tw-rounded-lg tw-outline-none">
         <option value="">Còn trống</option>
@@ -81,7 +77,7 @@ const payingStatusOptions = ref([
       </g-button>
     </div>
     <div class="tw-grid tw-grid-cols-4 tw-gap-3">
-      <RoomItem v-for="item in 9" />
+      <RoomItem v-for="item in 3" />
     </div>
   </div>
 </template>
