@@ -1,7 +1,9 @@
 <script setup>
 import Sidebar from "@/components/layouts/Sidebar/index.vue";
+import listMenu from "~/components/layouts/Sidebar/menu";
 const route = useRoute();
 
+console.log(listMenu.value);
 </script>
 <template>
   <div
@@ -14,9 +16,19 @@ const route = useRoute();
     >
       <!-- <Header v-if="!error" /> -->
       <div class="tw-bg-[#F6F6F6] tw-grow tw-pt-5 tw-pb-8 tw-px-8">
+        <div v-for="(item, index) in listMenu">
+          <div
+            class="tw-w-full tw-p-5 tw-rounded-xl tw-bg-white tw-mb-5 tw-flex tw-items-center"
+            v-if="route.path == item.path"
+          >
+            <span class="tw-text-[28px] tw-font-extrabold">{{
+              item.text
+            }}</span>
+          </div>
+        </div>
         <slot />
       </div>
     </div>
   </div>
-  <slot/>
+  <slot v-if="!route.params.roomId" />
 </template>

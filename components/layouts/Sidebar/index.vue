@@ -5,7 +5,7 @@ import IconArrowLeft from "@/assets/svg/arrow-left.svg";
 //store
 
 //composable
-
+const route = useRoute();
 //state
 
 //methods
@@ -44,7 +44,9 @@ import IconArrowLeft from "@/assets/svg/arrow-left.svg";
         >
           <nuxt-link
             class="tw-flex tw-items-center tw-w-full tw-p-3 tw-rounded-[10px]"
-            :class="[$route.path === item.path ? 'tw-bg-[#eeeeee]' : '']"
+            :class="[
+              $route.path.includes(item.mainPath) ? 'tw-bg-[#eeeeee]' : '',
+            ]"
             :to="item.path"
           >
             <div class="tw-shrink-0">
