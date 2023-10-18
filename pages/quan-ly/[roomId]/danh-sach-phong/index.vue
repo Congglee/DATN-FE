@@ -2,10 +2,16 @@
 import RoomItem from "@/components/pages/room/RoomItem.vue";
 import IconFilter from "@/assets/svg/filter.svg";
 import IconSearch from "@/assets/svg/search.svg";
+import { useRoomStore } from "@/store/room";
+
+//store
+
+const roomStore = useRoomStore();
 
 const roomStatus = ref(null);
 const payingStatus = ref(null);
 const isShowFilter = ref(false);
+const rooms = ref(null);
 const roomStatusOptions = ref([
   {
     value: "Available",
@@ -27,6 +33,15 @@ const payingStatusOptions = ref([
     status: "Chưa thanh toán",
   },
 ]);
+
+const getListRoom = async () => {
+  const res = await roomStore.getRoom();
+  if (res.data) {
+    console.log(res.data);
+  }
+};
+
+getListRoom();
 </script>
 <template>
   <div class="tw-w-full">

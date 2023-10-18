@@ -42,8 +42,9 @@ const isShowPassword = ref(false);
 const handleLogin = handleSubmit(async () => {
   const payload = { ...values };
   const res = await authStore.login(payload);
-  if(res.data){
-    console.log(res.data)
+  if (res.data) {
+    useSetToken(res.data.accessToken);
+    navigateTo("/")
   }
 });
 </script>
@@ -55,7 +56,11 @@ const handleLogin = handleSubmit(async () => {
   >
     <div class="tw-flex tw-flex-col tw-gap-y-[12px] tw-w-[400px]">
       <div class="tw-w-full">
-        <g-input label="Tên tài khoản" v-bind="formData.email">
+        <g-input
+          label="Tên tài khoản"
+          v-bind="formData.email"
+          :error="errors.email"
+        >
           <template #prepend>
             <IconUser />
           </template>
@@ -66,6 +71,7 @@ const handleLogin = handleSubmit(async () => {
           label="Mật khẩu"
           v-bind="formData.password"
           :type="isShowPassword ? 'text' : 'password'"
+          :error="errors.password"
         >
           <template #prepend> <IconLock /></template>
           <template #append>

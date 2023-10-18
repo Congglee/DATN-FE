@@ -3,7 +3,6 @@ import Sidebar from "@/components/layouts/Sidebar/index.vue";
 import listMenu from "~/components/layouts/Sidebar/menu";
 const route = useRoute();
 
-console.log(listMenu.value);
 </script>
 <template>
   <div

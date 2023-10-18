@@ -8,6 +8,8 @@ definePageMeta({
   middleware: "check-auth",
 });
 
+
+
 const isSigningUp = ref(false);
 </script>
 <template>

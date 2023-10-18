@@ -6,7 +6,7 @@ const chartData = ref({
     {
       label: "Data One",
       backgroundColor: "#f87979",
-      data: [40, 20, 12, 50, 10],
+      data: [1000000, 2000000, 1200000, 1500000, 1000000],
     },
   ],
 });

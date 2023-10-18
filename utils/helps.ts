@@ -1,7 +1,6 @@
-import dayjs from 'dayjs';
-import avatarDefault from '@/assets/images/defaultAvt.png';
-import { useToast } from 'vue-toastification';
-
+import dayjs from "dayjs";
+import avatarDefault from "@/assets/images/defaultAvt.png";
+import { useToast } from "vue-toastification";
 
 export const convertDateType = (date: Date, format: string) => {
   return dayjs(date).format(format);
@@ -13,23 +12,26 @@ export const getDifferenceObject = (oldObj: any, newObj: any) => {
   keys.forEach((el: string) => {
     if (oldObj[el] !== newObj[el]) different[el] = newObj[el];
   });
-  const filteredObj = Object.entries(different).reduce((acc: any, [key, value]) => {
-    if (value !== undefined) {
-      acc[key] = value;
-    }
-    return acc;
-  }, {});
+  const filteredObj = Object.entries(different).reduce(
+    (acc: any, [key, value]) => {
+      if (value !== undefined) {
+        acc[key] = value;
+      }
+      return acc;
+    },
+    {}
+  );
   return filteredObj;
 };
 
 const convertError = (type: number) => {
   switch (type) {
     case 401:
-      return 'Vui lòng đăng nhập lại.';
+      return "Vui lòng đăng nhập lại.";
     case 403:
-      return 'Không có quyền truy cập.';
+      return "Không có quyền truy cập.";
     default:
-      return 'Lỗi hệ thống.';
+      return "Lỗi hệ thống.";
   }
 };
 
@@ -44,4 +46,21 @@ export const throwError = (error: any) => {
   } else {
     toast.error(convertError(statusCode));
   }
+};
+
+export const convertDepositRoomType = (type: boolean) => {
+  switch (type) {
+    case true:
+      return "Đã hoàn thành";
+    case false:
+      return "Chưa hoàn thành";
+    default:
+      return type;
+  }
+};
+
+export const formatCurrency = (amount: number) => {
+  const strAmount = amount.toString();
+  const result = strAmount.replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,");
+  return result + " VND";
 };
