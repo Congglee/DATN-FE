@@ -1,11 +1,11 @@
 import { defineStore } from "pinia";
 
-const useRoomStore = defineStore({
+export const useRoomStore = defineStore({
   id: "room",
   state: () => ({}),
   actions: {
     async getRoom() {
-      const res = await useFetchData(`localhost:3001`, {
+      const res = await useFetchData(`${MOTELS.GET}`, {
         method: "GET",
       });
       return res
