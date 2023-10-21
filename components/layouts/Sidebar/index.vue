@@ -9,6 +9,12 @@ const route = useRoute();
 //state
 
 //methods
+
+const handleLogout = () => {
+  useRemoveToken();
+  navigateTo('/dang-nhap');
+};
+
 </script>
 <template>
   <div

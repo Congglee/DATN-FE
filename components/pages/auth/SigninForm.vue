@@ -39,9 +39,9 @@ const isShowPassword = ref(false);
 
 //method
 
-const handleLogin = handleSubmit(async () => {
+const handleSignin = handleSubmit(async () => {
   const payload = { ...values };
-  const res = await authStore.login(payload);
+  const res = await authStore.signin(payload);
   if (res.data) {
     useSetToken(res.data.accessToken);
     navigateTo("/")
@@ -52,7 +52,7 @@ const handleLogin = handleSubmit(async () => {
   <div
     v-if="!isChangePassword"
     class="tw-absolute tw-right-0 tw-top-[50%] tw-translate-y-[-50%] tw-w-[40%]"
-    @keyup.enter="handleLogin"
+    @keyup.enter="handleSignin"
   >
     <div class="tw-flex tw-flex-col tw-gap-y-[12px] tw-w-[400px]">
       <div class="tw-w-full">
@@ -95,7 +95,7 @@ const handleLogin = handleSubmit(async () => {
       <div class="tw-w-full tw-flex tw-mt-[10px]">
         <button
           class="tw-w-full tw-py-4 tw-bg-black tw-text-white tw-rounded-[10px]"
-          @click="handleLogin"
+          @click="handleSignin"
         >
           Đăng nhập
         </button>

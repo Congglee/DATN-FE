@@ -6,8 +6,6 @@ import { useRoomStore } from "@/store/room";
 
 //store
 
-const roomStore = useRoomStore();
-
 const roomStatus = ref(null);
 const payingStatus = ref(null);
 const isShowFilter = ref(false);
@@ -34,14 +32,6 @@ const payingStatusOptions = ref([
   },
 ]);
 
-const getListRoom = async () => {
-  const res = await roomStore.getRoom();
-  if (res.data) {
-    console.log(res.data);
-  }
-};
-
-getListRoom();
 </script>
 <template>
   <div class="tw-w-full">
