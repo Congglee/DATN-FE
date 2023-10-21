@@ -1,17 +1,31 @@
 import { AUTH } from "./../utils/endpoint";
 import { defineStore } from "pinia";
 
-interface ILogin {
-  username: string;
+interface ISignin {
+  email: string;
   password: string;
+}
+
+interface ISignup {
+  email: string;
+  name: string;
+  password: string;
+  confirmPassword: string;
 }
 
 export const useAuthStore = defineStore({
   id: "auth",
   state: () => ({}),
   actions: {
-    async login(payload: ILogin) {
-      const res = await useFetchData(`${AUTH.LOGIN}`, {
+    async signin(payload: ISignin) {
+      const res = await useFetchData(`${AUTH.SIGNIN}`, {
+        method: "POST",
+        body: payload,
+      });
+      return res;
+    },
+    async signup(payload: ISignup) {
+      const res = await useFetchData(`${AUTH.SIGNUP}`, {
         method: "POST",
         body: payload,
       });

@@ -28,8 +28,8 @@ export const useFetchData = async (
     },
   });
   return {
-    data: data?._rawValue,
+    data: data?.value,
     pending,
-    error,
+    error: error?.value,
   };
 };

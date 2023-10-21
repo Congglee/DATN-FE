@@ -8,6 +8,10 @@ import * as yup from "yup";
 import { setAccessToken } from "@/utils/auth";
 import jwt_decode from "jwt-decode";
 import { useAuthStore } from "@/store/auth";
+import { useToast } from "vue-toastification";
+
+const toast = useToast();
+
 //store
 const authStore = useAuthStore();
 
@@ -15,7 +19,12 @@ const authStore = useAuthStore();
 
 const { values, errors, defineComponentBinds, handleSubmit } = useForm({
   validationSchema: yup.object({
-    username: yup
+    email: yup
+      .string()
+      .trim()
+      .required()
+      .min(3, "Tên đăng nhập không thể nhỏ hơn 3 ký tự"),
+    name: yup
       .string()
       .trim()
       .required()
@@ -25,43 +34,37 @@ const { values, errors, defineComponentBinds, handleSubmit } = useForm({
       .trim()
       .required()
       .max(255, "Mật khẩu không được lớn hơn 255 ký tự."),
+    confirmPassword: yup
+      .string()
+      .trim()
+      .required()
+      .oneOf([yup.ref("password")], "Mật khẩu không khớp"),
   }),
 });
 
 const formData = reactive({
-  username: defineComponentBinds("username"),
+  email: defineComponentBinds("email"),
+  name: defineComponentBinds("name"),
   password: defineComponentBinds("password"),
+  confirmPassword: defineComponentBinds("confirmPassword"),
 });
 
 const isCheck = ref(false);
 const isShowPassword = ref(false);
 const isChangePassword = ref(false);
-
+const isShowConfirmPassword = ref(false);
 //method
 
-const handleLogin = handleSubmit(async () => {
-  const res = await authStore.login({
-    username: values.username,
-    password: values.password,
-  });
+const handleSignup = handleSubmit(async () => {
+  const payload = {
+    ...values,
+  };
+  const res = await authStore.signup(payload);
   if (res.data) {
-    const accessToken = res.data.access_token;
-    const decoded = jwt_decode(accessToken);
-    setAccessToken(res.data.access_token);
-    if (
-      decoded &&
-      !decoded?.isChangeDefaultPassword &&
-      decoded.roles[0] !== "SUPER_ADMIN"
-    ) {
-      changePassword.value = true;
-      accessToken.value = accessToken;
-    } else {
-      navigateTo("/");
-    }
+    console.log(res.data);
   }
-
   if (res.error) {
-    throwError(res.error);
+    console.log(res.error);
   }
 });
 </script>
@@ -71,10 +74,24 @@ const handleLogin = handleSubmit(async () => {
     class="tw-absolute tw-right-0 tw-top-[50%] tw-translate-y-[-50%] tw-w-[40%]"
     @keyup.enter="handleLogin"
   >
-    Đăng kí
     <div class="tw-flex tw-flex-col tw-gap-y-[12px] tw-w-[400px]">
       <div class="tw-w-full">
-        <g-input label="Tên tài khoản" v-bind="formData.username">
+        <g-input
+          label="Tên người dùng"
+          v-bind="formData.name"
+          :error="errors.name"
+        >
+          <template #prepend>
+            <IconUser />
+          </template>
+        </g-input>
+      </div>
+      <div class="tw-w-full">
+        <g-input
+          label="Tên tài khoản"
+          v-bind="formData.email"
+          :error="errors.email"
+        >
           <template #prepend>
             <IconUser />
           </template>
@@ -85,6 +102,7 @@ const handleLogin = handleSubmit(async () => {
           label="Mật khẩu"
           v-bind="formData.password"
           :type="isShowPassword ? 'text' : 'password'"
+          :error="errors.password"
         >
           <template #prepend> <IconLock /></template>
           <template #append>
@@ -98,15 +116,36 @@ const handleLogin = handleSubmit(async () => {
           </template>
         </g-input>
       </div>
+      <div class="tw-w-full">
+        <g-input
+          label="Mật khẩu"
+          v-bind="formData.confirmPassword"
+          :type="isShowConfirmPassword ? 'text' : 'password'"
+          :error="errors.confirmPassword"
+        >
+          <template #prepend> <IconLock /></template>
+          <template #append>
+            <div
+              class="tw-cursor-pointer active:tw-opacity-70"
+              @click="isShowConfirmPassword = !isShowConfirmPassword"
+            >
+              <IconEye v-if="isShowConfirmPassword" />
+              <IconEyeSlash v-if="!isShowConfirmPassword" />
+            </div>
+          </template>
+        </g-input>
+      </div>
       <div>
-        <span class="tw-text-[#1a3b70] hover:tw-underline" @click="$emit('signin')"
+        <span
+          class="tw-text-[#1a3b70] hover:tw-underline"
+          @click="$emit('signin')"
           >Đã có tài khoản?</span
         >
       </div>
       <div class="tw-w-full tw-flex tw-mt-[10px]">
         <button
           class="tw-w-full tw-py-4 tw-bg-black tw-text-white tw-rounded-[10px]"
-          @click="handleLogin"
+          @click="handleSignup"
         >
           Đăng nhập
         </button>
