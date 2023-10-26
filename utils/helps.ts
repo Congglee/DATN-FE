@@ -35,19 +35,6 @@ const convertError = (type: number) => {
   }
 };
 
-export const throwError = (error: any) => {
-  const { statusCode } = error;
-  const toast = useToast();
-
-  if (statusCode === 400) {
-    return error.message.forEach((message: string) => {
-      toast.error(message);
-    });
-  } else {
-    toast.error(convertError(statusCode));
-  }
-};
-
 export const convertDepositRoomType = (type: boolean) => {
   switch (type) {
     case true:

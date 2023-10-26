@@ -5,10 +5,17 @@ export const useRoomStore = defineStore({
   state: () => ({}),
   actions: {
     async getMotels() {
-      const res = await useFetchData(`${MOTELS.GET}`, {
+      const res = await useFetchData(`${MOTELS.GET_LIST_MOTELS}`, {
         method: "GET",
       });
-      return res
+      return res;
+    },
+    async createMotel(payload: any) {
+      const res = await useFetchData(`${MOTELS.CREATE_MOTEL}`, {
+        method: "POST",
+        body: payload,
+      });
+      return res;
     },
   },
 });

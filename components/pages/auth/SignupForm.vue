@@ -9,6 +9,7 @@ import { setAccessToken } from "@/utils/auth";
 import jwt_decode from "jwt-decode";
 import { useAuthStore } from "@/store/auth";
 import { useToast } from "vue-toastification";
+import OtpInputModal from "@/components/pages/auth/OtpInputModal.vue";
 
 const toast = useToast();
 
@@ -53,6 +54,7 @@ const isCheck = ref(false);
 const isShowPassword = ref(false);
 const isChangePassword = ref(false);
 const isShowConfirmPassword = ref(false);
+const isShowOtpInputModal = ref(false);
 //method
 
 const handleSignup = handleSubmit(async () => {
@@ -61,10 +63,11 @@ const handleSignup = handleSubmit(async () => {
   };
   const res = await authStore.signup(payload);
   if (res.data) {
-    console.log(res.data);
+    toast.success(res.data.message);
+    isShowOtpInputModal.value = true;
   }
   if (res.error) {
-    console.log(res.error);
+    toast.error(res.error.data.message)
   }
 });
 </script>
@@ -152,4 +155,7 @@ const handleSignup = handleSubmit(async () => {
       </div>
     </div>
   </div>
+  <v-dialog v-model="isShowOtpInputModal" width="544">
+    <OtpInputModal @close="isShowOtpInputModal = false" />
+  </v-dialog>
 </template>
