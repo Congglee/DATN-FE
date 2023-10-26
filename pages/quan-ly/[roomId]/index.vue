@@ -1,2 +1,2 @@
 <script setup></script>
-<template></template>
+<template>abc quản lý</template>

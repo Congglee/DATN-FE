@@ -12,9 +12,8 @@ const route = useRoute();
 
 const handleLogout = () => {
   useRemoveToken();
-  navigateTo('/dang-nhap');
+  navigateTo("/dang-nhap");
 };
-
 </script>
 <template>
   <div
@@ -35,7 +34,7 @@ const handleLogout = () => {
       <template #prepend>
         <IconArrowLeft />
       </template>
-      <span>Trở lại</span>
+      <button @click="$router.back()">Trở lại</button>
     </g-button>
     <ul
       class="tw-my-5 tw-px-2 menu-nav tw-overflow-y-auto tw-max-h-[calc(100vh-252px)]"
