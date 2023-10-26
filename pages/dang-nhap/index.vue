@@ -8,9 +8,13 @@ definePageMeta({
   middleware: "check-auth",
 });
 
-
+const signUpSuccessEventBus = useEventBus(`sign-up-success`);
 
 const isSigningUp = ref(false);
+signUpSuccessEventBus.on(() => {
+  console.log(1);
+  isSigningUp.value = false;
+});
 </script>
 <template>
   <div class="tw-flex tw-w-screen tw-h-screen tw-p-5">
@@ -21,10 +25,10 @@ const isSigningUp = ref(false);
         ></div>
       </div>
       <div v-if="!isSigningUp">
-        <SigninForm @signup="isSigningUp = true"/>
+        <SigninForm @signup="isSigningUp = true" />
       </div>
       <div v-if="isSigningUp">
-        <SignupForm @signin="isSigningUp = false"/>
+        <SignupForm @signin="isSigningUp = false" />
       </div>
       <div class="tw-absolute tw-bottom-10">
         <div class="tw-w-[200px]">

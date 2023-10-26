@@ -31,5 +31,11 @@ export const useAuthStore = defineStore({
       });
       return res;
     },
+    async confirmMail(params: string) {
+      const res = await useFetchData(`${AUTH.CONFIRM_MAIL}/${params}`, {
+        method: "PUT",
+      });
+      return res;
+    },
   },
 });

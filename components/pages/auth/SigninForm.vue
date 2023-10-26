@@ -8,6 +8,11 @@ import * as yup from "yup";
 import { setAccessToken } from "@/utils/auth";
 import jwt_decode from "jwt-decode";
 import { useAuthStore } from "@/store/auth";
+import { useToast } from "vue-toastification";
+
+//composable
+
+const toast = useToast()
 
 //store
 const authStore = useAuthStore();
@@ -45,6 +50,9 @@ const handleSignin = handleSubmit(async () => {
   if (res.data) {
     useSetToken(res.data.accessToken);
     navigateTo("/")
+  }
+  if(res.error){
+    toast.error(res.error.data.message)
   }
 });
 </script>
