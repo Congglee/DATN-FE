@@ -17,5 +17,22 @@ export const useRoomStore = defineStore({
       });
       return res;
     },
+    async updateMotel(payload: any) {
+      const res = await useFetchData(
+        `${MOTELS.UPDATE_MOTEL}${payload["_id"]}`,
+        {
+          method: "PUT",
+          body: payload["data"],
+        }
+      );
+      return res;
+    },
+
+    async deleteMotel(id: number | string) {
+      const res = await useFetchData(`${MOTELS.DELETE_MOTEL}${id}`, {
+        method: "DELETE",
+      });
+      return res;
+    },
   },
 });

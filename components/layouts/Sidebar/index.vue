@@ -30,12 +30,16 @@ const handleLogout = () => {
         >Poly Home Rent</span
       >
     </div>
-    <g-button size="none" class="tw-w-full tw-py-2" rounded="full">
-      <template #prepend>
-        <IconArrowLeft />
-      </template>
-      <button @click="$router.back()">Trở lại</button>
-    </g-button>
+    <NuxtLink to="/quan-ly">
+      <g-button size="none" class="tw-w-full tw-py-2" rounded="full">
+        <template #prepend>
+          <IconArrowLeft />
+        </template>
+
+        <button>Trở lại</button>
+      </g-button>
+    </NuxtLink>
+
     <ul
       class="tw-my-5 tw-px-2 menu-nav tw-overflow-y-auto tw-max-h-[calc(100vh-252px)]"
     >
