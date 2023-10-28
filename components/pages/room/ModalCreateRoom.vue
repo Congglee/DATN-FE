@@ -39,39 +39,39 @@ const { values, errors, defineComponentBinds, handleSubmit } = useForm({
     name: yup.string().trim().required(),
     // motelId: yup.string().trim().required(),
     price: yup.number().required(),
-    // verify_code: yup.string().trim().required(),
     max_customer: yup.number().required(),
-    // area: yup.string(),
+    area: yup.string(),
   }),
-  initialValues: {
-    name: props.roomInfo.name,
-    price: props.roomInfo.price,
-    max_customer: props.roomInfo.max_customer,
-    // verify_code: "",
-  },
 });
 
 const validateFormData = reactive({
   name: defineComponentBinds("name"),
   price: defineComponentBinds("price"),
-  // verify_code: defineComponentBinds("verify_code"),
   max_customer: defineComponentBinds("max_customer"),
+  area: defineComponentBinds("area"),
 });
 
 const formData = reactive({
   description: props.roomInfo.description,
-  status: props.roomInfo.status,
 });
+
+const loading = ref(false)
 
 //methods
 
-const updateRoom = handleSubmit(async () => {
-  const payload = { ...values, ...formData, status: formData.status.status };
+const createRoom = handleSubmit(async () => {
+    loading.value = true
+  const payload = {
+    ...values,
+    ...formData,
+    motelId: route.params.motelId,
+  };
   console.log(payload);
-  const res = await roomStore.updateRoom(payload, props.roomInfo._id);
+  const res = await roomStore.createRoom(payload);
   if (res.data) {
     fetchListRoomEventBus.emit();
-    toast.success("Cập nhật phòng thành công!");
+    toast.success("Tạo phòng thành công!");
+    loading.value = false
     emit("close");
   }
   if (res.error) {
@@ -83,7 +83,7 @@ const updateRoom = handleSubmit(async () => {
   <div class="modal-change-information">
     <div class="">
       <button
-        @click="$emit('close')"
+        @click="emit('close')"
         class="modal-change-information__btn-close"
       >
         <IconClose />
@@ -121,6 +121,14 @@ const updateRoom = handleSubmit(async () => {
           :error="errors.max_customer"
         >
         </g-input>
+        <g-input
+          class="tw-pt-4"
+          label="Diện tích"
+          required
+          v-bind="validateFormData.area"
+          :error="errors.area"
+        >
+        </g-input>
         <div class="tw-gap-y-1 tw-grid tw-pt-4">
           <p>Ghi chú</p>
           <textarea
@@ -129,35 +137,17 @@ const updateRoom = handleSubmit(async () => {
           ></textarea>
         </div>
       </div>
-      <hr class="tw-mt-8" />
-      <div class="tw-w-full tw-py-8">
-        <g-autocomplete
-          label="Trạng thái phòng"
-          required
-          :items="ROOM_STATUS"
-          title="title"
-          v-model="formData.status"
-        ></g-autocomplete>
-      </div>
-      <!-- <g-input
-        class="tw-pt-4"
-        label="Mã xác thực"
-        required
-        v-bind="validateFormData.verify_code"
-        :error="errors.verify_code"
-      >
-      </g-input> -->
     </div>
     <div
       class="tw-grid tw-grid-cols-2 tw-justify-between tw-gap-x-3 tw-bg-white tw-px-[24px] tw-py-[22px] tw-rounded-b-xl"
     >
-      <g-button variant="bezeled" class="tw-w-full" @click="$emit('close')">
+      <g-button variant="bezeled" class="tw-w-full" @click="emit('close')">
         <template #prepend>
           <IconXMark />
         </template>
         Hủy
       </g-button>
-      <g-button @click="updateRoom">Cập nhật</g-button>
+      <g-button @click="createRoom" :loading="loading">Tạo</g-button>
     </div>
   </div>
 </template>

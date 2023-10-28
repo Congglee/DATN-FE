@@ -4,7 +4,7 @@ import IconXMark from "@/assets/svg/x-mark.svg";
 // import * as yup from "yup";
 import { useForm } from "vee-validate";
 import { useToast } from "vue-toastification";
-import { useRoomStore } from "@/store/room";
+import { useMotelStore } from "@/store/motel";
 //props
 const props = defineProps({
   item: {
@@ -21,7 +21,7 @@ const toast = useToast();
 const route = useRoute();
 
 //store
-const roomStore = useRoomStore();
+const motelStore = useMotelStore();
 
 //state
 const { values, errors, defineComponentBinds, handleSubmit } = useForm({});
@@ -32,7 +32,7 @@ const { values, errors, defineComponentBinds, handleSubmit } = useForm({});
 
 //methods
 const deleteMotel = handleSubmit(async () => {
-  const res = await roomStore.deleteMotel(props.item._id);
+  const res = await motelStore.deleteMotel(props.item._id);
   if (res.data) {
     toast.success("Xoá nhà trọ thành công!");
     fetchListMotel.emit();

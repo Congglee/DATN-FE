@@ -24,6 +24,12 @@ import IconXMark from "@/assets/svg/x-mark.svg";
             </template>
             <span class="tw-font-semibold"> Thêm thành viên </span>
           </g-button>
+          <g-button variant="bezeled" @click="$emit('deleteRoom')">
+            <template #prepend>
+              <IconAddUser />
+            </template>
+            <span class="tw-font-semibold"> Xóa phòng </span>
+          </g-button>
         </div>
         <hr class="tw-my-4" />
         <div class="tw-flex tw-flex-col">

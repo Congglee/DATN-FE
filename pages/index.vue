@@ -26,7 +26,7 @@ import Footer from "~/components/global/footer/Footer.vue";
           </h3>
         </aside>
         <aside
-          class="tw-w-1/3 max-lg:tw-w-full w-full tw-flex tw-justify-around tw-flex-col tw-gap-2 tw-items-center"
+          class="w-full tw-w-1/3 max-lg:tw-w-full tw-flex tw-justify-around tw-flex-col tw-gap-2 tw-items-center"
         >
           <button class="cta">
             <span class="tw-skew-x-[15deg]">Xin chào: Lê Quang Minh Đức</span>
@@ -134,7 +134,7 @@ import Footer from "~/components/global/footer/Footer.vue";
                   focusable="false"
                   data-prefix="fas"
                   data-icon="phone"
-                  class="svg-inline--fa fa-phone w-5"
+                  class="w-5 svg-inline--fa fa-phone"
                   role="img"
                   xmlns="http://www.w3.org/2000/svg"
                   viewBox="0 0 512 512"
@@ -157,7 +157,7 @@ import Footer from "~/components/global/footer/Footer.vue";
                   focusable="false"
                   data-prefix="fas"
                   data-icon="message"
-                  class="svg-inline--fa fa-message w-5"
+                  class="w-5 svg-inline--fa fa-message"
                   role="img"
                   xmlns="http://www.w3.org/2000/svg"
                   viewBox="0 0 512 512"
@@ -181,7 +181,7 @@ import Footer from "~/components/global/footer/Footer.vue";
                   focusable="false"
                   data-prefix="fas"
                   data-icon="location-dot"
-                  class="svg-inline--fa fa-location-dot w-5"
+                  class="w-5 svg-inline--fa fa-location-dot"
                   role="img"
                   xmlns="http://www.w3.org/2000/svg"
                   viewBox="0 0 384 512"
@@ -206,7 +206,7 @@ import Footer from "~/components/global/footer/Footer.vue";
                   focusable="false"
                   data-prefix="fas"
                   data-icon="envelope"
-                  class="svg-inline--fa fa-envelope w-5"
+                  class="w-5 svg-inline--fa fa-envelope"
                   role="img"
                   xmlns="http://www.w3.org/2000/svg"
                   viewBox="0 0 512 512"
@@ -230,7 +230,7 @@ import Footer from "~/components/global/footer/Footer.vue";
                   focusable="false"
                   data-prefix="fas"
                   data-icon="link"
-                  class="svg-inline--fa fa-link w-5"
+                  class="w-5 svg-inline--fa fa-link"
                   role="img"
                   xmlns="http://www.w3.org/2000/svg"
                   viewBox="0 0 640 512"

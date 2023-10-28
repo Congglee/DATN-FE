@@ -3,6 +3,7 @@ import RoomItem from "@/components/pages/room/RoomItem.vue";
 import IconFilter from "@/assets/svg/filter.svg";
 import IconSearch from "@/assets/svg/search.svg";
 import { useRoomStore } from "~/store/room";
+import ModalCreateRoom from "@/components/pages/room/ModalCreateRoom.vue";
 
 //composable
 const route = useRoute();
@@ -16,6 +17,7 @@ const roomStore = useRoomStore();
 const roomStatus = ref(null);
 const payingStatus = ref(null);
 const isShowFilter = ref(false);
+const isDisplayCreateRoom = ref(false);
 const rooms = ref(null);
 const roomStatusOptions = ref([
   {
@@ -47,6 +49,7 @@ const getAllRoomOfMotel = async () => {
 };
 
 getAllRoomOfMotel();
+
 fetchListRoomEventBus.on(() => {
   getAllRoomOfMotel();
 });
@@ -95,7 +98,7 @@ fetchListRoomEventBus.on(() => {
       </div>
     </div>
     <div class="tw-flex tw-w-full tw-max-w-[250px] tw-my-[12px]">
-      <g-button>
+      <g-button @click="isDisplayCreateRoom = true">
         <span>Thêm phòng</span>
       </g-button>
     </div>
@@ -103,4 +106,7 @@ fetchListRoomEventBus.on(() => {
       <RoomItem v-for="item in rooms" :roomInfo="item" />
     </div>
   </div>
+  <v-dialog v-model="isDisplayCreateRoom" width="544">
+    <ModalCreateRoom @close="isDisplayCreateRoom = false"/>
+  </v-dialog>
 </template>
