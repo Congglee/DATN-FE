@@ -45,7 +45,7 @@ const closePopupAll = () => {
             </div>
           </v-card-title>
           <v-card-subtitle>
-            <!-- <span class="me-1">{{ item.motelIds.length }} phòng</span> -->
+            <span class="me-1">{{ item?.roomIds?.length }} phòng</span>
             <v-icon color="error" icon="mdi-fire-circle" size="small"></v-icon>
           </v-card-subtitle>
         </v-card-item>

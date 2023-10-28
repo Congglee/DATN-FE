@@ -12,7 +12,6 @@ export const MOTELS = {
   DELETE_MOTEL: "/motels/",
 };
 
-
 export const ROOM = {
   GET_LIST_ROOM: "/rooms/getall",
   GET_ONE_ROOM: "/rooms/getone",
@@ -27,4 +26,11 @@ export const ROOM = {
 export const MEMBERS = {
   GET_ROOM_OWNERS: "/members",
   UPDATE_MEMBER: "/members/member",
-}
+};
+
+export const SERVICES = {
+  GET_SERVICES: "/services/",
+  CREATE_SERVICES: "/services",
+  UPDATE_SERVICES: "/services/update/",
+  DELETE_SERVICES: "/services/",
+};

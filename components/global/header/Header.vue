@@ -1,4 +1,9 @@
-<script setup></script>
+<script setup>
+const handleLogout = () => {
+  useRemoveToken();
+  navigateTo("/dang-nhap");
+};
+</script>
 
 <template>
   <header
@@ -57,7 +62,9 @@
                 >
               </li>
               <li>
-                <NuxtLink to="/logout" class="tw-block"> Đăng xuất </NuxtLink>
+                <button @click="handleLogout" class="tw-block">
+                  Đăng xuất
+                </button>
               </li>
             </ul>
           </div>

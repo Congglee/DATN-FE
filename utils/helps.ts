@@ -35,6 +35,16 @@ const convertError = (type: number) => {
   }
 };
 
+export const convertStatusServiceType = (type: boolean) => {
+  switch (type) {
+    case true:
+      return "Hoạt động";
+    case false:
+      return "Không hoạt động";
+    default:
+      return type;
+  }
+};
 export const convertDepositRoomType = (type: boolean) => {
   switch (type) {
     case true:
