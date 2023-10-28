@@ -14,7 +14,6 @@ const props = defineProps({
 });
 const item = props.items;
 
-const showPassword = ref(false);
 const isDisplayDeleteMotel = ref(false);
 const isDisplayUpdateMotel = ref(false);
 

@@ -1,5 +1,5 @@
 <script setup>
-import svgRequired from '@/assets/svg/required.svg';
+import svgRequired from "@/assets/svg/required.svg";
 const props = defineProps({
   required: {
     type: Boolean,
@@ -8,24 +8,20 @@ const props = defineProps({
   label: String,
   error: {
     type: String,
-    default: '',
+    default: "",
   },
   teleport: {
     type: Boolean,
     default: false,
   },
-  maxDateNow: {
-    type: Boolean,
-    default: false,
-  },
   placeholder: {
     type: String,
-    default: 'MM/DD/YYYY',
+    default: "MM/DD/YYYY",
   },
 });
 
 const format = (date) => {
-  return convertDateType(date, 'DD/MM/YYYY');
+  return convertDateType(date, "DD/MM/YYYY");
 };
 </script>
 <template>
@@ -45,7 +41,6 @@ const format = (date) => {
       :action-row="false"
       allow-prevent-default
       :teleport="teleport"
-      :max-date="maxDateNow ? new Date() : false"
       :enable-time-picker="false"
       text-input
       :placeholder="placeholder"
@@ -73,6 +68,7 @@ const format = (date) => {
     height: 44px;
     border-radius: 10px;
     border: 2px solid rgb(239 68 68);
+
     &:hover {
       border: 2px solid rgb(239 68 68);
     }

@@ -4,6 +4,8 @@ import IconGrowArrow from "@/assets/svg/grow-arrow.svg";
 import ModalChooseEditOption from "@/components/pages/room/ModalChooseEditOption.vue";
 import ModalUpdateRoom from "@/components/pages/room/ModalUpdateRoom.vue";
 import ModalAddRoomMember from "@/components/pages/room/ModalAddRoomMember.vue";
+import { useRoomStore } from "~/store/room";
+import { useToast } from "vue-toastification";
 
 const props = defineProps({
   roomInfo: {
@@ -12,14 +14,33 @@ const props = defineProps({
   },
 });
 
+//composable
+const route = useRoute();
 const router = useRouter();
+const fetchListRoomEventBus = useEventBus(
+  `fetch-list-room-${route.params.motelId}`
+);
+const toast = useToast();
+//store
+const roomStore = useRoomStore();
 
 const isShowChooseEditOption = ref(false);
 const isShowUpdateRoom = ref(false);
 const isShowAddRoomMember = ref(false);
+const isShowConfirmDeleteRoom = ref(false);
 
 const handleEnterRoomDetail = () => {
   router.push(`danh-sach-phong/${props.roomInfo._id}`);
+};
+
+const handleRemoveRoom = async (e) => {
+  const res = await roomStore.deleteRoom(e._id);
+  if (res.data) {
+    toast.success("Xóa phòng thành công!");
+    fetchListRoomEventBus.emit();
+    isShowConfirmDeleteRoom.value = false;
+    isShowChooseEditOption.value = false;
+  }
 };
 </script>
 <template>
@@ -70,6 +91,7 @@ const handleEnterRoomDetail = () => {
       @addRoomMember="
         (isShowChooseEditOption = false), (isShowAddRoomMember = true)
       "
+      @deleteRoom="isShowConfirmDeleteRoom = true"
     />
   </v-dialog>
   <v-dialog v-model="isShowUpdateRoom" width="544" persistent scrollable>
@@ -78,4 +100,10 @@ const handleEnterRoomDetail = () => {
   <v-dialog v-model="isShowAddRoomMember" width="544" persistent scrollable>
     <ModalAddRoomMember @close="isShowAddRoomMember = false" />
   </v-dialog>
+  <g-modal-confirm
+    v-model="isShowConfirmDeleteRoom"
+    title="Xóa phòng?"
+    description="Một khi đã xóa, không thể hồi lại"
+    @ok="handleRemoveRoom(roomInfo)"
+  ></g-modal-confirm>
 </template>

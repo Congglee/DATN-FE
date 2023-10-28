@@ -24,15 +24,8 @@ const getAllMotels = async () => {
 };
 getAllMotels();
 
-fetchListMotel.on(async () => {
-  // fix tạm thời
-  motels.value = null;
-  // ----
-  await getAllMotels();
-  // Đã chạy nhưng không update state motels
-  // console.log(motels);
-  // console.log("getAllMotels");
-  isDisplayAddMotel.value = false;
+fetchListMotel.on(() => {
+  getAllMotels();
 });
 </script>
 <template>
@@ -76,7 +69,7 @@ fetchListMotel.on(async () => {
     </aside>
     <aside
       v-if="motels && motels.length > 0"
-      class="tw-grid tw-grid-flow-cols lg:tw-grid-cols-5 md:tw-grid-cols-3 sm:tw-grid-cols-1 lg:tw-gap-10 tw-gap-1 tw-py-2 tw-px-5"
+      class="tw-grid tw-grid-flow-cols lg:tw-grid-cols-4 md:tw-grid-cols-3 sm:tw-grid-cols-1 lg:tw-gap-10 tw-gap-1 tw-py-2 tw-px-5"
     >
       <MotelsCard :items="item" v-for="item in motels" />
     </aside>
