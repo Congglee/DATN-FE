@@ -11,3 +11,20 @@ export const MOTELS = {
   UPDATE_MOTEL: "/motels/update/",
   DELETE_MOTEL: "/motels/",
 };
+
+
+export const ROOM = {
+  GET_LIST_ROOM: "/rooms/getall",
+  GET_ONE_ROOM: "/rooms/getone",
+  GET_ALL_ROOM_OF_OWNER: "/rooms/getall",
+  ROOM_STATISTICAL: "/rooms/statistical",
+  CREATE_ROOM: "/rooms",
+  UPDATE_ROOM: "/rooms/update",
+  MOVE_MEMBER_ROOM: "/rooms/movememberroom",
+  DELETE_ROOM: "/rooms/delete",
+};
+
+export const MEMBERS = {
+  GET_ROOM_OWNERS: "/members",
+  UPDATE_MEMBER: "/members/member",
+}

@@ -12,13 +12,11 @@ import IconXMark from "@/assets/svg/x-mark.svg";
       </div>
       <div class="tw-pt-12">
         <div class="tw-flex tw-flex-col tw-gap-y-3">
-          <g-button variant="bezeled" @click="$emit('addByPhoneNumber')">
+          <g-button variant="bezeled" @click="$emit('editRoom')">
             <template #prepend>
               <IconPhone />
             </template>
-            <span class="tw-font-semibold" @click="$emit('editRoom')"
-              >Thay đổi thông tin phòng</span
-            >
+            <span class="tw-font-semibold">Thay đổi thông tin phòng</span>
           </g-button>
           <g-button variant="bezeled" @click="$emit('addRoomMember')">
             <template #prepend>

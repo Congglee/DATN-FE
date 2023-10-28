@@ -5,29 +5,42 @@ import ModalChooseEditOption from "@/components/pages/room/ModalChooseEditOption
 import ModalUpdateRoom from "@/components/pages/room/ModalUpdateRoom.vue";
 import ModalAddRoomMember from "@/components/pages/room/ModalAddRoomMember.vue";
 
+const props = defineProps({
+  roomInfo: {
+    type: Object,
+    default: {},
+  },
+});
+
+const router = useRouter();
+
 const isShowChooseEditOption = ref(false);
 const isShowUpdateRoom = ref(false);
 const isShowAddRoomMember = ref(false);
+
+const handleEnterRoomDetail = () => {
+  router.push(`danh-sach-phong/${props.roomInfo._id}`);
+};
 </script>
 <template>
-  <a
-    href="#"
-    class="tw-block tw-rounded-lg tw-p-4 tw-shadow-indigo-100 tw-shadow-xl"
-  >
+  <a class="tw-block tw-rounded-lg tw-p-4 tw-shadow-indigo-100 tw-shadow-xl">
     <img
+      @click="handleEnterRoomDetail"
       alt="Home"
       src="https://images.unsplash.com/photo-1613545325278-f24b0cae1224?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1770&q=80"
-      class="tw-h-56 tw-w-full tw-rounded-md tw-object-cover"
+      class="tw-h-56 tw-w-full tw-rounded-md tw-object-cover tw-cursor-pointer"
     />
     <div class="tw-mt-2">
       <dl>
         <div>
           <dt class="tw-sr-only">Price</dt>
-          <dd class="tw-text-sm tw-text-gray-500">$240,000</dd>
+          <dd class="tw-text-sm tw-text-gray-500">
+            {{ formatCurrency(roomInfo.price) }}/1 tháng
+          </dd>
         </div>
         <div>
           <dt class="tw-sr-only">Address</dt>
-          <dd class="tw-font-medium">123 Wallaby Avenue, Park Road</dd>
+          <dd class="tw-font-medium">{{ roomInfo.name }}</dd>
         </div>
       </dl>
       <div
@@ -39,7 +52,7 @@ const isShowAddRoomMember = ref(false);
           <IconUser />
           <div class="tw-mt-1.5 sm:tw-mt-0">
             <p class="text-gray-500">Tối đa</p>
-            <p class="font-medium">4 người</p>
+            <p class="font-medium">{{ roomInfo.max_customer }} người</p>
           </div>
         </div>
         <div>
@@ -60,7 +73,7 @@ const isShowAddRoomMember = ref(false);
     />
   </v-dialog>
   <v-dialog v-model="isShowUpdateRoom" width="544" persistent scrollable>
-    <ModalUpdateRoom @close="isShowUpdateRoom = false" />
+    <ModalUpdateRoom @close="isShowUpdateRoom = false" :roomInfo="roomInfo" />
   </v-dialog>
   <v-dialog v-model="isShowAddRoomMember" width="544" persistent scrollable>
     <ModalAddRoomMember @close="isShowAddRoomMember = false" />

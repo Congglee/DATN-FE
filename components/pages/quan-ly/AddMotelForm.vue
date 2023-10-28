@@ -4,7 +4,7 @@ import IconXMark from "@/assets/svg/x-mark.svg";
 import * as yup from "yup";
 import { useForm } from "vee-validate";
 import { useToast } from "vue-toastification";
-import { useRoomStore } from "@/store/room";
+import { useMotelStore } from "@/store/motel";
 //props
 const props = defineProps({});
 
@@ -16,7 +16,7 @@ const toast = useToast();
 const route = useRoute();
 
 //store
-const roomStore = useRoomStore();
+const motelStore = useMotelStore();
 
 //state
 const { values, errors, defineComponentBinds, handleSubmit } = useForm({
@@ -66,7 +66,7 @@ const validateFormData = reactive({
 
 const createMotel = handleSubmit(async () => {
   const payload = { ...values };
-  const res = await roomStore.createMotel(payload);
+  const res = await motelStore.createMotel(payload);
   if (res.data) {
     toast.success("Tạo nhà trọ thành công!");
     fetchListMotel.emit();
@@ -146,3 +146,4 @@ const createMotel = handleSubmit(async () => {
 <style lang="scss" scoped>
 @import url("./index.scss");
 </style>
+~/store/motel

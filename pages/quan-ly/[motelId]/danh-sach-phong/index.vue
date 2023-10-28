@@ -2,9 +2,16 @@
 import RoomItem from "@/components/pages/room/RoomItem.vue";
 import IconFilter from "@/assets/svg/filter.svg";
 import IconSearch from "@/assets/svg/search.svg";
-import { useRoomStore } from "@/store/room";
+import { useRoomStore } from "~/store/room";
+
+//composable
+const route = useRoute();
+const fetchListRoomEventBus = useEventBus(
+  `fetch-list-room-${route.params.motelId}`
+);
 
 //store
+const roomStore = useRoomStore();
 
 const roomStatus = ref(null);
 const payingStatus = ref(null);
@@ -32,6 +39,17 @@ const payingStatusOptions = ref([
   },
 ]);
 
+const getAllRoomOfMotel = async () => {
+  const res = await roomStore.getAllRoomOfMotel(route.params.motelId);
+  if (res.data) {
+    rooms.value = res.data.listRoom;
+  }
+};
+
+getAllRoomOfMotel();
+fetchListRoomEventBus.on(() => {
+  getAllRoomOfMotel();
+});
 </script>
 <template>
   <div class="tw-w-full">
@@ -82,7 +100,7 @@ const payingStatusOptions = ref([
       </g-button>
     </div>
     <div class="tw-grid tw-grid-cols-4 tw-gap-3">
-      <RoomItem v-for="item in 3" />
+      <RoomItem v-for="item in rooms" :roomInfo="item" />
     </div>
   </div>
 </template>

@@ -1,10 +1,18 @@
 <script setup>
 import { Doughnut } from "vue-chartjs";
+
+const props = defineProps({
+  roomData: {
+    type: Object,
+    default: {},
+  },
+});
+
 const data = {
-  labels: ["Dịch vụ", "Tiền điện", "Tiền nước", "Tiền phòng"],
+  labels: ["Phòng trống", "Phòng đang thuê", "Phòng đang sửa chữa", "Phòng đang cọc"],
   datasets: [
     {
-      data: [300, 50, 100, 500],
+      data: [props.roomData.emptyRooms, props.roomData.rentingRooms, props.roomData.repairRoom, props.roomData.depositRooms],
     },
   ],
 };

@@ -1,5 +1,10 @@
 .modal-change-information {
-  background-color: #f7f7f7;
+  background: var(
+    --global-alert-bg,
+    linear-gradient(0deg, rgba(0, 0, 0, 0.2) 0%, rgba(0, 0, 0, 0.2) 100%),
+    rgba(255, 255, 255, 0.9)
+  );
+  background-blend-mode: overlay, normal;
   backdrop-filter: blur(40px);
   border-radius: 14px;
   position: relative;
@@ -25,20 +30,9 @@
 
   &__form {
     padding: 20px;
-    max-height: 750px;
+    max-height: 600px;
     overflow-y: auto;
     -ms-overflow-style: none;
     scrollbar-width: none;
   }
-}
-
-.card {
-  border-radius: 0px;
-  background-color: #f7f7f7;
-  box-shadow: none;
-}
-
-.card .v-slide-group__container {
-  background-color: #f7f7f7;
-  padding: 0px;
 }

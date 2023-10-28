@@ -1,5 +1,5 @@
 <script setup>
-import { useRoomStore } from "@/store/room";
+import { useMotelStore } from "@/store/motel";
 import MotelsCard from "@/components/pages/quan-ly/MotelsCard.vue";
 import Header from "~/components/global/header/Header.vue";
 import Footer from "~/components/global/footer/Footer.vue";
@@ -11,13 +11,13 @@ import * as yup from "yup";
 const fetchListMotel = useEventBus(`fetch-list-motel`);
 
 //store
-const roomStore = useRoomStore();
+const motelStore = useMotelStore();
 
 const motels = ref(null);
 const isDisplayAddMotel = ref(false);
 
 const getAllMotels = async () => {
-  const res = await roomStore.getMotels();
+  const res = await motelStore.getMotels();
   if (res.data) {
     motels.value = res.data.motels;
   }
@@ -83,3 +83,4 @@ fetchListMotel.on(async () => {
   </section>
   <Footer></Footer>
 </template>
+~/store/motel

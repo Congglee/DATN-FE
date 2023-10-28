@@ -1,4 +1,4 @@
-<script setup lang="ts">
+<script setup>
 import IconClose from "@/assets/svg/close.svg";
 import IconXMark from "@/assets/svg/x-mark.svg";
 import IconRequired from "@/assets/svg/required.svg";
@@ -6,18 +6,78 @@ import IconCalendar from "@/assets/svg/manage-student/calendar.svg";
 import * as yup from "yup";
 import { useForm } from "vee-validate";
 import { useToast } from "vue-toastification";
+import { useRoomStore } from "~/store/room";
 //props
-const props = defineProps({});
+const props = defineProps({
+  roomInfo: {
+    type: Object,
+    default: {},
+  },
+});
+
+console.log(props.roomInfo);
 
 //composable
 const toast = useToast();
-const route: any = useRoute();
+const route = useRoute();
+const fetchListRoomEventBus = useEventBus(
+  `fetch-list-room-${route.params.motelId}`
+);
 
 //emit
 
+const emit = defineEmits("close");
+
 //store
 
+const roomStore = useRoomStore();
+
+//state
+
+const { values, errors, defineComponentBinds, handleSubmit } = useForm({
+  validationSchema: yup.object({
+    name: yup.string().trim().required(),
+    // motelId: yup.string().trim().required(),
+    price: yup.number().required(),
+    verify_code: yup.string().trim().required(),
+    max_customer: yup.number().required(),
+    // area: yup.string(),
+  }),
+  initialValues: {
+    name: props.roomInfo.name,
+    price: props.roomInfo.price,
+    max_customer: props.roomInfo.max_customer,
+    verify_code: "",
+  },
+});
+
+const validateFormData = reactive({
+  name: defineComponentBinds("name"),
+  price: defineComponentBinds("price"),
+  verify_code: defineComponentBinds("verify_code"),
+  max_customer: defineComponentBinds("max_customer"),
+});
+
+const formData = reactive({
+  description: props.roomInfo.description,
+  status: props.roomInfo.status,
+});
+
 //methods
+
+const updateRoom = handleSubmit(async () => {
+  const payload = { ...values, ...formData, ...formData.status.status };
+  console.log(payload);
+  const res = await roomStore.updateRoom(payload, props.roomInfo._id);
+  if (res.data) {
+    fetchListRoomEventBus.emit();
+    toast.success("Cập nhật phòng thành công!");
+    emit("close");
+  }
+  if (res.error) {
+    toast.error(res.error.data.message.verify_code);
+  }
+});
 </script>
 <template>
   <div class="modal-change-information">
@@ -39,33 +99,54 @@ const route: any = useRoute();
     </div>
     <div class="modal-change-information__form">
       <div class="tw-mt-6 tw-flex-col tw-gap-y-4">
-        <div class="tw-grid tw-grid-cols-3 tw-gap-x-4 tw-pt-4">
-          <g-input label="Họ" required></g-input>
-          <g-input label="Tên đệm"></g-input>
-          <g-input label="Tên" required></g-input>
+        <g-input
+          label="Tên phòng"
+          required
+          v-bind="validateFormData.name"
+          :error="errors.name"
+        ></g-input>
+        <g-input
+          class="tw-pt-4"
+          label="Giá phòng"
+          required
+          v-bind="validateFormData.price"
+          :error="errors.name"
+        >
+        </g-input>
+        <g-input
+          class="tw-pt-4"
+          label="Số người tối đa"
+          required
+          v-bind="validateFormData.max_customer"
+          :error="errors.max_customer"
+        >
+        </g-input>
+        <div class="tw-gap-y-1 tw-grid tw-pt-4">
+          <p>Ghi chú</p>
+          <textarea
+            v-model="formData.description"
+            class="tw-resize-none tw-rounded-[10px] tw-bg-white tw-outline tw-p-3 !tw-outline-[#c0c0c0] tw-outline-[1px] focus:!tw-outline-[#f88125] tw-w-full tw-h-[158px] focus:!tw-shadow-[0px_0px_0px_2px_rgba(248,129,37,0.2)]"
+          ></textarea>
         </div>
-        <g-date-picker class="tw-pt-4" label="Ngày tháng năm sinh" required>
-          <template #append>
-            <IconCalendar />
-          </template>
-        </g-date-picker>
-        <g-input class="tw-pt-4" label="Email"> </g-input>
-        <g-input class="tw-pt-4" label="Số điện thoại" required> </g-input>
-        <g-autocomplete label="Dân tộc" class="tw-mt-4"> </g-autocomplete>
-        <g-input class="tw-pt-4" label="Địa chỉ"> </g-input>
       </div>
       <hr class="tw-mt-8" />
       <div class="tw-w-full tw-py-8">
-        <div class="tw-grid tw-gap-y-4">
-          <div class="tw-flex tw-gap-x-1">
-            <p>Giới tính</p>
-            <IconRequired class="tw-mt-1" />
-          </div>
-          <div class="tw-flex tw-items-center tw-gap-x-8">
-            <g-radio-group name="gender" inline />
-          </div>
-        </div>
+        <g-autocomplete
+          label="Trạng thái phòng"
+          required
+          :items="ROOM_STATUS"
+          title="title"
+          v-model="formData.status"
+        ></g-autocomplete>
       </div>
+      <g-input
+        class="tw-pt-4"
+        label="Mã xác thực"
+        required
+        v-bind="validateFormData.verify_code"
+        :error="errors.verify_code"
+      >
+      </g-input>
     </div>
     <div
       class="tw-grid tw-grid-cols-2 tw-justify-between tw-gap-x-3 tw-bg-white tw-px-[24px] tw-py-[22px] tw-rounded-b-xl"
@@ -76,7 +157,7 @@ const route: any = useRoute();
         </template>
         Hủy
       </g-button>
-      <g-button>Cập nhật</g-button>
+      <g-button @click="updateRoom">Cập nhật</g-button>
     </div>
   </div>
 </template>

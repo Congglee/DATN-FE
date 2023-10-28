@@ -14,65 +14,65 @@ const route = useRoute();
 //store
 
 const menu = computed(() => {
-  const roomId = route.params.roomId;
+  const motelId = route.params.motelId;
   return [
     {
       text: "Thống kê",
-      path: `/quan-ly/${roomId}/thong-ke`,
+      path: `/quan-ly/${motelId}/thong-ke`,
       icon: IconThongKe,
       mainPath: "thong-ke",
     },
     {
       text: "Danh sách phòng",
-      path: `/quan-ly/${roomId}/danh-sach-phong`,
+      path: `/quan-ly/${motelId}/danh-sach-phong`,
       icon: IconPhong,
       mainPath: "danh-sach-phong",
     },
     {
       text: "Cọc phòng",
-      path: `/quan-ly/${roomId}/coc-phong`,
+      path: `/quan-ly/${motelId}/coc-phong`,
       icon: IconCocPhong,
       mainPath: "coc-phong",
     },
     {
       text: "Dịch vụ",
-      path: `/quan-ly/${roomId}/dich-vu`,
+      path: `/quan-ly/${motelId}/dich-vu`,
       icon: IconDichVu,
       mainPath: "dich-vu",
     },
     {
       text: "Số điện",
-      path: `/quan-ly/${roomId}/so-dien`,
+      path: `/quan-ly/${motelId}/so-dien`,
       icon: IconSoDienNuoc,
       mainPath: "so-dien",
     },
     {
       text: "Số nước",
-      path: `/quan-ly/${roomId}/so-nuoc`,
+      path: `/quan-ly/${motelId}/so-nuoc`,
       icon: IconSoDienNuoc,
       mainPath: "so-nuoc",
     },
     {
       text: "Hóa đơn hàng tháng",
-      path: `/quan-ly/${roomId}/hoa-don-hang-thang`,
+      path: `/quan-ly/${motelId}/hoa-don-hang-thang`,
       icon: IconHoaDon,
       mainPath: "hoa-don-hang-thang",
     },
     {
       text: "Hóa đơn thanh lý",
-      path: `/quan-ly/${roomId}/hoa-don-thanh-ly`,
+      path: `/quan-ly/${motelId}/hoa-don-thanh-ly`,
       icon: IconHoaDon,
       mainPath: "hoa-don-thanh-ly",
     },
     {
       text: "Lịch sử",
-      path: `/quan-ly/${roomId}/lich-su`,
+      path: `/quan-ly/${motelId}/lich-su`,
       icon: IconQuanLyThanhToan,
       mainPath: "lich-su",
     },
     {
       text: "Quản lý thanh toán",
-      path: `/quan-ly/${roomId}/quan-ly-thanh-toan`,
+      path: `/quan-ly/${motelId}/quan-ly-thanh-toan`,
       icon: IconQuanLyThanhToan,
       mainPath: "quan-ly-thanh-toan",
     },
