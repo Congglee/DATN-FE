@@ -133,13 +133,13 @@ const createMotel = handleSubmit(async () => {
     <div
       class="tw-grid tw-grid-cols-2 tw-justify-between tw-gap-x-3 tw-bg-white tw-px-[24px] tw-py-[22px] tw-rounded-b-xl"
     >
-      <g-button variant="bezeled" class="tw-w-full" @click="$emit('close')">
+      <g-button @click="createMotel">Thêm</g-button
+      ><g-button variant="bezeled" class="tw-w-full" @click="$emit('close')">
         <template #prepend>
           <IconXMark />
         </template>
         Hủy
       </g-button>
-      <g-button @click="createMotel">Tạo</g-button>
     </div>
   </div>
 </template>

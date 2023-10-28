@@ -4,7 +4,7 @@ import MotelsCard from "@/components/pages/quan-ly/MotelsCard.vue";
 import Header from "~/components/global/header/Header.vue";
 import Footer from "~/components/global/footer/Footer.vue";
 import "@/assets/css/main.css";
-import { useForm } from "vee-validate";
+import IconAddMotel from "@/assets/svg/add-motel.svg";
 import AddMotelForm from "@/components/pages/quan-ly/AddMotelForm.vue";
 import * as yup from "yup";
 
@@ -24,8 +24,14 @@ const getAllMotels = async () => {
 };
 getAllMotels();
 
-fetchListMotel.on(() => {
-  getAllMotels();
+fetchListMotel.on(async () => {
+  // fix tạm thời
+  motels.value = null;
+  // ----
+  await getAllMotels();
+  // Đã chạy nhưng không update state motels
+  // console.log(motels);
+  // console.log("getAllMotels");
   isDisplayAddMotel.value = false;
 });
 </script>
@@ -45,8 +51,12 @@ fetchListMotel.on(() => {
         </h3>
         <div class="">
           <div class="tw-flex tw-items-center tw-gap-x-3">
-            <g-button @click="isDisplayAddMotel = true" variant="bezeled"
-              >Thêm nhà trọ</g-button
+            <g-button
+              @click="isDisplayAddMotel = true"
+              class="tw-w-[220px]"
+              variant="bezeled"
+            >
+              <IconAddMotel class="tw-mr-1" /> Thêm nhà trọ</g-button
             >
             <v-dialog width="544" v-model="isDisplayAddMotel">
               <AddMotelForm @close="isDisplayAddMotel = false" />
@@ -57,7 +67,7 @@ fetchListMotel.on(() => {
       </div>
     </aside>
     <aside
-      v-if="!motels || motels.length == 0"
+      v-if="!motels || motels.length === 0 || motels.length === undefined"
       class="tw-py-2 tw-px-5 tw-w-full tw-text-center"
     >
       <h2 class="tw-font-semibold tw-py-20 tw-text-gray-600">
