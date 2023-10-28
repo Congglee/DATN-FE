@@ -7,6 +7,13 @@ export const ACCESS_TOKEN = "accessToken";
 
 export const CLASS_ID_COOKIE = "lms_class_id";
 
+export const ROOM_STATUS = [
+  { title: "Đã đặt cọc", status: "Đã đặt cọc" },
+  { title: "Đang sửa", status: "Đang sửa" },
+  { title: "Trống", status: "Trống" },
+  { title: "Đã có người ở", status: "Đã có người ở" },
+];
+
 export const UPLOAD_KEY =
   "MGMJU97D7WVRANW44JLM9M9PSH2MUWS1JBBW1D9PDJ37J2GMGZYI1CWT7GWWWSE";
 

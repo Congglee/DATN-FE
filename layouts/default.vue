@@ -7,7 +7,7 @@ const route = useRoute();
 <template>
   <div
     class="tw-flex tw-h-screen tw-overflow-hidden"
-    v-if="route.params.roomId"
+    v-if="route.params.motelId"
   >
     <Sidebar />
     <div
@@ -29,5 +29,5 @@ const route = useRoute();
       </div>
     </div>
   </div>
-  <slot v-if="!route.params.roomId" />
+  <slot v-if="!route.params.motelId" />
 </template>

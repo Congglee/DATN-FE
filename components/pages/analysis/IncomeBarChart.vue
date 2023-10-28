@@ -17,7 +17,7 @@ const chartOptions = ref({
 </script>
 <template>
   <div class="tw-max-h-[300px]">
-    <span>Doanh thu 5 tháng gần nhất</span>
+    <span class="tw-text-[16px] tw-font-bold">Doanh thu 5 tháng gần nhất</span>
     <Bar :data="chartData" :options="chartOptions" />
   </div>
 </template>
