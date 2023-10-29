@@ -12,7 +12,7 @@ const props = defineProps({
     default: {},
   },
 });
-console.log(props.item);
+// console.log(props.item);
 //composable
 
 const emit = defineEmits(["close"]);
