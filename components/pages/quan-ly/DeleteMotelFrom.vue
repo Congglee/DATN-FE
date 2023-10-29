@@ -34,10 +34,12 @@ const deleteMotel = handleSubmit(async () => {
   const res = await motelStore.deleteMotel(props.item._id);
   if (res.data) {
     toast.success("Xoá nhà trọ thành công!");
+    emit("close");
     fetchListMotel.emit();
   }
   if (res.error) {
-    toast.error("Xoá nhà trọ thất bại!");
+    toast.error(res.error.data.message);
+    emit("close");
   }
 });
 </script>

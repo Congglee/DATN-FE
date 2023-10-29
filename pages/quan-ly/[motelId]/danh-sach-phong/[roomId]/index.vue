@@ -5,6 +5,7 @@ import IconArrowBack from "@/assets/svg/arrow-back.svg";
 import IconSearch from "@/assets/svg/search.svg";
 import { useRoomStore } from "@/store/room";
 import IconSetting from "@/assets/svg/setting.svg";
+import ModalAddRoomMember from "@/components/pages/room/ModalAddRoomMember.vue";
 import {
   VCard,
   VTabs,
@@ -13,39 +14,67 @@ import {
   VWindow,
   VWindowItem,
 } from "vuetify/lib/components";
+import { useMemberStore } from "~/store/member";
+import IconArrowLeft from "@/assets/svg/arrow-left.svg";
+import ListMemberTable from "@/components/pages/room/home/ListMemberTable.vue";
+import ListServiceTable from "@/components/pages/room/home/ListServiceTable.vue";
 
 //composable
 const route = useRoute();
 
 //store
 const roomStore = useRoomStore();
+const memberStore = useMemberStore();
 
 //state
 const searchKeyword = ref("");
+const roomHost = ref(null);
+const roomMembers = ref(null);
 const tab = ref("");
 const room = ref({});
+const isShowAddMemberInRoom = ref(false);
+const isFullMember = ref(false);
 const roomFactorList = ref([
   {
     _id: "1",
     title: "Danh sách thành viên",
+    value: "MEMBERS",
   },
   {
     _id: "2",
     title: "Danh sách dịch vụ",
+    value: "SERVICES",
   },
 ]);
+const listComponent = {
+  MEMBERS: ListMemberTable,
+  SERVICES: ListServiceTable,
+};
 
 //method
 const getRoomDetail = async () => {
   const res = await roomStore.getRoomDetail(route.params.roomId);
   if (res.data) {
     room.value = res.data.room;
+    if (room.value.max_customer == room.value.memberIds.length) {
+      isFullMember.value = true;
+    }
   }
 };
 getRoomDetail();
 </script>
 <template>
   <div class="tw-pt-[50px]">
+    <div class="tw-mb-4">
+      <nuxt-link :to="'/quan-ly/' + route.params.motelId + '/danh-sach-phong'">
+        <g-button rounded="true" variant="ghosted">
+          <template #prepend>
+            <IconArrowLeft />
+          </template>
+          Quay lại trang phòng trọ</g-button
+        >
+      </nuxt-link>
+    </div>
     <div class="tw-px-5">
       <div class="tw-pb-4">
         <h5 class="tw-text-[20px] tw-font-extrabold tw-mb-2">
@@ -82,15 +111,19 @@ getRoomDetail();
               >Chỉnh sửa thông tin phòng</span
             >
           </g-button>
-          <g-button variant="filled">
-            <span class="tw-text-[14px] tw-font-semibold">Quản lý phòng</span>
+          <g-button
+            variant="filled"
+            @click="isShowAddMemberInRoom = true"
+            :disabled="isFullMember"
+          >
+            <span class="tw-text-[14px] tw-font-semibold">Thêm thành viên</span>
           </g-button>
         </div>
       </div>
     </div>
     <div class="tw-pt-[24px]">
       <v-card class="conduct-table">
-        <v-tabs v-model="tab" bg-color="" class="s-tabs" id="">
+        <v-tabs v-model="tab" class="s-tabs" id="">
           <v-tab v-for="item in roomFactorList" :value="item._id">
             <span class="tw-flex tw-items-center">{{ item.title }}</span>
           </v-tab>
@@ -99,12 +132,22 @@ getRoomDetail();
         <v-card-text class="conduct-v-card-text">
           <v-window v-model="tab">
             <v-window-item v-for="item in roomFactorList" :value="item._id">
+              <component :is="listComponent[item.value]"> </component>
             </v-window-item>
           </v-window>
         </v-card-text>
       </v-card>
     </div>
   </div>
+  <v-dialog v-model="isShowAddMemberInRoom" width="544">
+    <ModalAddRoomMember
+      @close="isShowAddMemberInRoom = false"
+      @fetchRoomData="
+        getRoomDetail();
+        getAllMemberInRoom();
+      "
+    />
+  </v-dialog>
 </template>
 <style scoped>
 @import url("./index.scss");

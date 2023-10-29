@@ -38,7 +38,7 @@ const { values, errors, defineComponentBinds, handleSubmit } = useForm({
     // motelId: yup.string().trim().required(),
     price: yup.number().required(),
     max_customer: yup.number().required(),
-    area: yup.string(),
+    area: yup.number().required(),
   }),
 });
 
@@ -72,7 +72,8 @@ const createRoom = handleSubmit(async () => {
     emit("close");
   }
   if (res.error) {
-    toast.error(res.error.data.message.verify_code);
+    toast.error(res.error.data.message);
+    loading.value = false
   }
 });
 </script>
