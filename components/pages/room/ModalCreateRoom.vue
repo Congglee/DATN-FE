@@ -64,7 +64,6 @@ const createRoom = handleSubmit(async () => {
     ...formData,
     motelId: route.params.motelId,
   };
-  console.log(payload);
   const res = await roomStore.createRoom(payload);
   if (res.data) {
     fetchListRoomEventBus.emit();

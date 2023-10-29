@@ -26,7 +26,7 @@ export const useServiceStore = defineStore({
     },
     async updateService(payload: any) {
       const res = await useFetchData(
-        `${SERVICES.UPDATE_SERVICES}${payload["_id"]}`,
+        `${SERVICES.UPDATE_SERVICES}/${payload["_id"]}`,
         {
           method: "PUT",
           body: payload["data"],
@@ -35,7 +35,7 @@ export const useServiceStore = defineStore({
       return res;
     },
     async deleteService(id: number | string) {
-      const res = await useFetchData(`${SERVICES.DELETE_SERVICES}${id}`, {
+      const res = await useFetchData(`${SERVICES.DELETE_SERVICES}/${id}`, {
         method: "DELETE",
       });
       return res;

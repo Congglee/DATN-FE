@@ -30,58 +30,6 @@ export const GENDER_TYPE: keyType = {
 export const IMAGE_DEFAULT = imageDefault;
 export const AVATAR_DEFAULT = avatarDefault;
 
-export const LIST_GRADE_TYPE = [
-  {
-    label: "Đạt/Không đạt",
-    value: "PASS/FAIL",
-  },
-  {
-    label: "Điểm số",
-    value: "GRADE",
-  },
-];
-
-export const DAYS_OF_WEEK = [
-  {
-    value: "monday",
-    label: "MONDAY",
-  },
-  {
-    value: "tuesday",
-    label: "TUESDAY",
-  },
-  {
-    value: "wednesday",
-    label: "WEDNESDAY",
-  },
-  {
-    value: "thursday",
-    label: "THURSDAY",
-  },
-  {
-    value: "friday",
-    label: "FRIDAY",
-  },
-  {
-    value: "saturday",
-    label: "SATURDAY",
-  },
-  {
-    value: "sunday",
-    label: "SUNDAY",
-  },
-];
-
-export const enum WORK_TIME_DAY {
-  "MONDAY" = "Thứ hai",
-  "TUESDAY" = "Thứ ba",
-  "WEDNESDAY" = "Thứ tư",
-  "THURSDAY" = "Thứ năm",
-  "FRIDAY" = "Thứ sáu",
-  "SATURDAY" = "Thứ bảy",
-  "SUNDAY" = "Chủ nhật",
-}
-
 export const genders = [
   {
     label: "Nam",
