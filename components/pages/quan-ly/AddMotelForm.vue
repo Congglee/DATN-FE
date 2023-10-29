@@ -5,6 +5,7 @@ import * as yup from "yup";
 import { useForm } from "vee-validate";
 import { useToast } from "vue-toastification";
 import { useMotelStore } from "@/store/motel";
+import { useAdministrativeStore } from "@/store/administrative";
 //props
 const props = defineProps({});
 
@@ -17,6 +18,7 @@ const route = useRoute();
 
 //store
 const motelStore = useMotelStore();
+const administrativeStore = useAdministrativeStore();
 
 //state
 const { values, errors, defineComponentBinds, handleSubmit } = useForm({
@@ -31,21 +33,6 @@ const { values, errors, defineComponentBinds, handleSubmit } = useForm({
       .trim("Địa chỉ không được bỏ trống")
       .required("Địa chỉ là trường bắt buộc")
       .min(3, "Địa chỉ tối thiểu 3 ký tự"),
-    city: yup
-      .string()
-      .trim("Tỉnh / Thành phố không được bỏ trống")
-      .required("Tỉnh / Thành phố là trường bắt buộc")
-      .min(3, "Tỉnh / Thành phố tối thiểu 3 ký tự"),
-    ward: yup
-      .string()
-      .trim("Quận / Huyện không được bỏ trống")
-      .required("Quận / Huyện là trường bắt buộc")
-      .min(3, "Quận / Huyện tối thiểu 3 ký tự"),
-    district: yup
-      .string()
-      .trim("Phường / Xã không được bỏ trống")
-      .required("Phường / Xã là trường bắt buộc")
-      .min(3, "Phường / Xã tối thiểu 3 ký tự"),
     // password: yup
     //   .string()
     //   .trim("Mật khẩu không được bỏ trống")
@@ -57,19 +44,59 @@ const { values, errors, defineComponentBinds, handleSubmit } = useForm({
 const validateFormData = reactive({
   name: defineComponentBinds("name"),
   address: defineComponentBinds("address"),
-  city: defineComponentBinds("city"),
-  ward: defineComponentBinds("ward"),
-  district: defineComponentBinds("district"),
 });
+
+const province = ref("Hà Nội");
+const districts = ref([]);
+const wards = ref([]);
+const choosedDistrict = ref(null);
+const choosedWard = ref(null);
 
 //methods
 
+const getDistrictOfHaNoi = async () => {
+  const params = {
+    provinceCode: "01",
+    limit: "-1",
+  };
+  const res = await administrativeStore.getDistrictOfHaNoi(params);
+  if (res.data) {
+    districts.value = res.data.data.data;
+  }
+};
+
+getDistrictOfHaNoi();
+
+const getWards = async (e) => {
+  const params = {
+    districtCode: e.code,
+    limit: "-1",
+  };
+  const res = await administrativeStore.getWardByDistrict(params);
+  if (res.data) {
+    wards.value = res.data.data.data;
+  }
+};
+
+watch(
+  () => choosedDistrict.value,
+  (newVal) => {
+    getWards(newVal);
+  }
+);
+
 const createMotel = handleSubmit(async () => {
-  const payload = { ...values };
+  const payload = {
+    ...values,
+    city: province.value,
+    district: choosedDistrict.value.name,
+    ward: choosedWard.value.name,
+  };
   const res = await motelStore.createMotel(payload);
   if (res.data) {
     toast.success("Tạo nhà trọ thành công!");
     fetchListMotel.emit();
+    emit("close")
   }
   if (res.error) {
     toast.error("Tạo nhà trọ thất bại!");
@@ -109,24 +136,26 @@ const createMotel = handleSubmit(async () => {
         >
         </g-input>
         <div class="tw-grid tw-grid-cols-3 tw-gap-x-4 tw-pt-4">
-          <g-input
+          <g-autocomplete
             label="Tỉnh/TP"
-            required
-            v-bind="validateFormData.city"
-            :error="errors.city"
-          ></g-input>
-          <g-input
+            disabled
+            v-model="province"
+          ></g-autocomplete>
+          <g-autocomplete
+            v-model="choosedDistrict"
             label="Quận/Huyện"
             required
-            v-bind="validateFormData.ward"
-            :error="errors.ward"
-          ></g-input>
-          <g-input
+            :items="districts"
+            item-title="name"
+          ></g-autocomplete>
+          <g-autocomplete
+            v-model="choosedWard"
             label="Phường/Xã"
             required
-            v-bind="validateFormData.district"
-            :error="errors.district"
-          ></g-input>
+            :items="wards"
+            item-title="name"
+            :disabled="!choosedDistrict"
+          ></g-autocomplete>
         </div>
       </div>
     </div>

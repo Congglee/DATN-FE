@@ -12,7 +12,6 @@ const signUpSuccessEventBus = useEventBus(`sign-up-success`);
 
 const isSigningUp = ref(false);
 signUpSuccessEventBus.on(() => {
-  console.log(1);
   isSigningUp.value = false;
 });
 </script>

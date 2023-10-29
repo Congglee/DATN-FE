@@ -2,12 +2,16 @@ import { defineStore } from "pinia";
 
 export const useMotelStore = defineStore({
   id: "motel",
-  state: () => ({}),
+  state: () => ({
+    motels: null,
+  }),
   actions: {
     async getMotels() {
       const res = await useFetchData(`${MOTELS.GET_LIST_MOTELS}`, {
         method: "GET",
       });
+      this.motels = res.data.motels
+      console.log(this.motels)
       return res;
     },
     async createMotel(payload: any) {
@@ -17,19 +21,16 @@ export const useMotelStore = defineStore({
       });
       return res;
     },
-    async updateMotel(payload: any) {
-      const res = await useFetchData(
-        `${MOTELS.UPDATE_MOTEL}${payload["_id"]}`,
-        {
-          method: "PUT",
-          body: payload["data"],
-        }
-      );
+    async updateMotel(payload: any, id: string) {
+      const res = await useFetchData(`${MOTELS.UPDATE_MOTEL}/${id}`, {
+        method: "PUT",
+        body: payload,
+      });
       return res;
     },
 
     async deleteMotel(id: number | string) {
-      const res = await useFetchData(`${MOTELS.DELETE_MOTEL}${id}`, {
+      const res = await useFetchData(`${MOTELS.DELETE_MOTEL}/${id}`, {
         method: "DELETE",
       });
       return res;

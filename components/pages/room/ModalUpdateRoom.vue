@@ -15,8 +15,6 @@ const props = defineProps({
   },
 });
 
-console.log(props.roomInfo);
-
 //composable
 const toast = useToast();
 const route = useRoute();
@@ -67,7 +65,6 @@ const formData = reactive({
 
 const updateRoom = handleSubmit(async () => {
   const payload = { ...values, ...formData, status: formData.status.status };
-  console.log(payload);
   const res = await roomStore.updateRoom(payload, props.roomInfo._id);
   if (res.data) {
     fetchListRoomEventBus.emit();

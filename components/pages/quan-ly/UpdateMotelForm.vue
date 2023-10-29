@@ -4,15 +4,13 @@ import IconXMark from "@/assets/svg/x-mark.svg";
 import * as yup from "yup";
 import { useForm } from "vee-validate";
 import { useToast } from "vue-toastification";
-import { useMotelStore } from "~/store/motel";
+import { useMotelStore } from "@/store/motel";
+import { useAdministrativeStore } from "@/store/administrative";
 //props
 const props = defineProps({
-  item: {
+  motelInfo: {
     type: Object,
     default: {},
-  },
-  closePopupAll: {
-    type: Function,
   },
 });
 
@@ -25,6 +23,7 @@ const route = useRoute();
 
 //store
 const motelStore = useMotelStore();
+const administrativeStore = useAdministrativeStore();
 
 //state
 const { values, errors, defineComponentBinds, handleSubmit } = useForm({
@@ -39,21 +38,6 @@ const { values, errors, defineComponentBinds, handleSubmit } = useForm({
       .trim("Địa chỉ không được bỏ trống")
       .required("Địa chỉ là trường bắt buộc")
       .min(3, "Địa chỉ tối thiểu 3 ký tự"),
-    city: yup
-      .string()
-      .trim("Tỉnh / Thành phố không được bỏ trống")
-      .required("Tỉnh / Thành phố là trường bắt buộc")
-      .min(3, "Tỉnh / Thành phố tối thiểu 3 ký tự"),
-    ward: yup
-      .string()
-      .trim("Quận / Huyện không được bỏ trống")
-      .required("Quận / Huyện là trường bắt buộc")
-      .min(3, "Quận / Huyện tối thiểu 3 ký tự"),
-    district: yup
-      .string()
-      .trim("Phường / Xã không được bỏ trống")
-      .required("Phường / Xã là trường bắt buộc")
-      .min(3, "Phường / Xã tối thiểu 3 ký tự"),
     // password: yup
     //   .string()
     //   .trim("Mật khẩu không được bỏ trống")
@@ -61,39 +45,74 @@ const { values, errors, defineComponentBinds, handleSubmit } = useForm({
     //   .min(6, "Mật khẩu tối thiểu 6 ký tự"),
   }),
   initialValues: {
-    ...Object.assign({}, props.item),
+    name: props.motelInfo.name,
+    address: props.motelInfo.address,
   },
 });
 
 const validateFormData = reactive({
   name: defineComponentBinds("name"),
   address: defineComponentBinds("address"),
-  city: defineComponentBinds("city"),
-  ward: defineComponentBinds("ward"),
-  district: defineComponentBinds("district"),
 });
 
+const province = ref("Hà Nội");
+const districts = ref([]);
+const wards = ref([]);
+const choosedDistrict = ref(props.motelInfo.district);
+const choosedWard = ref(props.motelInfo.ward);
+const id = ref(props.motelInfo._id);
+
 //methods
-const updateMotel = handleSubmit(async () => {
-  props.closePopupAll();
-  const { name, address, city, ward, district } = values;
-  const payload = {
-    _id: props.item._id,
-    data: {
-      name,
-      address,
-      city,
-      ward,
-      district,
-    },
+
+const getDistrictOfHaNoi = async () => {
+  const params = {
+    provinceCode: "01",
+    limit: "-1",
   };
-  const res = await motelStore.updateMotel(payload);
+  const res = await administrativeStore.getDistrictOfHaNoi(params);
   if (res.data) {
-    toast.success("Cập nhật nhà trọ thành công!");
+    districts.value = res.data.data.data;
+  }
+};
+
+getDistrictOfHaNoi();
+
+const getWards = async (e) => {
+  const params = {
+    districtCode: e.code,
+    limit: "-1",
+  };
+  const res = await administrativeStore.getWardByDistrict(params);
+  if (res.data) {
+    wards.value = res.data.data.data;
+  }
+};
+
+getWards(choosedDistrict.value);
+
+watch(
+  () => choosedDistrict.value,
+  (newVal) => {
+    choosedWard.value = "";
+    getWards(newVal);
+  }
+);
+
+const updateMotel = handleSubmit(async () => {
+  const payload = {
+    ...values,
+    city: province.value,
+    district: choosedDistrict.value.name,
+    ward: choosedWard.value.name,
+  };
+  const res = await motelStore.updateMotel(payload, id.value);
+  if (res.data) {
+    toast.success("Cập nhà trọ thành công!");
     fetchListMotel.emit();
+    emit("close");
   }
   if (res.error) {
-    toast.error("Cập nhật nhà trọ thất bại!");
+    toast.error("Tạo nhà trọ thất bại!");
   }
 });
 </script>
@@ -109,8 +128,7 @@ const updateMotel = handleSubmit(async () => {
       <h5
         class="tw-text-center tw-text-xl tw-leading-6 tw-font-extrabold tw-mb-3 tw-mt-3"
       >
-        Cập nhật nhà trọ
-        <span class="tw-text-[#f88125]">"{{ props.item.name }}"</span>
+        Thêm nhà trọ mới
       </h5>
     </div>
     <div class="modal-change-information__form">
@@ -131,32 +149,34 @@ const updateMotel = handleSubmit(async () => {
         >
         </g-input>
         <div class="tw-grid tw-grid-cols-3 tw-gap-x-4 tw-pt-4">
-          <g-input
+          <g-autocomplete
             label="Tỉnh/TP"
-            required
-            v-bind="validateFormData.city"
-            :error="errors.city"
-          ></g-input>
-          <g-input
+            disabled
+            v-model="province"
+          ></g-autocomplete>
+          <g-autocomplete
+            v-model="choosedDistrict"
             label="Quận/Huyện"
             required
-            v-bind="validateFormData.ward"
-            :error="errors.ward"
-          ></g-input>
-          <g-input
+            :items="districts"
+            item-title="name"
+          ></g-autocomplete>
+          <g-autocomplete
+            v-model="choosedWard"
             label="Phường/Xã"
             required
-            v-bind="validateFormData.district"
-            :error="errors.district"
-          ></g-input>
+            :items="wards"
+            item-title="name"
+            :disabled="!choosedDistrict"
+          ></g-autocomplete>
         </div>
       </div>
     </div>
     <div
       class="tw-grid tw-grid-cols-2 tw-justify-between tw-gap-x-3 tw-bg-white tw-px-[24px] tw-py-[22px] tw-rounded-b-xl"
     >
-      <g-button @click="updateMotel">Cập nhật</g-button>
-      <g-button variant="bezeled" class="tw-w-full" @click="$emit('close')">
+      <g-button @click="updateMotel">Thêm</g-button
+      ><g-button variant="bezeled" class="tw-w-full" @click="$emit('close')">
         <template #prepend>
           <IconXMark />
         </template>
@@ -168,3 +188,4 @@ const updateMotel = handleSubmit(async () => {
 <style lang="scss" scoped>
 @import url("./index.scss");
 </style>
+~/store/motel
