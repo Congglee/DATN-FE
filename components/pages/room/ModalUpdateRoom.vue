@@ -60,7 +60,6 @@ const formData = reactive({
   description: props.roomInfo.description,
   status: props.roomInfo.status,
 });
-
 //methods
 
 const updateRoom = handleSubmit(async () => {

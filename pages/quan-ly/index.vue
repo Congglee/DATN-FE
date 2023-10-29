@@ -66,7 +66,7 @@ fetchListMotel.on(() => {
     </aside>
     <aside
       v-if="motels && motels.length > 0"
-      class="tw-grid tw-grid-flow-cols lg:tw-grid-cols-4 md:tw-grid-cols-3 sm:tw-grid-cols-1 lg:tw-gap-10 tw-gap-1 tw-py-2 tw-px-5"
+      class="tw-grid tw-grid-cols-2 md:tw-grid-cols-3 lg:tw-grid-cols-4 tw-gap-3 tw-px-3 tw-py-5 tw-w-full"
     >
       <MotelsCard :items="item" v-for="item in motels" />
     </aside>

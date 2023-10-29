@@ -2,6 +2,7 @@
 import IconPhone from "@/assets/svg/phone.svg";
 import IconAddUser from "@/assets/svg/add-user.svg";
 import IconXMark from "@/assets/svg/x-mark.svg";
+import IconDelete from '@/assets/svg/delete.svg'
 </script>
 
 <template>
@@ -22,11 +23,11 @@ import IconXMark from "@/assets/svg/x-mark.svg";
             <template #prepend>
               <IconAddUser />
             </template>
-            <span class="tw-font-semibold"> Thêm thành viên </span>
+            <span class="tw-font-semibold"> Thêm người thuê phòng </span>
           </g-button>
           <g-button variant="bezeled" @click="$emit('deleteRoom')">
             <template #prepend>
-              <IconAddUser />
+              <IconDelete />
             </template>
             <span class="tw-font-semibold"> Xóa phòng </span>
           </g-button>

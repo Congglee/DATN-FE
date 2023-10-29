@@ -23,43 +23,33 @@ const closePopupAll = () => {
 };
 </script>
 <template>
-  <div
-    class="tw-my-4 tw-flex tw-flex-col tw-bg-white tw-rounded-xl tw-p-4"
-    max-width="374"
-  >
+  <div class="tw-flex tw-flex-col tw-bg-white tw-rounded-xl tw-p-4">
     <nuxt-link :to="'/quan-ly/' + item._id">
       <img
         class="tw-rounded-xl"
         src="https://cafefcdn.com/thumb_w/640/203337114487263232/2021/3/3/photo1614738126212-16147381266471125055486.jpg"
       />
     </nuxt-link>
-    <div style="flex: 1" class="tw-bg-[#FFFFFF] tw-pb-5">
+    <div class="tw-pt-5 tw-px-5">
       <div>
-        <v-card-item>
-          <v-card-title>
-            <div class="tw-flex tw-items-center tw-gap-2">
-              <IconHomeMotel />
-              <h5 class="tw-line-clamp-1">
-                {{ item.name }}
-              </h5>
-            </div>
-          </v-card-title>
-          <v-card-subtitle>
-            <span class="me-1">{{ item?.roomIds?.length }} phòng</span>
-            <v-icon color="error" icon="mdi-fire-circle" size="small"></v-icon>
-          </v-card-subtitle>
-        </v-card-item>
-
-        <v-card-text>
-          <div class="tw-flex tw-items-center tw-gap-3">
-            <IconAddressMotel />
-            <h5 class="tw-line-clamp-2">
-              {{
-                `${item.address}, ${item.ward}, ${item.district}, ${item.city} `
-              }}
-            </h5>
-          </div>
-        </v-card-text>
+        <div class="tw-flex tw-items-center tw-gap-2">
+          <IconHomeMotel />
+          <h5 class="tw-line-clamp-1">
+            {{ item.name }}
+          </h5>
+        </div>
+      </div>
+      <div class="tw-pt-3">
+        <span class="me-1">{{ item?.roomIds?.length }} phòng</span>
+        <v-icon color="error" icon="mdi-fire-circle" size="small"></v-icon>
+      </div>
+    </div>
+    <div>
+      <div class="tw-flex tw-items-center tw-gap-3 tw-p-5">
+        <IconAddressMotel />
+        <h5 class="tw-line-clamp-2">
+          {{ `${item.address}, ${item.ward}, ${item.district}, ${item.city} ` }}
+        </h5>
       </div>
 
       <div

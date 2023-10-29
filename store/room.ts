@@ -4,8 +4,8 @@ export const useRoomStore = defineStore({
   id: "room",
   state: () => ({}),
   actions: {
-    async getAllRoomOfMotel() {
-      const res = await useFetchData(`${ROOM.GET_LIST_ROOM}`, {
+    async getAllRoomOfMotel(id:string) {
+      const res = await useFetchData(`${ROOM.GET_LIST_ROOM}/${id}`, {
         method: "GET",
       });
       return res;

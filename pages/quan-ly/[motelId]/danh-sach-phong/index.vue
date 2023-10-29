@@ -44,7 +44,8 @@ const payingStatusOptions = ref([
 const getAllRoomOfMotel = async () => {
   const res = await roomStore.getAllRoomOfMotel(route.params.motelId);
   if (res.data) {
-    rooms.value = res.data.listRoom;
+    rooms.value = res.data.rooms;
+    console.log(rooms.value)
   }
 };
 
@@ -102,11 +103,11 @@ fetchListRoomEventBus.on(() => {
         <span>Thêm phòng</span>
       </g-button>
     </div>
-    <div class="tw-grid tw-grid-cols-4 tw-gap-3">
+    <div class="tw-w-full tw-flex tw-flex-wrap tw-gap-3">
       <RoomItem v-for="item in rooms" :roomInfo="item" />
     </div>
   </div>
   <v-dialog v-model="isDisplayCreateRoom" width="544">
-    <ModalCreateRoom @close="isDisplayCreateRoom = false"/>
+    <ModalCreateRoom @close="isDisplayCreateRoom = false" />
   </v-dialog>
 </template>

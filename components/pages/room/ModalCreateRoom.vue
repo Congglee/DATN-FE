@@ -53,22 +53,23 @@ const formData = reactive({
   description: props.roomInfo.description,
 });
 
-const loading = ref(false)
+const loading = ref(false);
 
 //methods
 
 const createRoom = handleSubmit(async () => {
-    loading.value = true
+  loading.value = true;
   const payload = {
     ...values,
     ...formData,
     motelId: route.params.motelId,
   };
+  console.log(payload);
   const res = await roomStore.createRoom(payload);
   if (res.data) {
     fetchListRoomEventBus.emit();
     toast.success("Tạo phòng thành công!");
-    loading.value = false
+    loading.value = false;
     emit("close");
   }
   if (res.error) {
@@ -88,11 +89,8 @@ const createRoom = handleSubmit(async () => {
       <h5
         class="tw-text-center tw-text-xl tw-leading-6 tw-font-extrabold tw-mb-3 tw-mt-3"
       >
-        Chỉnh sửa thông tin phòng
+        Thêm phòng trọ mới
       </h5>
-      <p class="tw-text-[15px] tw-leading-5 tw-text-center">
-        A message should be a short, complete sentence.
-      </p>
     </div>
     <div class="modal-change-information__form">
       <div class="tw-mt-6 tw-flex-col tw-gap-y-4">
