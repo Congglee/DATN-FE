@@ -6,18 +6,19 @@ import { useForm } from "vee-validate";
 import { genders } from "@/utils/constants";
 import * as yup from "yup";
 import { useMemberStore } from "~/store/member";
+import { useToast } from "vue-toastification";
 
 const props = defineProps({
   roomInfo: {
     type: Object,
-    default: {}
-  }
-})
+    default: {},
+  },
+});
 
-console.log(props.roomInfo)
+const toast = useToast();
 
 //store
-const memberStore = useMemberStore()
+const memberStore = useMemberStore();
 
 const { values, errors, defineComponentBinds, handleSubmit } = useForm({
   validationSchema: yup.object({
@@ -51,11 +52,13 @@ const handleCreateRoomHost = handleSubmit(async () => {
   const payload = {
     ...values,
     date_start: startDateConverted,
-    roomId: props.roomInfo._id
+    roomId: props.roomInfo._id,
   };
-  const res = await memberStore.createRoomHost(payload)
-  if(res.data){
-    console.log(res.data)
+  const res = await memberStore.createRoomHost(payload);
+  if (res.data) {
+  }
+  if (res.error) {
+    toast.error(res.error.data.message);
   }
 });
 </script>

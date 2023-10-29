@@ -11,7 +11,7 @@ export const useMemberStore = defineStore({
       return res;
     },
     async createRoomHost(payload: any) {
-      const res = await useFetchData(`${MEMBERS.CREATE_ROOM_MEMBER}`, {
+      const res = await useFetchData(`${MEMBERS.CREATE_ROOM_OWNER}`, {
         method: "POST",
         body: payload,
       });

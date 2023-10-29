@@ -46,5 +46,5 @@ export const SERVICES = {
   GET_ONE_SERVICE: "/services/get-one-service",
   CREATE_SERVICES: "/services/create-new-service",
   UPDATE_SERVICES: "/services/update-service/",
-  DELETE_SERVICES: "/services/get-one-service",
+  DELETE_SERVICES: "/services/delete-service",
 };

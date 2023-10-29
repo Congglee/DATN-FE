@@ -79,12 +79,12 @@ const onHandleRemove = async (item) => {
       const res = await serviceStore.deleteService(data_remove.value._id);
       if (res.data.success) {
         fetchListServiceEventBus.emit();
-        toast.success("Xóa phòng thành công !");
+        toast.success("Xóa dịch vụ thành công !");
         isShowConfirmDeleteService.value = false;
         isDisplayUpdateService.value = false;
       }
     } catch (error) {
-      toast.error("Xoá phòng thất bại !");
+      toast.error("Xoá dịch vụ thất bại !");
     }
     return;
   } else {

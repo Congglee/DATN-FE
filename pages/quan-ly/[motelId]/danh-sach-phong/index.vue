@@ -21,12 +21,20 @@ const isDisplayCreateRoom = ref(false);
 const rooms = ref(null);
 const roomStatusOptions = ref([
   {
-    value: "Available",
-    status: "Còn phòng",
+    value: "Trống",
+    status: "Còn trống",
   },
   {
-    value: "Unavailable",
-    status: "Đang cho thuê",
+    value: "Đã có người ở",
+    status: "Đã có người ở",
+  },
+    {
+    value: "Đang sửa",
+    status: "Đang sửa",
+  },
+    {
+    value: "Đã đặt cọc",
+    status: "Đã đặt cọc",
   },
 ]);
 
@@ -41,15 +49,26 @@ const payingStatusOptions = ref([
   },
 ]);
 
-const getAllRoomOfMotel = async () => {
-  const res = await roomStore.getAllRoomOfMotel(route.params.motelId);
+const getAllRoomOfMotel = async (query) => {
+  const payload = {
+    motelId: route.params.motelId,
+    status: query?.status
+  }
+  const res = await roomStore.getAllRoomOfMotel(payload);
   if (res.data) {
     rooms.value = res.data.rooms;
-    console.log(rooms.value)
   }
 };
 
 getAllRoomOfMotel();
+
+const handleFilter = () => {
+  const query = {
+    status: roomStatus.value.value,
+  };
+  console.log(query)
+  getAllRoomOfMotel(query);
+};
 
 fetchListRoomEventBus.on(() => {
   getAllRoomOfMotel();
@@ -91,7 +110,7 @@ fetchListRoomEventBus.on(() => {
             ></g-autocomplete>
           </div>
         </div>
-        <g-button variant="bezeled">
+        <g-button variant="bezeled" @click="handleFilter">
           <template #default>
             <IconSearch />
           </template>
