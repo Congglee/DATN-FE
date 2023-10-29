@@ -27,11 +27,8 @@ export const GENDER_TYPE: keyType = {
   OTHER: "Khác",
 };
 
-
-
 export const IMAGE_DEFAULT = imageDefault;
 export const AVATAR_DEFAULT = avatarDefault;
-
 
 export const LIST_GRADE_TYPE = [
   {
@@ -84,3 +81,14 @@ export const enum WORK_TIME_DAY {
   "SATURDAY" = "Thứ bảy",
   "SUNDAY" = "Chủ nhật",
 }
+
+export const genders = [
+  {
+    label: "Nam",
+    value: "Nam",
+  },
+  {
+    label: "Nữ",
+    value: "Nữ",
+  },
+];

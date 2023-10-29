@@ -58,6 +58,7 @@ const validateFormData = reactive({
 const province = ref("Hà Nội");
 const districts = ref([]);
 const wards = ref([]);
+const initialDistrict = ref(null);
 const choosedDistrict = ref(props.motelInfo.district);
 const choosedWard = ref(props.motelInfo.ward);
 const id = ref(props.motelInfo._id);
@@ -72,6 +73,11 @@ const getDistrictOfHaNoi = async () => {
   const res = await administrativeStore.getDistrictOfHaNoi(params);
   if (res.data) {
     districts.value = res.data.data.data;
+    districts.value.map((el) => {
+      if (el.name == choosedDistrict.value) {
+        initialDistrict.value = el;
+      }
+    });
   }
 };
 
@@ -79,7 +85,7 @@ getDistrictOfHaNoi();
 
 const getWards = async (e) => {
   const params = {
-    districtCode: e.code,
+    districtCode: e?.code,
     limit: "-1",
   };
   const res = await administrativeStore.getWardByDistrict(params);
@@ -88,7 +94,12 @@ const getWards = async (e) => {
   }
 };
 
-getWards(choosedDistrict.value);
+watch(
+  () => initialDistrict.value,
+  (newVal) => {
+    getWards(newVal);
+  }
+);
 
 watch(
   () => choosedDistrict.value,
@@ -128,7 +139,7 @@ const updateMotel = handleSubmit(async () => {
       <h5
         class="tw-text-center tw-text-xl tw-leading-6 tw-font-extrabold tw-mb-3 tw-mt-3"
       >
-        Thêm nhà trọ mới
+        Chỉnh sửa thông tin phòng trọ
       </h5>
     </div>
     <div class="modal-change-information__form">

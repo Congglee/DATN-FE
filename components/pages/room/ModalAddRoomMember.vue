@@ -3,14 +3,27 @@ import IconXMark from "@/assets/svg/x-mark.svg";
 import IconClose from "@/assets/svg/close.svg";
 import IconCalendar from "@/assets/svg/manage-student/calendar.svg";
 import { useForm } from "vee-validate";
+import { genders } from "@/utils/constants";
 import * as yup from "yup";
+import { useMemberStore } from "~/store/member";
+
+const props = defineProps({
+  roomInfo: {
+    type: Object,
+    default: {}
+  }
+})
+
+console.log(props.roomInfo)
+
+//store
+const memberStore = useMemberStore()
 
 const { values, errors, defineComponentBinds, handleSubmit } = useForm({
   validationSchema: yup.object({
     name: yup.string().trim().required(),
-    email: yup.string().trim().required(),
+    email: yup.string().email().trim().required(),
     phone: yup.string().trim().required(),
-    gender: yup.string(),
     date_start: yup.string().required(),
     room_deposit_amount: yup.number().required(),
   }),
@@ -23,9 +36,27 @@ const validateFormData = reactive({
   name: defineComponentBinds("name"),
   email: defineComponentBinds("email"),
   phone: defineComponentBinds("phone"),
-  gender: defineComponentBinds("gender"),
   date_start: defineComponentBinds("date_start"),
   room_deposit_amount: defineComponentBinds("room_deposit_amount"),
+});
+const gender = ref(genders[0].value);
+
+//method
+
+const handleCreateRoomHost = handleSubmit(async () => {
+  const startDateConverted = convertDateType(
+    validateFormData.date_start.modelValue,
+    "DD/MM/YYYY"
+  );
+  const payload = {
+    ...values,
+    date_start: startDateConverted,
+    roomId: props.roomInfo._id
+  };
+  const res = await memberStore.createRoomHost(payload)
+  if(res.data){
+    console.log(res.data)
+  }
 });
 </script>
 <template>
@@ -40,11 +71,8 @@ const validateFormData = reactive({
       <h5
         class="tw-text-center tw-text-xl tw-leading-6 tw-font-extrabold tw-mb-3 tw-mt-3"
       >
-        Chỉnh sửa thông tin phòng
+        Thêm chủ phòng
       </h5>
-      <p class="tw-text-[15px] tw-leading-5 tw-text-center">
-        A message should be a short, complete sentence.
-      </p>
     </div>
     <div class="modal-change-information__form">
       <div class="tw-mt-6 tw-flex-col tw-gap-y-4">
@@ -61,10 +89,44 @@ const validateFormData = reactive({
           label="Ngày bắt đầu"
           required
         ></g-date-picker>
-        <g-input class="tw-pt-4" label="Email"> </g-input>
-        <g-input class="tw-pt-4" label="Số điện thoại" required> </g-input>
-        <g-autocomplete label="Dân tộc" class="tw-mt-4"> </g-autocomplete>
-        <g-input class="tw-pt-4" label="Địa chỉ"> </g-input>
+        <g-input
+          class="tw-pt-4"
+          label="Email"
+          v-bind="validateFormData.email"
+          :error="errors.email"
+        >
+        </g-input>
+        <g-input
+          class="tw-pt-4"
+          label="Số điện thoại"
+          required
+          v-bind="validateFormData.phone"
+          :error="errors.phone"
+        >
+        </g-input>
+        <div class="tw-w-full tw-py-8">
+          <div class="tw-grid tw-gap-y-4">
+            <div class="tw-flex tw-gap-x-1">
+              <p>Giới tính</p>
+              <IconRequired class="tw-mt-1" />
+            </div>
+            <div class="tw-flex tw-items-center tw-gap-x-8">
+              <g-radio-group
+                name="gender"
+                :options="genders"
+                v-model="gender"
+                inline
+              />
+            </div>
+          </div>
+        </div>
+        <g-input
+          class="tw-pt-4"
+          label="Tiền cọc"
+          required
+          v-bind="validateFormData.room_deposit_amount"
+        >
+        </g-input>
       </div>
       <hr class="tw-mt-8" />
     </div>
@@ -77,7 +139,7 @@ const validateFormData = reactive({
         </template>
         Hủy
       </g-button>
-      <g-button>Cập nhật</g-button>
+      <g-button @click="handleCreateRoomHost">Thêm</g-button>
     </div>
   </div>
 </template>

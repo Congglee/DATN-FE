@@ -11,7 +11,6 @@ export const useMotelStore = defineStore({
         method: "GET",
       });
       this.motels = res.data.motels
-      console.log(this.motels)
       return res;
     },
     async createMotel(payload: any) {
