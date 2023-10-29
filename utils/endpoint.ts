@@ -32,7 +32,7 @@ export const ROOM = {
 
 export const MEMBERS = {
   GET_ROOM_OWNERS: "/members/get-all-host-member",
-  GET_ALL_MEMBER_IN_ROOM: "/members/update-room-normal-member",
+  GET_ALL_MEMBER_IN_ROOM: "/members/get-all-member-in-room",
   GET_ONE_MEMBER_IN_ROOM: "/members/get-one-member",
   DELETE_ONE_MEMBER_IN_ROOM: "/members/get-one-member",
   CREATE_ROOM_OWNER: "/members/create-new-host-member",

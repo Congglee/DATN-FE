@@ -3,6 +3,16 @@ import IconPhone from "@/assets/svg/phone.svg";
 import IconAddUser from "@/assets/svg/add-user.svg";
 import IconXMark from "@/assets/svg/x-mark.svg";
 import IconDelete from '@/assets/svg/delete.svg'
+
+const props = defineProps({
+  roomInfo: {
+    type: Object,
+    default: {}
+  }
+})
+
+console.log(props.roomInfo)
+
 </script>
 
 <template>

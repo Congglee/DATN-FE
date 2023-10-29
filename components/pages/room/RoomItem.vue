@@ -3,7 +3,7 @@ import IconUser from "@/assets/svg/profile/user.svg";
 import IconGrowArrow from "@/assets/svg/grow-arrow.svg";
 import ModalChooseEditOption from "@/components/pages/room/ModalChooseEditOption.vue";
 import ModalUpdateRoom from "@/components/pages/room/ModalUpdateRoom.vue";
-import ModalAddRoomMember from "@/components/pages/room/ModalAddRoomMember.vue";
+import ModalAddRoomHost from "@/components/pages/room/ModalAddRoomHost.vue";
 import { useRoomStore } from "~/store/room";
 import { useToast } from "vue-toastification";
 
@@ -30,6 +30,10 @@ const isShowAddRoomMember = ref(false);
 const isShowConfirmDeleteRoom = ref(false);
 
 const handleEnterRoomDetail = () => {
+  if (props.roomInfo.status === "Trống") {
+    toast.error("Bạn chưa thêm chủ phòng trọ này!");
+    return;
+  }
   router.push(`danh-sach-phong/${props.roomInfo._id}`);
 };
 
@@ -44,7 +48,9 @@ const handleRemoveRoom = async (e) => {
 };
 </script>
 <template>
-  <a class="tw-block tw-rounded-lg tw-p-4 tw-shadow-indigo-100 tw-shadow-xl tw-min-w-[300px]">
+  <a
+    class="tw-block tw-rounded-lg tw-p-4 tw-shadow-indigo-100 tw-shadow-xl tw-min-w-[300px]"
+  >
     <img
       @click="handleEnterRoomDetail"
       alt="Home"
@@ -86,6 +92,7 @@ const handleRemoveRoom = async (e) => {
   </a>
   <v-dialog v-model="isShowChooseEditOption" width="544" persistent scrollable>
     <ModalChooseEditOption
+      :roomInfo="roomInfo"
       @close="isShowChooseEditOption = false"
       @editRoom="(isShowChooseEditOption = false), (isShowUpdateRoom = true)"
       @addRoomMember="
@@ -98,7 +105,10 @@ const handleRemoveRoom = async (e) => {
     <ModalUpdateRoom @close="isShowUpdateRoom = false" :roomInfo="roomInfo" />
   </v-dialog>
   <v-dialog v-model="isShowAddRoomMember" width="544" persistent scrollable>
-    <ModalAddRoomMember @close="isShowAddRoomMember = false" :roomInfo="roomInfo"/>
+    <ModalAddRoomHost
+      @close="isShowAddRoomMember = false"
+      :roomInfo="roomInfo"
+    />
   </v-dialog>
   <g-modal-confirm
     v-model="isShowConfirmDeleteRoom"

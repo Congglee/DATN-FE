@@ -21,6 +21,10 @@ const isDisplayCreateRoom = ref(false);
 const rooms = ref(null);
 const roomStatusOptions = ref([
   {
+    value: "",
+    status: "Tất cả"
+  },
+  {
     value: "Trống",
     status: "Còn trống",
   },
@@ -101,14 +105,14 @@ fetchListRoomEventBus.on(() => {
               label="Trạng thái phòng"
             ></g-autocomplete>
           </div>
-          <div class="tw-w-[250px]">
+          <!-- <div class="tw-w-[250px]">
             <g-autocomplete
               :items="payingStatusOptions"
               v-model="payingStatus"
               item-title="status"
               label="Trạng thái thanh toán"
             ></g-autocomplete>
-          </div>
+          </div> -->
         </div>
         <g-button variant="bezeled" @click="handleFilter">
           <template #default>

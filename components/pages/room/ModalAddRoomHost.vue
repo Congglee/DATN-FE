@@ -16,9 +16,8 @@ const props = defineProps({
 });
 
 const toast = useToast();
-const route = useRoute();
 
-const emit = defineEmits(["close", "fetchRoomData"]);
+const emit = defineEmits(["close"]);
 
 //store
 const memberStore = useMemberStore();
@@ -26,44 +25,41 @@ const memberStore = useMemberStore();
 const { values, errors, defineComponentBinds, handleSubmit } = useForm({
   validationSchema: yup.object({
     name: yup.string().trim().required(),
-    phone: yup.string().length(10),
-    // gender: yup.string(),
-    // vehicle_number: yup.string(),
-    // identify_code: yup.string(),
-    // date_of_birth: yup.string(),
+    email: yup.string().email().trim().required(),
+    phone: yup.string().trim().required().length(10),
+    date_start: yup.string().required(),
+    room_deposit_amount: yup.number().required(),
   }),
+  initialValues: {
+    room_deposit_amount: 0,
+  },
 });
 
 const validateFormData = reactive({
   name: defineComponentBinds("name"),
-  phone: defineComponentBinds("phone")
+  email: defineComponentBinds("email"),
+  phone: defineComponentBinds("phone"),
+  date_start: defineComponentBinds("date_start"),
+  room_deposit_amount: defineComponentBinds("room_deposit_amount"),
 });
-const gender = ref("Nam");
-const vehicle_number = ref("");
-const identify_code = ref("");
-const date_of_birth = ref("");
+const gender = ref(genders[0].value);
 
 //method
 
-const handleCreateRoomMember = handleSubmit(async () => {
-  const dateOfBirthConverted = convertDateType(
-    date_of_birth.modelValue,
+const handleCreateRoomHost = handleSubmit(async () => {
+  const startDateConverted = convertDateType(
+    validateFormData.date_start.modelValue,
     "DD/MM/YYYY"
   );
   const payload = {
     ...values,
-    gender: gender.value,
-    vehicle_number: vehicle_number.value,
-    identify_code: identify_code.value,
-    date_of_birth: dateOfBirthConverted,
-    roomId: route.params.roomId,
+    date_start: startDateConverted,
+    roomId: props.roomInfo._id,
   };
-  console.log(payload);
-  const res = await memberStore.createRoomMember(payload);
+  const res = await memberStore.createRoomHost(payload);
   if (res.data) {
-    toast.success("Thêm thành viên phòng thành công");
+    toast.success("Thêm chủ phòng thành công");
     emit("close");
-    emit("fetchRoomData")
   }
   if (res.error) {
     toast.error(res.error.data.message);
@@ -82,7 +78,7 @@ const handleCreateRoomMember = handleSubmit(async () => {
       <h5
         class="tw-text-center tw-text-xl tw-leading-6 tw-font-extrabold tw-mb-3 tw-mt-3"
       >
-        Thêm thành viên vào phòng
+        Thêm chủ phòng
       </h5>
     </div>
     <div class="modal-change-information__form">
@@ -93,14 +89,28 @@ const handleCreateRoomMember = handleSubmit(async () => {
           v-bind="validateFormData.name"
           :error="errors.name"
         ></g-input>
-        <g-input class="tw-pt-4" label="Số điện thoại" v-bind="validateFormData.phone" :error="errors.phone">
-        </g-input>
         <g-date-picker
-          v-model="date_of_birth"
+          v-bind="validateFormData.date_start"
+          :error="errors.date_start"
           class="tw-pt-4"
-          label="Ngày sinh"
+          label="Ngày bắt đầu"
           required
         ></g-date-picker>
+        <g-input
+          class="tw-pt-4"
+          label="Email"
+          v-bind="validateFormData.email"
+          :error="errors.email"
+        >
+        </g-input>
+        <g-input
+          class="tw-pt-4"
+          label="Số điện thoại"
+          required
+          v-bind="validateFormData.phone"
+          :error="errors.phone"
+        >
+        </g-input>
         <div class="tw-w-full tw-py-8">
           <div class="tw-grid tw-gap-y-4">
             <div class="tw-flex tw-gap-x-1">
@@ -119,16 +129,9 @@ const handleCreateRoomMember = handleSubmit(async () => {
         </div>
         <g-input
           class="tw-pt-4"
-          label="Số CCCD"
+          label="Tiền cọc"
           required
-          v-model="identify_code"
-        >
-        </g-input>
-        <g-input
-          class="tw-pt-4"
-          label="Biển số xe"
-          required
-          v-model="vehicle_number"
+          v-bind="validateFormData.room_deposit_amount"
         >
         </g-input>
       </div>
@@ -143,7 +146,7 @@ const handleCreateRoomMember = handleSubmit(async () => {
         </template>
         Hủy
       </g-button>
-      <g-button @click="handleCreateRoomMember">Thêm</g-button>
+      <g-button @click="handleCreateRoomHost">Thêm</g-button>
     </div>
   </div>
 </template>
