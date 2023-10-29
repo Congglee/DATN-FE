@@ -15,8 +15,6 @@ const props = defineProps({
   },
 });
 
-console.log(props.roomInfo);
-
 //composable
 const toast = useToast();
 const route = useRoute();
@@ -66,7 +64,6 @@ const createRoom = handleSubmit(async () => {
     ...formData,
     motelId: route.params.motelId,
   };
-  console.log(payload);
   const res = await roomStore.createRoom(payload);
   if (res.data) {
     fetchListRoomEventBus.emit();

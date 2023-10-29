@@ -23,16 +23,16 @@ const closePopupAll = () => {
 };
 </script>
 <template>
-  <v-card
-    class="mx-auto tw-my-4 tw-flex tw-flex-col tw-bg-red-400 rounded-xl"
+  <div
+    class="tw-my-4 tw-flex tw-flex-col tw-bg-white tw-rounded-xl tw-p-4"
     max-width="374"
   >
-    <v-img
-      cover
-      style="flex-shrink: 0"
-      height="250"
-      src="https://cafefcdn.com/thumb_w/640/203337114487263232/2021/3/3/photo1614738126212-16147381266471125055486.jpg"
-    ></v-img>
+    <nuxt-link :to="'/quan-ly/' + item._id">
+      <img
+        class="tw-rounded-xl"
+        src="https://cafefcdn.com/thumb_w/640/203337114487263232/2021/3/3/photo1614738126212-16147381266471125055486.jpg"
+      />
+    </nuxt-link>
     <div style="flex: 1" class="tw-bg-[#FFFFFF] tw-pb-5">
       <div>
         <v-card-item>
@@ -62,43 +62,34 @@ const closePopupAll = () => {
         </v-card-text>
       </div>
 
-      <div class="tw-mt-auto tw-flex tw-w-full tw-py-2 tw-gap-1 tw-px-3">
-        <NuxtLink :to="'quan-ly/' + item._id">
-          <g-button
-            class="tw-text-white tw-bg-blue-700 hover:tw-bg-blue-800 focus:tw-ring-4 focus:tw-ring-blue-300 tw-font-medium tw-rounded-lg tw-text-sm tw-px-5 tw-py-2.5 tw-mr-2 tw-mb-2 dark:tw-bg-blue-600 dark:hover:tw-bg-blue-700 focus:tw-outline-none dark:focus:tw-ring-blue-800"
-          >
-            <template #prepend>
-              <IconManagerMotel />
-            </template>
-            Quản lý
-          </g-button>
-        </NuxtLink>
-
+      <div
+        class="tw-mt-auto tw-flex tw-w-full tw-py-2 tw-gap-1 tw-px-3 tw-justify-between"
+      >
         <g-button @click="isDisplayUpdateMotel = true" variant="bezeled">
           <template #prepend>
             <IconEditMotel />
           </template>
           Chỉnh sửa
         </g-button>
-        <v-dialog width="544" v-model="isDisplayUpdateMotel">
-          <UpdateMotelForm
-            :item="item"
-            :closePopupAll="closePopupAll"
-            @close="isDisplayUpdateMotel = false"
-          />
-        </v-dialog>
         <g-button @click="isDisplayDeleteMotel = true" class="tw-bg-red-500">
           <template #prepend>
             <IconDeleteMotel />
           </template>
           Xoá
         </g-button>
-        <v-dialog width="544" v-model="isDisplayDeleteMotel">
-          <DeleteMotelForm :item="item" @close="isDisplayDeleteMotel = false" />
-        </v-dialog>
       </div>
     </div>
-  </v-card>
+  </div>
+  <v-dialog width="544" v-model="isDisplayUpdateMotel">
+    <UpdateMotelForm
+      :motelInfo="item"
+      :closePopupAll="closePopupAll"
+      @close="isDisplayUpdateMotel = false"
+    />
+  </v-dialog>
+  <v-dialog width="544" v-model="isDisplayDeleteMotel">
+    <DeleteMotelForm :item="item" @close="isDisplayDeleteMotel = false" />
+  </v-dialog>
 </template>
 
 <style scoped></style>

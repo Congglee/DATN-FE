@@ -21,7 +21,7 @@ export default defineNuxtConfig({
   runtimeConfig: {
     public: {
       URL_API: process.env.URL_API,
-      USER_API: process.env.USER_API,
+      PROVINCE_API: process.env.PROVINCE_API,
     },
   },
   vite: {

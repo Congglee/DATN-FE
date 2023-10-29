@@ -5,7 +5,7 @@ import IconSearch from "@/assets/svg/search.svg";
 const searchKeyword = ref("");
 
 const handleSearch = () => {
-  console.log(searchKeyword.value)
+
 }
 
 </script>

@@ -27,7 +27,7 @@ fetchListServiceEventBus.on(() => {
   getAllServices();
 });
 const handleSearch = () => {
-  console.log(searchKeyword.value);
+
 };
 </script>
 <template>

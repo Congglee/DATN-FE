@@ -13,14 +13,11 @@ const fetchListMotel = useEventBus(`fetch-list-motel`);
 //store
 const motelStore = useMotelStore();
 
-const motels = ref(null);
+const motels = computed(() => motelStore.motels);
 const isDisplayAddMotel = ref(false);
 
 const getAllMotels = async () => {
-  const res = await motelStore.getMotels();
-  if (res.data) {
-    motels.value = res.data.motels;
-  }
+  await motelStore.getMotels();
 };
 getAllMotels();
 
@@ -33,12 +30,12 @@ fetchListMotel.on(() => {
   <section
     class="tw-bg-[linear-gradient(193deg,#f5f5f5_0%,#f7dfd0_66%,#dedede_100%)] tw-min-h-[85vh]"
   >
-    <aside class="tw-bg-[#f88125] tw-text-white">
+    <aside class="tw-bg-[#f88125]">
       <div
         class="tw-w-full tw-max-w-7xl tw-m-auto tw-flex max-lg:tw-flex-col tw-justify-between tw-items-center"
       >
         <h3
-          class="tw-py-3 max-lg:tw-py-2 tw-text-2xl max-lg:tw-text-xl tw-font-medium"
+          class="tw-py-3 max-lg:tw-py-2 tw-text-2xl max-lg:tw-text-xl tw-font-medium tw-text-white"
         >
           Danh sách nhà trọ
         </h3>
@@ -76,4 +73,3 @@ fetchListMotel.on(() => {
   </section>
   <Footer></Footer>
 </template>
-~/store/motel

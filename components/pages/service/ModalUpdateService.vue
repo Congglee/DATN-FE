@@ -14,7 +14,6 @@ const props = defineProps({
     default: {},
   },
 });
-// console.log(props.data);
 //composable
 const toast = useToast();
 const route = useRoute();
