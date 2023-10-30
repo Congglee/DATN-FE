@@ -18,6 +18,7 @@ import { useMemberStore } from "~/store/member";
 import IconArrowLeft from "@/assets/svg/arrow-left.svg";
 import ListMemberTable from "@/components/pages/room/home/ListMemberTable.vue";
 import ListServiceTable from "@/components/pages/room/home/ListServiceTable.vue";
+import RoomContract from "~/components/pages/room/home/RoomContract.vue";
 
 //composable
 const route = useRoute();
@@ -47,10 +48,16 @@ const roomFactorList = ref([
     title: "Danh sách dịch vụ",
     value: "SERVICES",
   },
+  {
+    _id: "3",
+    title: "Hợp đồng",
+    value: "CONTRACT",
+  },
 ]);
 const listComponent = {
   MEMBERS: ListMemberTable,
   SERVICES: ListServiceTable,
+  CONTRACT: RoomContract,
 };
 
 //method

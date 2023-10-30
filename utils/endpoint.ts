@@ -52,3 +52,10 @@ export const ELECTRICITY = {
   GET_ELECTRICITY: "/electricity-usages/get-all-electricity-usage",
   UPDATE_ELECTRICITY: "/electricity-usages/calculate-electricity-usage",
 };
+
+export const CONTRACT = {
+  GET_SAMPLE_CONTRACT: "/contracts/get-one-samplecontract",
+  CREATE_SAMPLE_CONTRACT: "/contracts/create-new-samplecontract",
+  UPDATE_SAMPLE_CONTRACT: "/contracts/update-samplecontract",
+  CREATE_NEW_CONTRACT_BY_ROOM: "/contracts/create-new-contract",
+};
