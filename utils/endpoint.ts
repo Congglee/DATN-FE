@@ -45,6 +45,10 @@ export const SERVICES = {
   GET_SERVICES: "/services/get-all-service",
   GET_ONE_SERVICE: "/services/get-one-service",
   CREATE_SERVICES: "/services/create-new-service",
-  UPDATE_SERVICES: "/services/update-service/",
+  UPDATE_SERVICES: "/services/update-service",
   DELETE_SERVICES: "/services/delete-service",
+};
+export const ELECTRICITY = {
+  GET_ELECTRICITY: "/electricity-usages/get-all-electricity-usage",
+  UPDATE_ELECTRICITY: "/electricity-usages/calculate-electricity-usage",
 };
