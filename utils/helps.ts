@@ -61,3 +61,11 @@ export const formatCurrency = (amount: number) => {
   const result = strAmount.replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,");
   return result + " VND";
 };
+
+export const formatMonthYear = (dateString: string) => {
+  const dateObject = new Date(dateString);
+  const formattedDate = `${(dateObject.getMonth() + 1)
+    .toString()
+    .padStart(2, "0")}/${dateObject.getFullYear()}`;
+  return formattedDate;
+};
