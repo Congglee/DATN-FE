@@ -27,5 +27,28 @@ export const useMemberStore = defineStore({
       });
       return res;
     },
+    async updateRoomMember(payload: any, id: string) {
+      const res = await useFetchData(`${MEMBERS.UPDATE_MEMBER}/${id}`, {
+        method: "PUT",
+        body: payload,
+      });
+      return res;
+    },
+    async updateRoomHost(payload: any, id: string) {
+      const res = await useFetchData(`${MEMBERS.UPDATE_ROOM_OWNER}/${id}`, {
+        method: "PUT",
+        body: payload,
+      });
+      return res;
+    },
+    async deleteMember(id: string) {
+      const res = await useFetchData(
+        `${MEMBERS.DELETE_ONE_MEMBER_IN_ROOM}/${id}`,
+        {
+          method: "DELETE",
+        }
+      );
+      return res;
+    },
   },
 });

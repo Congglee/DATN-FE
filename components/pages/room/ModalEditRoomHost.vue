@@ -9,16 +9,17 @@ import { useMemberStore } from "~/store/member";
 import { useToast } from "vue-toastification";
 
 const props = defineProps({
-  roomInfo: {
+  userInfo: {
     type: Object,
     default: {},
   },
 });
+console.log(props.userInfo);
 
 const toast = useToast();
 const route = useRoute();
-const fetchListRoomEventBus = useEventBus(
-  `fetch-list-room-${route.params.motelId}`
+const fetchRoomEventBus = useEventBus(
+  `fetch-room-${route.params.roomId}`
 );
 
 const emit = defineEmits(["close"]);
@@ -28,11 +29,11 @@ const memberStore = useMemberStore();
 
 const { values, errors, defineComponentBinds, handleSubmit } = useForm({
   validationSchema: yup.object({
-    name: yup.string().trim().required(),
-    email: yup.string().email().trim().required(),
-    phone: yup.string().trim().required().length(10),
-    date_start: yup.string().trim().required(),
-    room_deposit_amount: yup.number().required(),
+    name: yup.string().trim(),
+    email: yup.string().email().trim(),
+    phone: yup.string().trim().length(10),
+    date_start: yup.string().trim(),
+    room_deposit_amount: yup.number(),
     vehicle_number: yup.string().trim(),
     identify_code: yup.string().trim(),
     date_of_identify_code: yup.string(),
@@ -40,7 +41,16 @@ const { values, errors, defineComponentBinds, handleSubmit } = useForm({
     date_of_birth: yup.string().trim(),
   }),
   initialValues: {
-    room_deposit_amount: 0,
+    name: props.userInfo.name,
+    email: props.userInfo.email,
+    phone: props.userInfo.phone,
+    date_start: props.userInfo.date_start,
+    room_deposit_amount: props.userInfo.room_deposit_amount,
+    vehicle_number: props.userInfo.vehicle_number,
+    identify_code: props.userInfo.identify_code,
+    date_of_identify_code: props.userInfo.date_of_identify_code,
+    address: props.userInfo.address,
+    date_of_birth: props.userInfo.date_of_birth,
   },
 });
 
@@ -79,14 +89,12 @@ const handleCreateRoomHost = handleSubmit(async () => {
       validateFormData.date_of_birth.modelValue,
       "DD/MM/YYYY"
     ),
-    roomId: props.roomInfo._id,
     gender: gender.value,
   };
-  console.log(payload);
-  const res = await memberStore.createRoomHost(payload);
+  const res = await memberStore.updateRoomHost(payload, props.userInfo._id);
   if (res.data) {
-    toast.success("Thêm chủ phòng thành công");
-    fetchListRoomEventBus.emit();
+    toast.success("Chỉnh sửa thông tin chủ phòng thành công!");
+    fetchRoomEventBus.emit();
     emit("close");
   }
   if (res.error) {
@@ -106,14 +114,13 @@ const handleCreateRoomHost = handleSubmit(async () => {
       <h5
         class="tw-text-center tw-text-xl tw-leading-6 tw-font-extrabold tw-mb-3 tw-mt-3"
       >
-        Thêm chủ phòng
+        Chỉnh sửa thông tin chủ phòng
       </h5>
     </div>
     <div class="modal-change-information__form">
       <div class="tw-mt-6 tw-flex-col tw-gap-y-4">
         <g-input
           label="Tên"
-          required
           v-bind="validateFormData.name"
           :error="errors.name"
         ></g-input>
@@ -122,7 +129,6 @@ const handleCreateRoomHost = handleSubmit(async () => {
           :error="errors.date_start"
           class="tw-pt-4"
           label="Ngày bắt đầu"
-          required
         ></g-date-picker>
         <g-input
           class="tw-pt-4"
@@ -142,7 +148,6 @@ const handleCreateRoomHost = handleSubmit(async () => {
           <div class="tw-grid tw-gap-y-4">
             <div class="tw-flex tw-gap-x-1">
               <p>Giới tính</p>
-              <IconRequired class="tw-mt-1" />
             </div>
             <div class="tw-flex tw-items-center tw-gap-x-8">
               <g-radio-group
@@ -157,7 +162,6 @@ const handleCreateRoomHost = handleSubmit(async () => {
         <g-input
           class="tw-pt-4"
           label="Tiền cọc"
-          required
           v-bind="validateFormData.room_deposit_amount"
           :error="errors.room_deposit_amount"
         >
@@ -208,7 +212,7 @@ const handleCreateRoomHost = handleSubmit(async () => {
         </template>
         Hủy
       </g-button>
-      <g-button @click="handleCreateRoomHost">Thêm</g-button>
+      <g-button @click="handleCreateRoomHost">Xác nhận</g-button>
     </div>
   </div>
 </template>
