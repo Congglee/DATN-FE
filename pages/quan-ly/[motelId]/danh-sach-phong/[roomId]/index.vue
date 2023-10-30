@@ -22,6 +22,8 @@ import ListServiceTable from "@/components/pages/room/home/ListServiceTable.vue"
 //composable
 const route = useRoute();
 
+const fetchRoomEventBus = useEventBus(`fetch-room-${route.params.roomId}`);
+
 //store
 const roomStore = useRoomStore();
 const memberStore = useMemberStore();
@@ -62,6 +64,10 @@ const getRoomDetail = async () => {
   }
 };
 getRoomDetail();
+
+fetchRoomEventBus.on(() => {
+  getRoomDetail();
+});
 </script>
 <template>
   <div class="tw-pt-[50px]">

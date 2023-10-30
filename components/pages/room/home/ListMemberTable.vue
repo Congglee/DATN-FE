@@ -3,8 +3,13 @@ import { VDataTable } from "vuetify/lib/labs/components.mjs";
 import { useMemberStore } from "@/store/member";
 import IconRemove from "@/assets/svg/remove.svg";
 import IconEdit from "@/assets/svg/edit.svg";
+import ModalEditRoomHost from "../ModalEditRoomHost.vue";
+import ModalEditRoomMember from "../ModalEditRoomMember.vue";
+import { useToast } from "vue-toastification";
 
 const route = useRoute();
+const toast = useToast();
+const fetchRoomEventBus = useEventBus(`fetch-room-${route.params.roomId}`);
 
 const memberStore = useMemberStore();
 
@@ -59,16 +64,52 @@ const headers = [
 ];
 
 const roomMembers = ref([]);
+const isShowAddRoomHost = ref(false);
+const isShowAddRoomMember = ref(false);
+const userInfo = ref(null);
+const isShowConfirmDeleteMember = ref(false);
+const isShowConfirmDeleteHost = ref(false);
 
 const getAllMemberInRoom = async () => {
   const res = await memberStore.getAllMemberInRoom(route.params.roomId);
   if (res.data) {
-    console.log(res.data);
     roomMembers.value = res.data.roomMembers;
   }
 };
 
 getAllMemberInRoom();
+
+const handleEdit = (e) => {
+  userInfo.value = e;
+  if (e.isHost) {
+    isShowAddRoomHost.value = true;
+  } else {
+    isShowAddRoomMember.value = true;
+  }
+};
+
+const handleConfirmDeleteMember = (e) => {
+  if (e.isHost) {
+    isShowConfirmDeleteHost.value = true;
+  } else {
+    isShowConfirmDeleteMember.value = true;
+  }
+  userInfo.value = e;
+};
+
+const handleRemoveMember = async (e) => {
+  const res = await memberStore.deleteMember(e._id);
+  if (res.data) {
+    toast.success("Xóa thành viên trong phòng thành công!");
+  }
+  if (res.error) {
+    toast.error(res.error.data.message);
+  }
+};
+
+fetchRoomEventBus.on(() => {
+  getAllMemberInRoom();
+});
 </script>
 <template>
   <v-data-table :headers="headers" class="s-table" :items="roomMembers">
@@ -88,12 +129,20 @@ getAllMemberInRoom();
           class="tw-absolute tw-right-3 tw-top-[50%] tw-translate-y-[-50%] tw-hidden group-hover:tw-flex tw-space-x-2"
         >
           <div>
-            <g-button class="!tw-ml-0 !tw-p-1" variant="bezeled">
+            <g-button
+              class="!tw-ml-0 !tw-p-1"
+              variant="bezeled"
+              @click="handleEdit(item)"
+            >
               <IconEdit />
             </g-button>
           </div>
           <div>
-            <g-button class="!tw-ml-0 !tw-p-1" variant="bezeled">
+            <g-button
+              class="!tw-ml-0 !tw-p-1"
+              variant="bezeled"
+              @click="handleConfirmDeleteMember(item)"
+            >
               <IconRemove class="!tw-ml-0" />
             </g-button>
           </div>
@@ -101,4 +150,28 @@ getAllMemberInRoom();
       </tr>
     </template>
   </v-data-table>
+  <v-dialog v-model="isShowAddRoomHost" width="544">
+    <ModalEditRoomHost
+      @close="isShowAddRoomHost = false"
+      :userInfo="userInfo"
+    />
+  </v-dialog>
+  <v-dialog v-model="isShowAddRoomMember" width="544">
+    <ModalEditRoomMember
+      @close="isShowAddRoomMember = false"
+      :userInfo="userInfo"
+    />
+  </v-dialog>
+  <g-modal-confirm
+    v-model="isShowConfirmDeleteHost"
+    title="Xóa chủ phòng?"
+    description="Nếu xóa chủ phòng, tất cả thành viên sẽ bị xóa theo"
+    @ok="handleRemoveMember(userInfo)"
+  ></g-modal-confirm>
+  <g-modal-confirm
+    v-model="isShowConfirmDeleteMember"
+    title="Xóa thành viên?"
+    description="Một khi đã xóa, không thể phục hồi lại"
+    @ok="handleRemoveMember(userInfo)"
+  ></g-modal-confirm>
 </template>
