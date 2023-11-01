@@ -69,3 +69,15 @@ export const formatMonthYear = (dateString: string) => {
     .padStart(2, "0")}/${dateObject.getFullYear()}`;
   return formattedDate;
 };
+
+export const removeEmptyFields = (obj: any) => {
+  Object.keys(obj).forEach((key) => {
+    if (typeof obj[key] === "string" && obj[key].trim() === "") {
+      delete obj[key];
+    } else if (typeof obj[key] === "object") {
+      removeEmptyFields(obj[key]);
+    }
+  });
+
+  return obj;
+};
