@@ -41,7 +41,6 @@ const { values, errors, defineComponentBinds, handleSubmit } = useForm({
   },
 });
 
-console.log(props.userInfo.date_of_birth);
 
 const validateFormData = reactive({
   name: defineComponentBinds("name"),

@@ -76,6 +76,12 @@ const menu = computed(() => {
       icon: IconQuanLyThanhToan,
       mainPath: "quan-ly-thanh-toan",
     },
+    {
+      text: "Thiết lập",
+      path: `/quan-ly/${motelId}/thiet-lap`,
+      icon: IconQuanLyThanhToan,
+      mainPath: "thiet-lap",
+    },
   ];
 });
 

@@ -19,6 +19,7 @@ export const useContractStore = defineStore({
     async updateSampleContract(payload: any) {
       const res = await useFetchData(`${CONTRACT.UPDATE_SAMPLE_CONTRACT}`, {
         method: "PUT",
+        body: payload,
       });
       return res;
     },
