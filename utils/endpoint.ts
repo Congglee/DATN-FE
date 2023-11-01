@@ -14,6 +14,7 @@ export const ADMINISTRATIVE = {
 
 export const MOTELS = {
   GET_LIST_MOTELS: "/motels/get-all-motel",
+  GET_ONE_MOTELS: "/motels/get-one-motel",
   CREATE_MOTEL: "/motels/create-new-motel",
   UPDATE_MOTEL: "/motels/update-motel",
   DELETE_MOTEL: "/motels/delete-motel",
@@ -51,6 +52,10 @@ export const SERVICES = {
 export const ELECTRICITY = {
   GET_ELECTRICITY: "/electricity-usages/get-all-electricity-usage",
   UPDATE_ELECTRICITY: "/electricity-usages/calculate-electricity-usage",
+};
+export const WATER = {
+  GET_WATER: "/water-usages/get-all-water-usage",
+  UPDATE_WATER: "/water-usages/calculate-water-usage",
 };
 
 export const CONTRACT = {

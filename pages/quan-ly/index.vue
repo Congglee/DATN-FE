@@ -12,12 +12,12 @@ const fetchListMotel = useEventBus(`fetch-list-motel`);
 
 //store
 const motelStore = useMotelStore();
-
+const owner = JSON.parse(window.localStorage.getItem("owner"));
 const motels = computed(() => motelStore.motels);
 const isDisplayAddMotel = ref(false);
 
 const getAllMotels = async () => {
-  await motelStore.getMotels();
+  await motelStore.getMotels(owner._id);
 };
 getAllMotels();
 

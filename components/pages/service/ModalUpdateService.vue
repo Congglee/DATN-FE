@@ -86,7 +86,7 @@ const updateService = handleSubmit(async () => {
     },
     _id: props.data._id,
   };
-  const res = await serviceStore.updateService(payload);
+  const res = await serviceStore.updateService(removeEmptyFields(payload));
   if (res.data) {
     fetchListServiceEventBus.emit();
     toast.success("Cập nhật dịch vụ thành công!");
