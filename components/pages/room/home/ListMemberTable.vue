@@ -11,6 +11,8 @@ const route = useRoute();
 const toast = useToast();
 const fetchRoomEventBus = useEventBus(`fetch-room-${route.params.roomId}`);
 
+const emit = defineEmits(['fetchRoomDetail'])
+
 const memberStore = useMemberStore();
 
 const headers = [
@@ -101,6 +103,10 @@ const handleRemoveMember = async (e) => {
   const res = await memberStore.deleteMember(e._id);
   if (res.data) {
     toast.success("Xóa thành viên trong phòng thành công!");
+    isShowConfirmDeleteHost.value = false;
+    isShowConfirmDeleteMember.value = false;
+    getAllMemberInRoom();
+    emit('fetchRoomDetail')
   }
   if (res.error) {
     toast.error(res.error.data.message);
@@ -125,24 +131,14 @@ fetchRoomEventBus.on(() => {
         <td>{{ item.phone || "Không có" }}</td>
         <td>{{ item.vehicle_number || "Không có" }}</td>
         <td>{{ item.start_date || "Không có" }}</td>
-        <div
-          class="tw-absolute tw-right-3 tw-top-[50%] tw-translate-y-[-50%] tw-hidden group-hover:tw-flex tw-space-x-2"
-        >
+        <div class="tw-absolute tw-right-3 tw-top-[50%] tw-translate-y-[-50%] tw-hidden group-hover:tw-flex tw-space-x-2">
           <div>
-            <g-button
-              class="!tw-ml-0 !tw-p-1"
-              variant="bezeled"
-              @click="handleEdit(item)"
-            >
+            <g-button class="!tw-ml-0 !tw-p-1" variant="bezeled" @click="handleEdit(item)">
               <IconEdit />
             </g-button>
           </div>
           <div>
-            <g-button
-              class="!tw-ml-0 !tw-p-1"
-              variant="bezeled"
-              @click="handleConfirmDeleteMember(item)"
-            >
+            <g-button class="!tw-ml-0 !tw-p-1" variant="bezeled" @click="handleConfirmDeleteMember(item)">
               <IconRemove class="!tw-ml-0" />
             </g-button>
           </div>
@@ -151,27 +147,14 @@ fetchRoomEventBus.on(() => {
     </template>
   </v-data-table>
   <v-dialog v-model="isShowAddRoomHost" width="544">
-    <ModalEditRoomHost
-      @close="isShowAddRoomHost = false"
-      :userInfo="userInfo"
-    />
+    <ModalEditRoomHost @close="isShowAddRoomHost = false" :userInfo="userInfo" />
   </v-dialog>
   <v-dialog v-model="isShowAddRoomMember" width="544">
-    <ModalEditRoomMember
-      @close="isShowAddRoomMember = false"
-      :userInfo="userInfo"
-    />
+    <ModalEditRoomMember @close="isShowAddRoomMember = false" :userInfo="userInfo" />
   </v-dialog>
-  <g-modal-confirm
-    v-model="isShowConfirmDeleteHost"
-    title="Xóa chủ phòng?"
+  <g-modal-confirm v-model="isShowConfirmDeleteHost" title="Xóa chủ phòng?"
     description="Nếu xóa chủ phòng, tất cả thành viên sẽ bị xóa theo"
-    @ok="handleRemoveMember(userInfo)"
-  ></g-modal-confirm>
-  <g-modal-confirm
-    v-model="isShowConfirmDeleteMember"
-    title="Xóa thành viên?"
-    description="Một khi đã xóa, không thể phục hồi lại"
-    @ok="handleRemoveMember(userInfo)"
-  ></g-modal-confirm>
+    @ok="handleRemoveMember(userInfo)"></g-modal-confirm>
+  <g-modal-confirm v-model="isShowConfirmDeleteMember" title="Xóa thành viên?"
+    description="Một khi đã xóa, không thể phục hồi lại" @ok="handleRemoveMember(userInfo)"></g-modal-confirm>
 </template>

@@ -10,10 +10,9 @@ export const useContractStore = defineStore({
       });
       return res;
     },
-    async createSampleContract(payload: any) {
+    async createSampleContract() {
       const res = await useFetchData(`${CONTRACT.CREATE_SAMPLE_CONTRACT}`, {
         method: "POST",
-        body: payload,
       });
       return res;
     },

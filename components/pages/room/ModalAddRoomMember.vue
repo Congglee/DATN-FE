@@ -27,7 +27,7 @@ const memberStore = useMemberStore();
 const { values, errors, defineComponentBinds, handleSubmit } = useForm({
   validationSchema: yup.object({
     name: yup.string().trim().required(),
-    phone: yup.string().length(10),
+    phone: yup.string(),
     // gender: yup.string(),
     // vehicle_number: yup.string(),
     // identify_code: yup.string(),
@@ -59,8 +59,7 @@ const handleCreateRoomMember = handleSubmit(async () => {
     date_of_birth: dateOfBirthConverted,
     roomId: route.params.roomId,
   };
-  console.log(payload);
-  const res = await memberStore.createRoomMember(payload);
+  const res = await memberStore.createRoomMember(removeEmptyFields(payload));
   if (res.data) {
     toast.success("Thêm thành viên phòng thành công");
     fetchRoomEventBus.emit();
@@ -74,39 +73,19 @@ const handleCreateRoomMember = handleSubmit(async () => {
 <template>
   <div class="modal-change-information">
     <div class="">
-      <button
-        @click="$emit('close')"
-        class="modal-change-information__btn-close"
-      >
+      <button @click="$emit('close')" class="modal-change-information__btn-close">
         <IconClose />
       </button>
-      <h5
-        class="tw-text-center tw-text-xl tw-leading-6 tw-font-extrabold tw-mb-3 tw-mt-3"
-      >
+      <h5 class="tw-text-center tw-text-xl tw-leading-6 tw-font-extrabold tw-mb-3 tw-mt-3">
         Thêm thành viên vào phòng
       </h5>
     </div>
     <div class="modal-change-information__form">
       <div class="tw-mt-6 tw-flex-col tw-gap-y-4">
-        <g-input
-          label="Tên"
-          required
-          v-bind="validateFormData.name"
-          :error="errors.name"
-        ></g-input>
-        <g-input
-          class="tw-pt-4"
-          label="Số điện thoại"
-          v-bind="validateFormData.phone"
-          :error="errors.phone"
-        >
+        <g-input label="Tên" required v-bind="validateFormData.name" :error="errors.name"></g-input>
+        <g-input class="tw-pt-4" label="Số điện thoại" v-bind="validateFormData.phone" :error="errors.phone">
         </g-input>
-        <g-date-picker
-          v-model="date_of_birth"
-          class="tw-pt-4"
-          label="Ngày sinh"
-          required
-        ></g-date-picker>
+        <g-date-picker v-model="date_of_birth" class="tw-pt-4" label="Ngày sinh"></g-date-picker>
         <div class="tw-w-full tw-py-8">
           <div class="tw-grid tw-gap-y-4">
             <div class="tw-flex tw-gap-x-1">
@@ -114,35 +93,19 @@ const handleCreateRoomMember = handleSubmit(async () => {
               <IconRequired class="tw-mt-1" />
             </div>
             <div class="tw-flex tw-items-center tw-gap-x-8">
-              <g-radio-group
-                name="gender"
-                :options="genders"
-                v-model="gender"
-                inline
-              />
+              <g-radio-group name="gender" :options="genders" v-model="gender" inline />
             </div>
           </div>
         </div>
-        <g-input
-          class="tw-pt-4"
-          label="Số CCCD"
-          required
-          v-model="identify_code"
-        >
+        <g-input class="tw-pt-4" label="Số CCCD" v-model="identify_code">
         </g-input>
-        <g-input
-          class="tw-pt-4"
-          label="Biển số xe"
-          required
-          v-model="vehicle_number"
-        >
+        <g-input class="tw-pt-4" label="Biển số xe" v-model="vehicle_number">
         </g-input>
       </div>
       <hr class="tw-mt-8" />
     </div>
     <div
-      class="tw-grid tw-grid-cols-2 tw-justify-between tw-gap-x-3 tw-bg-white tw-px-[24px] tw-py-[22px] tw-rounded-b-xl"
-    >
+      class="tw-grid tw-grid-cols-2 tw-justify-between tw-gap-x-3 tw-bg-white tw-px-[24px] tw-py-[22px] tw-rounded-b-xl">
       <g-button variant="bezeled" class="tw-w-full" @click="$emit('close')">
         <template #prepend>
           <IconXMark />

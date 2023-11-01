@@ -84,8 +84,7 @@ fetchRoomEventBus.on(() => {
           <template #prepend>
             <IconArrowLeft />
           </template>
-          Quay lại trang phòng trọ</g-button
-        >
+          Quay lại trang phòng trọ</g-button>
       </nuxt-link>
     </div>
     <div class="tw-px-5">
@@ -112,23 +111,13 @@ fetchRoomEventBus.on(() => {
       </div>
       <div class="tw-mt-6">
         <div class="tw-flex tw-space-x-3">
-          <g-button
-            label=""
-            variant="bezeled"
-            @click="showUpdateClassModal = true"
-          >
+          <g-button label="" variant="bezeled" @click="showUpdateClassModal = true">
             <template #prepend>
               <IconSetting />
             </template>
-            <span class="tw-text-[14px] tw-font-semibold"
-              >Chỉnh sửa thông tin phòng</span
-            >
+            <span class="tw-text-[14px] tw-font-semibold">Chỉnh sửa thông tin phòng</span>
           </g-button>
-          <g-button
-            variant="filled"
-            @click="isShowAddMemberInRoom = true"
-            :disabled="isFullMember"
-          >
+          <g-button variant="filled" @click="isShowAddMemberInRoom = true" :disabled="isFullMember">
             <span class="tw-text-[14px] tw-font-semibold">Thêm thành viên</span>
           </g-button>
         </div>
@@ -145,7 +134,8 @@ fetchRoomEventBus.on(() => {
         <v-card-text class="conduct-v-card-text">
           <v-window v-model="tab">
             <v-window-item v-for="item in roomFactorList" :value="item._id">
-              <component :is="listComponent[item.value]"> </component>
+              <component :is="listComponent[item.value]" @fetchRoomDetail="getRoomDetail()">
+              </component>
             </v-window-item>
           </v-window>
         </v-card-text>
@@ -153,13 +143,10 @@ fetchRoomEventBus.on(() => {
     </div>
   </div>
   <v-dialog v-model="isShowAddMemberInRoom" width="544">
-    <ModalAddRoomMember
-      @close="isShowAddMemberInRoom = false"
-      @fetchRoomData="
-        getRoomDetail();
-        getAllMemberInRoom();
-      "
-    />
+    <ModalAddRoomMember @close="isShowAddMemberInRoom = false" @fetchRoomData="
+      getRoomDetail();
+    getAllMemberInRoom();
+    " />
   </v-dialog>
 </template>
 <style scoped>
