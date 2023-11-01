@@ -24,15 +24,15 @@ const getAllMotels = async () => {
         title: motel.name,
         id: motel._id,
       }));
-      MotelFilter.value = res.data.motels[0]?._id;
     }
   } catch (error) {}
 };
 getAllMotels();
 const getAllElectricity = async (params) => {
   try {
-    params = params !== null ? params : "";
-    const res = await electricityStore.getAllElectricity(params);
+    const res = await electricityStore.getAllElectricity(
+      params !== null ? params : ""
+    );
     if (res.data) {
       dataElectricity.value = null;
       dataElectricity.value = res.data.electricityUsages;
@@ -44,16 +44,32 @@ const getAllElectricity = async (params) => {
 getAllElectricity(`monthDate=${formatMonthYear(Date())}`);
 
 const onHandleDate = async (event) => {
-  if (event == undefined) return (DateFilter.value = Date());
-  if (DateFilter.value == null) {
-    return;
-  }
   dataElectricity.value = null;
-  getAllElectricity(
-    `motel=${MotelFilter?._value}&monthDate=${formatMonthYear(
-      DateFilter._value
-    )}&limit=10&page=1`
-  );
+  if (DateFilter._value == null) {
+    if (MotelFilter._value == null) {
+      return getAllElectricity(
+        `${"monthDate=" + formatMonthYear(Date())}&limit=25&page=1`
+      );
+    }
+    DateFilter.value = Date();
+    getAllElectricity(
+      `${
+        MotelFilter._value == "all" ? "" : "motel=" + MotelFilter._value + "&"
+      }${"monthDate=" + formatMonthYear(Date())}&limit=25&page=1`
+    );
+  } else {
+    if (MotelFilter._value == null || MotelFilter._value == "all") {
+      getAllElectricity(
+        `${"monthDate=" + formatMonthYear(DateFilter._value)}&limit=25&page=1`
+      );
+    } else if (MotelFilter._value == "all") {
+      getAllElectricity(
+        `${"motel=" + MotelFilter._value + "&"}${
+          "monthDate=" + formatMonthYear(DateFilter?._value)
+        }&limit=25&page=1`
+      );
+    }
+  }
 };
 
 const onHandleMotels = async (event) => {
@@ -63,7 +79,7 @@ const onHandleMotels = async (event) => {
     getAllElectricity(
       `${
         event.target.value == "all" ? "" : "motel=" + event.target.value + "&"
-      }monthDate=${formatMonthYear(DateFilter?._value)}&limit=10&page=1`
+      }monthDate=${formatMonthYear(DateFilter?._value)}&limit=25&page=1`
     );
   } catch (error) {
     console.log(error);

@@ -23,14 +23,14 @@ const waterStore = useWaterStore();
 
 const tableHeaders = ref([
   {
-    title: "STT",
-    key: "STT",
+    title: "Nhà",
+    key: "name",
     sortable: false,
-    width: "73px",
+    width: "200px",
   },
   {
     title: "Phòng",
-    key: "name",
+    key: "room",
     sortable: true,
     width: "200px",
   },
@@ -113,9 +113,8 @@ const onChangeWater = (item) => {
     <v-data-table :headers="tableHeaders" :items="dataTable" class="s-table">
       <template #item="{ item, index }">
         <tr class="tw-relative tw-group">
-          <td class="tw-text-center">{{ index + 1 }}</td>
+          <td>{{ item?.roomId?.motelId.name }}</td>
           <td>{{ item?.roomId?.name }}</td>
-
           <td>
             <g-input
               type="number"

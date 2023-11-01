@@ -1,7 +1,8 @@
 <script setup>
-import ElectricTable from "@/components/pages/so-nuoc/WaterTable.vue";
+import WaterTable from "@/components/pages/so-nuoc/WaterTable.vue";
 import { useWaterStore } from "~/store/water";
-import { useMotelStore } from "@/store/motel";
+import { useMotelStore } from "~/store/motel";
+import CreateWaterForm from "~/components/pages/so-nuoc/CreateWaterForm.vue";
 
 // store
 const waterStore = useWaterStore();
@@ -9,9 +10,12 @@ const motelStore = useMotelStore();
 const owner = JSON.parse(window.localStorage.getItem("owner"));
 // state
 const dataWater = ref(null);
-const DateFilter = ref(null);
+const DateFilter = ref(Date());
 const MotelFilter = ref(null);
 const DataMotels = ref(null);
+const isDisplayCreateWater = ref(false);
+const fetchListWaterEventBus = useEventBus(`fetch-list-water`);
+// function
 const getAllMotels = async () => {
   try {
     const res = await motelStore.getMotels(owner._id);
@@ -20,15 +24,13 @@ const getAllMotels = async () => {
         title: motel.name,
         id: motel._id,
       }));
-      MotelFilter.value = res.data.motels[0]?._id;
     }
   } catch (error) {}
 };
 getAllMotels();
 const getAllWater = async (params) => {
   try {
-    params = params !== null ? params : "";
-    const res = await waterStore.getAllWater(params);
+    const res = await waterStore.getAllWater(params !== null ? params : "");
     if (res.data) {
       dataWater.value = null;
       dataWater.value = res.data.waterUsages;
@@ -40,15 +42,32 @@ const getAllWater = async (params) => {
 getAllWater(`monthDate=${formatMonthYear(Date())}`);
 
 const onHandleDate = async (event) => {
-  if (DateFilter.value == null) {
-    return;
-  }
   dataWater.value = null;
-  getAllWater(
-    `motel=${MotelFilter?._value}&monthDate=${formatMonthYear(
-      DateFilter._value
-    )}&limit=10&page=1`
-  );
+  if (DateFilter._value == null) {
+    if (MotelFilter._value == null) {
+      return getAllWater(
+        `${"monthDate=" + formatMonthYear(Date())}&limit=25&page=1`
+      );
+    }
+    DateFilter.value = Date();
+    getAllWater(
+      `${
+        MotelFilter._value == "all" ? "" : "motel=" + MotelFilter._value + "&"
+      }${"monthDate=" + formatMonthYear(Date())}&limit=25&page=1`
+    );
+  } else {
+    if (MotelFilter._value == null || MotelFilter._value == "all") {
+      getAllWater(
+        `${"monthDate=" + formatMonthYear(DateFilter._value)}&limit=25&page=1`
+      );
+    } else if (MotelFilter._value == "all") {
+      getAllWater(
+        `${"motel=" + MotelFilter._value + "&"}${
+          "monthDate=" + formatMonthYear(DateFilter?._value)
+        }&limit=25&page=1`
+      );
+    }
+  }
 };
 
 const onHandleMotels = async (event) => {
@@ -56,21 +75,27 @@ const onHandleMotels = async (event) => {
   dataWater.value = null;
   try {
     getAllWater(
-      `motel=${event.target.value}&monthDate=${formatMonthYear(
-        DateFilter?._value
-      )}&limit=10&page=1`
+      `${
+        event.target.value == "all" ? "" : "motel=" + event.target.value + "&"
+      }monthDate=${formatMonthYear(DateFilter?._value)}&limit=25&page=1`
     );
   } catch (error) {
     console.log(error);
     throw error;
   }
 };
+
+fetchListWaterEventBus.on(() => {
+  dataWater.value = null;
+  getAllWater(`monthDate=${formatMonthYear(Date())}`);
+});
 </script>
 <template>
   <header class="tw-grid tw-grid-cols-4 tw-items-end tw-gap-x-3">
     <g-date-picker
       class="tw-pt-4"
       label="Theo tháng"
+      :placeholder="formatMonthYear(Date())"
       @blur="onHandleDate($event)"
       v-model="DateFilter"
     ></g-date-picker>
@@ -84,14 +109,26 @@ const onHandleMotels = async (event) => {
         "
         @change="onHandleMotels($event)"
       >
-        <option value="" selected disabled>Chọn nhà trọ</option>
+        <option value="all" selected>Tất cả nhà trọ</option>
         <option v-for="item in DataMotels" :key="item.id" :value="item.id">
           {{ item.title }}
         </option>
       </select>
     </div>
+    <g-button
+      class="!tw-h-[38px] !tw-w-40"
+      @click="isDisplayCreateWater = true"
+    >
+      Cập nhật số nước
+    </g-button>
   </header>
   <section>
-    <ElectricTable v-if="dataWater !== null" :data="dataWater" />
+    <WaterTable v-if="dataWater !== null" :data="dataWater" />
+    <div v-if="dataWater == null">
+      <h2 class="tw-text-center tw-py-10">Danh sách trống</h2>
+    </div>
   </section>
+  <v-dialog v-model="isDisplayCreateWater" width="544">
+    <CreateWaterForm @close="isDisplayCreateWater = false" />
+  </v-dialog>
 </template>
