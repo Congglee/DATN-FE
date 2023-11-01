@@ -3,10 +3,15 @@ import { useForm } from "vee-validate";
 import { useContractStore } from "~/store/contract";
 import * as yup from "yup";
 import { useToast } from "vue-toastification";
-import * as htmlToImage from "html-to-image";
 // import { toPng, toJpeg, toBlob, toPixelData, toSvg } from "html-to-image";
 
-console.log(htmlToImage);
+const props = defineProps({
+  roomInfo: {
+    type: Object,
+    default: {},
+  },
+});
+
 const contractStore = useContractStore();
 
 const route = useRoute();
@@ -28,6 +33,10 @@ const contractData = reactive({
   DateStartContract: defineComponentBinds("DateStartContract"),
   DateEndContract: defineComponentBinds("DateEndContract"),
 });
+
+if (props.roomInfo.contractId?.content) {
+  contract.value = props.roomInfo.contractId.content;
+}
 
 const handleCreateNewContract = handleSubmit(async () => {
   const payload = {
@@ -51,7 +60,6 @@ const handleCreateNewContract = handleSubmit(async () => {
   );
   if (res.data) {
     contract.value = res.data.contract.content;
-    console.log(contract.value);
   }
 });
 
@@ -75,12 +83,6 @@ async function handleExport() {
   fileDownload.download = "document.doc";
   fileDownload.click();
   document.body.removeChild(fileDownload);
-  toast(text, {
-    toastClassName: "notification-toast",
-    type: "Success",
-    position: POSITION.BOTTOM_LEFT,
-    timeout: 5000,
-  });
 }
 </script>
 <template>

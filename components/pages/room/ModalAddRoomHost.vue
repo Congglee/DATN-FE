@@ -82,7 +82,6 @@ const handleCreateRoomHost = handleSubmit(async () => {
     roomId: props.roomInfo._id,
     gender: gender.value,
   };
-  console.log(payload);
   const res = await memberStore.createRoomHost(payload);
   if (res.data) {
     toast.success("Thêm chủ phòng thành công");

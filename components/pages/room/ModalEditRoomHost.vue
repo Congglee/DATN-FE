@@ -14,7 +14,6 @@ const props = defineProps({
     default: {},
   },
 });
-console.log(props.userInfo);
 
 const toast = useToast();
 const route = useRoute();

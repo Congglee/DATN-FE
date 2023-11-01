@@ -11,7 +11,7 @@ const props = defineProps({
   }
 })
 
-console.log(props.roomInfo)
+
 
 </script>
 
