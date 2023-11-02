@@ -1,0 +1,216 @@
+<script setup>
+import IconXMark from "@/assets/svg/x-mark.svg";
+import IconClose from "@/assets/svg/close.svg";
+import IconCalendar from "@/assets/svg/manage-student/calendar.svg";
+import { useForm } from "vee-validate";
+import * as yup from "yup";
+import { useToast } from "vue-toastification";
+import { useUserStore } from "~/store/user";
+
+// compatibility
+const fetchDataUserEventBus = useEventBus(`fetch-data-user`);
+
+const props = defineProps({
+  data: {
+    Type: Object,
+    default: {},
+  },
+});
+
+const toast = useToast();
+const route = useRoute();
+// state
+
+const IAvatar = ref(props.data.avatar);
+
+//store
+
+const userStore = useUserStore();
+
+const { values, errors, defineComponentBinds, handleSubmit } = useForm({
+  validationSchema: yup.object({
+    name: yup
+      .string()
+      .matches(/^[^0-9]*$/, "Tên không được chứa ký tự số")
+      .trim("Tên không được bỏ trống")
+      .required("Tên là trường bắt buộc"),
+    phone: yup
+      .string()
+      .matches(/^0[0-9]{9}$/, "Số điện thoại không hợp lệ")
+      .test(
+        "is-phone-length",
+        "Số điện thoại phải có độ dài 10 ký tự",
+        (value) => {
+          return value.length === 10;
+        }
+      )
+      .required("Số điện là trường bắt buộc"),
+    date_of_birth: yup.string().required("Ngày sinh là trường bắt buộc"),
+    date_of_identify_code: yup
+      .string()
+      .trim("Ngày của mã xác định không được bỏ trống"),
+    address: yup
+      .string()
+      .trim("Địa chỉ không được bỏ trống")
+      .required("Địa chỉ là trường bắt buộc"),
+    avatar: yup.string(),
+    address_issue_identify_code: yup
+      .number()
+      .typeError("Mã xác định vấn đề về địa chỉ phải là số"),
+  }),
+  initialValues: props.data,
+});
+
+const validateFormData = reactive({
+  name: defineComponentBinds("name"),
+  phone: defineComponentBinds("phone"),
+  date_of_birth: defineComponentBinds("date_of_birth"),
+  date_of_identify_code: defineComponentBinds("date_of_identify_code"),
+  address: defineComponentBinds("address"),
+  email: defineComponentBinds("email"),
+  avatar: defineComponentBinds("avatar"),
+  address_issue_identify_code: defineComponentBinds(
+    "address_issue_identify_code"
+  ),
+});
+
+//method
+
+const handleUpdateUser = handleSubmit(async () => {
+  const sendData = {
+    name: values.name,
+    phone: values.phone,
+    identify_code: values.identify_code,
+    address: values.address,
+    secret_key: values.secret_key,
+    card_number: values.card_number,
+    avatar: values.avatar,
+    date_of_birth: formatDayMonthYear(values.date_of_birth),
+    date_of_identify_code: formatDayMonthYear(values.date_of_identify_code),
+    address_issue_identify_code: values.address_issue_identify_code,
+  };
+  if (props.data.avatar !== IAvatar._value) {
+    sendData.avatar = IAvatar._value;
+  } else {
+    sendData.avatar = props.data.avatar;
+  }
+  try {
+    const res = await userStore.updateUser(sendData, props.data._id);
+    if (res.data) {
+      fetchDataUserEventBus.emit();
+      const { avatar, name } = sendData;
+      window.localStorage.setItem(
+        "owner",
+        JSON.stringify({ avatar, name, _id: props.data._id })
+      );
+      toast.success("Cập nhật thông tin người dùng thành công !!!");
+    }
+  } catch (error) {
+    toast.error("Cập nhật thất bại");
+    throw error;
+  }
+});
+
+const onHandleAvt = (e) => {
+  IAvatar.value = props.data.avatar;
+  const file = e.target.files[0];
+  const reader = new FileReader();
+  reader.onloadend = function () {
+    const base64 = reader.result;
+    IAvatar.value = base64;
+  };
+  reader.readAsDataURL(file);
+};
+</script>
+<template>
+  <div class="modal-change-information tw-max-w-3xl tw-m-auto">
+    <div class="">
+      <h5
+        class="tw-text-center tw-text-3xl tw-leading-6 tw-font-extrabold tw-mb-3 tw-mt-3"
+      >
+        Thông tin người dùng
+      </h5>
+    </div>
+    <div class="modal-change-information__form">
+      <div class="tw-mt-6 tw-flex-col tw-gap-y-4">
+        <g-input
+          label="Tên"
+          v-bind="validateFormData.name"
+          :error="errors.name"
+        ></g-input>
+        <g-input
+          class="tw-pt-4"
+          label="Số điện thoại"
+          v-bind="validateFormData.phone"
+          :error="errors.phone"
+        >
+        </g-input>
+        <g-date-picker
+          v-bind="validateFormData.date_of_birth"
+          :error="errors.date_of_birth"
+          class="tw-pt-4"
+          label="Ngày sinh"
+        ></g-date-picker>
+        <g-date-picker
+          v-bind="validateFormData.date_of_identify_code"
+          :error="errors.date_of_identify_code"
+          class="tw-pt-4"
+          label="Ngày đăng ký CCCD"
+        ></g-date-picker>
+        <g-input
+          class="tw-pt-4"
+          label="Email"
+          v-bind="validateFormData.email"
+          :error="errors.email"
+          disabled="true"
+        ></g-input>
+        <g-input
+          class="tw-pt-4"
+          label="Địa chỉ"
+          v-bind="validateFormData.address"
+          :error="errors.address"
+        >
+        </g-input>
+
+        <div class="tw-w-full tw-py-8">
+          <div class="tw-grid tw-gap-y-4">
+            <div class="tw-flex tw-gap-x-1">
+              <p>Avatar</p>
+            </div>
+            <div class="tw-pb-4 tw-h-44">
+              <img :src="IAvatar" class="tw-h-44" alt="" />
+            </div>
+            <input
+              type="file"
+              accept="image/*"
+              name=""
+              @change="onHandleAvt($event)"
+            />
+          </div>
+        </div>
+        <g-input
+          class="tw-pt-4"
+          label="address_issue_identify_code"
+          v-bind="validateFormData.address_issue_identify_code"
+          :error="errors.address_issue_identify_code"
+        >
+        </g-input>
+      </div>
+      <hr class="tw-mt-8" />
+    </div>
+    <div
+      class="tw-grid tw-grid-cols-2 tw-justify-between tw-gap-x-3 tw-bg-white tw-px-[24px] tw-py-[22px] tw-rounded-b-xl"
+    >
+      <g-button variant="bezeled" class="tw-w-full">
+        <template #prepend>
+          <IconXMark />
+        </template>
+        Hủy
+      </g-button>
+      <g-button @click="handleUpdateUser">Cập nhật thông tin</g-button>
+    </div>
+  </div>
+</template>
+<style lang="scss" scoped>
+@import url("./index.scss");
+</style>

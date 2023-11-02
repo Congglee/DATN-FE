@@ -6,6 +6,7 @@ import IconThongKe from "@/assets/svg/menu/thong-ke.svg";
 import IconDichVu from "@/assets/svg/menu/dich-vu.svg";
 import IconSoDienNuoc from "@/assets/svg/menu/so-dien.svg";
 import IconQuanLyThanhToan from "@/assets/svg/menu/quan-ly-thanh-toan.svg";
+import IconEditUser from "@/assets/svg/menu/edit-user.svg";
 
 //route
 const route = useRoute();
@@ -75,6 +76,12 @@ const menu = computed(() => {
       path: `/quan-ly/${motelId}/quan-ly-thanh-toan`,
       icon: IconQuanLyThanhToan,
       mainPath: "quan-ly-thanh-toan",
+    },
+    {
+      text: "Thông tin người dùng",
+      path: `/quan-ly/${motelId}/thong-tin-nguoi-dung`,
+      icon: IconEditUser,
+      mainPath: "thong-tin-nguoi-dung",
     },
     {
       text: "Thiết lập",

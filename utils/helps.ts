@@ -70,6 +70,14 @@ export const formatMonthYear = (dateString: string) => {
   return formattedDate;
 };
 
+export const formatDayMonthYear = (inputDateString: string) => {
+  const inputDate = new Date(inputDateString);
+  const day = String(inputDate.getDate()).padStart(2, "0");
+  const month = String(inputDate.getMonth() + 1).padStart(2, "0");
+  const year = String(inputDate.getFullYear()).slice(2, 4);
+  return `${day}/${month}/20${year}`;
+};
+
 export const removeEmptyFields = (obj: any) => {
   Object.keys(obj).forEach((key) => {
     if (typeof obj[key] === "string" && obj[key].trim() === "") {
