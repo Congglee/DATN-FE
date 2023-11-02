@@ -26,9 +26,7 @@ const searchKeyword = ref("");
 fetchListServiceEventBus.on(() => {
   getAllServices();
 });
-const handleSearch = () => {
-
-};
+const handleSearch = () => {};
 </script>
 <template>
   <div
@@ -39,7 +37,7 @@ const handleSearch = () => {
         >Thêm mới dịch vụ</g-button
       >
     </div>
-    <div class="tw-flex">
+    <!-- <div class="tw-flex">
       <div class="tw-w-[300px]">
         <g-input v-model="searchKeyword"> </g-input>
       </div>
@@ -49,7 +47,7 @@ const handleSearch = () => {
       >
         <IconSearch />
       </div>
-    </div>
+    </div> -->
   </div>
   <div>
     <ServiceTable v-if="dataServices !== null" :data="dataServices" />

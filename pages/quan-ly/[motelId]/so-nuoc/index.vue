@@ -4,6 +4,9 @@ import { useWaterStore } from "~/store/water";
 import { useMotelStore } from "~/store/motel";
 import CreateWaterForm from "~/components/pages/so-nuoc/CreateWaterForm.vue";
 
+// compatibility
+const route = useRoute();
+const idMotel = route.params?.motelId;
 // store
 const waterStore = useWaterStore();
 const motelStore = useMotelStore();
@@ -11,7 +14,6 @@ const owner = JSON.parse(window.localStorage.getItem("owner"));
 // state
 const dataWater = ref(null);
 const DateFilter = ref(Date());
-const MotelFilter = ref(null);
 const DataMotels = ref(null);
 const isDisplayCreateWater = ref(false);
 const fetchListWaterEventBus = useEventBus(`fetch-list-water`);
@@ -20,17 +22,29 @@ const getAllMotels = async () => {
   try {
     const res = await motelStore.getMotels(owner._id);
     if (res.data) {
-      DataMotels.value = res.data.motels.map((motel) => ({
-        title: motel.name,
-        id: motel._id,
-      }));
+      const motels = res.data.motels;
+      const foundMotel = motels.find((motel) => motel._id === idMotel);
+      if (foundMotel) {
+        DataMotels.value = [
+          {
+            title: foundMotel.name,
+            id: foundMotel._id,
+          },
+        ];
+      } else {
+        DataMotels.value = [];
+      }
     }
-  } catch (error) {}
+  } catch (error) {
+    throw error;
+  }
 };
 getAllMotels();
 const getAllWater = async (params) => {
   try {
-    const res = await waterStore.getAllWater(params !== null ? params : "");
+    const res = await waterStore.getAllWater(
+      `motel=${idMotel}&monthDate=${params}&limit=25&page=1`
+    );
     if (res.data) {
       dataWater.value = null;
       dataWater.value = res.data.waterUsages;
@@ -39,66 +53,26 @@ const getAllWater = async (params) => {
     console.log(error);
   }
 };
-getAllWater(`monthDate=${formatMonthYear(Date())}`);
+getAllWater(formatMonthYear(Date()));
 
 const onHandleDate = async (event) => {
-  dataWater.value = null;
   if (DateFilter._value == null) {
-    if (MotelFilter._value == null) {
-      return getAllWater(
-        `${"monthDate=" + formatMonthYear(Date())}&limit=25&page=1`
-      );
-    }
-    DateFilter.value = Date();
-    getAllWater(
-      `${
-        MotelFilter._value == "all" ? "" : "motel=" + MotelFilter._value + "&"
-      }${"monthDate=" + formatMonthYear(Date())}&limit=25&page=1`
-    );
+    dataWater.value = null;
+    getAllWater(formatMonthYear(Date()));
+    return;
   } else {
-    if (MotelFilter._value == null || MotelFilter._value == "all") {
-      getAllWater(
-        `${"monthDate=" + formatMonthYear(DateFilter._value)}&limit=25&page=1`
-      );
-    } else if (MotelFilter._value == "all") {
-      getAllWater(
-        `${"motel=" + MotelFilter._value + "&"}${
-          "monthDate=" + formatMonthYear(DateFilter?._value)
-        }&limit=25&page=1`
-      );
-    }
-  }
-};
-
-const onHandleMotels = async (event) => {
-  MotelFilter.value = event.target.value;
-  dataWater.value = null;
-  try {
-    getAllWater(
-      `${
-        event.target.value == "all" ? "" : "motel=" + event.target.value + "&"
-      }monthDate=${formatMonthYear(DateFilter?._value)}&limit=25&page=1`
-    );
-  } catch (error) {
-    console.log(error);
-    throw error;
+    dataWater.value = null;
+    getAllWater(formatMonthYear(DateFilter._value));
   }
 };
 
 fetchListWaterEventBus.on(() => {
   dataWater.value = null;
-  getAllWater(`monthDate=${formatMonthYear(Date())}`);
+  getAllWater(formatMonthYear(Date()));
 });
 </script>
 <template>
   <header class="tw-grid tw-grid-cols-4 tw-items-end tw-gap-x-3">
-    <g-date-picker
-      class="tw-pt-4"
-      label="Theo tháng"
-      :placeholder="formatMonthYear(Date())"
-      @blur="onHandleDate($event)"
-      v-model="DateFilter"
-    ></g-date-picker>
     <div class="tw-flex tw-flex-col tw-text-black">
       <h5 class="tw-text-[14px]">Nhà Trọ</h5>
       <select
@@ -107,14 +81,24 @@ fetchListWaterEventBus.on(() => {
           border: 1px solid rgb(218, 218, 218) !important ;
           border-radius: 3px;
         "
-        @change="onHandleMotels($event)"
       >
-        <option value="all" selected>Tất cả nhà trọ</option>
-        <option v-for="item in DataMotels" :key="item.id" :value="item.id">
+        <option
+          v-for="item in DataMotels"
+          :key="item.id"
+          :value="item.id"
+          selected
+        >
           {{ item.title }}
         </option>
       </select>
     </div>
+    <g-date-picker
+      class="tw-pt-4"
+      label="Theo tháng"
+      :placeholder="formatMonthYear(Date())"
+      @vnode-updated="onHandleDate($event)"
+      v-model="DateFilter"
+    ></g-date-picker>
     <g-button
       class="!tw-h-[38px] !tw-w-40"
       @click="isDisplayCreateWater = true"

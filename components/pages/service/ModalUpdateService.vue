@@ -1,8 +1,6 @@
 <script setup>
 import IconClose from "@/assets/svg/close.svg";
 import IconXMark from "@/assets/svg/x-mark.svg";
-import IconRequired from "@/assets/svg/required.svg";
-import IconCalendar from "@/assets/svg/manage-student/calendar.svg";
 import * as yup from "yup";
 import { useForm } from "vee-validate";
 import { useToast } from "vue-toastification";
@@ -16,11 +14,8 @@ const props = defineProps({
 });
 //composable
 const toast = useToast();
-const route = useRoute();
 const fetchListServiceEventBus = useEventBus(`fetch-list-service`);
-
 //emit
-
 const emit = defineEmits("close");
 
 //store
@@ -82,11 +77,11 @@ const updateService = handleSubmit(async () => {
     data: {
       ...values,
       isActive: values.isActive == "Hoạt động" ? true : false,
-      note: String(note?._value),
+      note: note._value,
     },
     _id: props.data._id,
   };
-  const res = await serviceStore.updateService(removeEmptyFields(payload));
+  const res = await serviceStore.updateService(payload);
   if (res.data) {
     fetchListServiceEventBus.emit();
     toast.success("Cập nhật dịch vụ thành công!");
@@ -140,8 +135,7 @@ const updateService = handleSubmit(async () => {
         <div class="tw-gap-y-1 tw-grid tw-pt-4">
           <p>Ghi chú</p>
           <textarea
-            :value="note"
-            @input="note = $event.target.value"
+            v-model="note"
             class="tw-resize-none tw-rounded-[10px] tw-bg-white tw-outline tw-p-3 !tw-outline-[#c0c0c0] tw-outline-[1px] focus:!tw-outline-[#f88125] tw-w-full tw-h-[158px] focus:!tw-shadow-[0px_0px_0px_2px_rgba(248,129,37,0.2)]"
           ></textarea>
         </div>

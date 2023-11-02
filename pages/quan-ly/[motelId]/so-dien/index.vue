@@ -4,6 +4,9 @@ import { useElectricityStore } from "~/store/electricity";
 import { useMotelStore } from "@/store/motel";
 import CreateElectricityForm from "~/components/pages/so-dien/CreateElectricityForm.vue";
 
+// compatibility
+const route = useRoute();
+const idMotel = route.params?.motelId;
 // store
 const electricityStore = useElectricityStore();
 const motelStore = useMotelStore();
@@ -11,7 +14,6 @@ const owner = JSON.parse(window.localStorage.getItem("owner"));
 // state
 const dataElectricity = ref(null);
 const DateFilter = ref(Date());
-const MotelFilter = ref(null);
 const DataMotels = ref(null);
 const isDisplayCreateElec = ref(false);
 const fetchListElectricityEventBus = useEventBus(`fetch-list-electricity`);
@@ -20,18 +22,28 @@ const getAllMotels = async () => {
   try {
     const res = await motelStore.getMotels(owner._id);
     if (res.data) {
-      DataMotels.value = res.data.motels.map((motel) => ({
-        title: motel.name,
-        id: motel._id,
-      }));
+      const motels = res.data.motels;
+      const foundMotel = motels.find((motel) => motel._id === idMotel);
+      if (foundMotel) {
+        DataMotels.value = [
+          {
+            title: foundMotel.name,
+            id: foundMotel._id,
+          },
+        ];
+      } else {
+        DataMotels.value = [];
+      }
     }
-  } catch (error) {}
+  } catch (error) {
+    throw error;
+  }
 };
 getAllMotels();
 const getAllElectricity = async (params) => {
   try {
     const res = await electricityStore.getAllElectricity(
-      params !== null ? params : ""
+      `motel=${idMotel}&monthDate=${params}&limit=25&page=1`
     );
     if (res.data) {
       dataElectricity.value = null;
@@ -41,66 +53,25 @@ const getAllElectricity = async (params) => {
     console.log(error);
   }
 };
-getAllElectricity(`monthDate=${formatMonthYear(Date())}`);
+getAllElectricity(formatMonthYear(Date()));
 
 const onHandleDate = async (event) => {
-  dataElectricity.value = null;
   if (DateFilter._value == null) {
-    if (MotelFilter._value == null) {
-      return getAllElectricity(
-        `${"monthDate=" + formatMonthYear(Date())}&limit=25&page=1`
-      );
-    }
-    DateFilter.value = Date();
-    getAllElectricity(
-      `${
-        MotelFilter._value == "all" ? "" : "motel=" + MotelFilter._value + "&"
-      }${"monthDate=" + formatMonthYear(Date())}&limit=25&page=1`
-    );
+    dataElectricity.value = null;
+    getAllElectricity(formatMonthYear(Date()));
+    return;
   } else {
-    if (MotelFilter._value == null || MotelFilter._value == "all") {
-      getAllElectricity(
-        `${"monthDate=" + formatMonthYear(DateFilter._value)}&limit=25&page=1`
-      );
-    } else if (MotelFilter._value == "all") {
-      getAllElectricity(
-        `${"motel=" + MotelFilter._value + "&"}${
-          "monthDate=" + formatMonthYear(DateFilter?._value)
-        }&limit=25&page=1`
-      );
-    }
+    dataElectricity.value = null;
+    getAllElectricity(formatMonthYear(DateFilter._value));
   }
 };
-
-const onHandleMotels = async (event) => {
-  MotelFilter.value = event.target.value;
-  dataElectricity.value = null;
-  try {
-    getAllElectricity(
-      `${
-        event.target.value == "all" ? "" : "motel=" + event.target.value + "&"
-      }monthDate=${formatMonthYear(DateFilter?._value)}&limit=25&page=1`
-    );
-  } catch (error) {
-    console.log(error);
-    throw error;
-  }
-};
-
 fetchListElectricityEventBus.on(() => {
   dataElectricity.value = null;
-  getAllElectricity(`monthDate=${formatMonthYear(Date())}`);
+  getAllElectricity(formatMonthYear(Date()));
 });
 </script>
 <template>
   <header class="tw-grid tw-grid-cols-4 tw-items-end tw-gap-x-3">
-    <g-date-picker
-      class="tw-pt-4"
-      label="Theo tháng"
-      :placeholder="formatMonthYear(Date())"
-      @blur="onHandleDate($event)"
-      v-model="DateFilter"
-    ></g-date-picker>
     <div class="tw-flex tw-flex-col tw-text-black">
       <h5 class="tw-text-[14px]">Nhà Trọ</h5>
       <select
@@ -109,14 +80,25 @@ fetchListElectricityEventBus.on(() => {
           border: 1px solid rgb(218, 218, 218) !important ;
           border-radius: 3px;
         "
-        @change="onHandleMotels($event)"
       >
-        <option value="all">Tất cả nhà trọ</option>
-        <option v-for="item in DataMotels" :key="item.id" :value="item.id">
+        <option
+          v-for="item in DataMotels"
+          :key="item.id"
+          :value="item.id"
+          selected
+        >
           {{ item.title }}
         </option>
       </select>
     </div>
+    <g-date-picker
+      class="tw-pt-4"
+      label="Theo tháng"
+      :placeholder="formatMonthYear(Date())"
+      @vnode-updated="onHandleDate($event)"
+      v-model="DateFilter"
+    ></g-date-picker>
+
     <g-button class="!tw-h-[38px] !tw-w-40" @click="isDisplayCreateElec = true">
       Cập nhật số điện
     </g-button>
