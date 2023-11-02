@@ -1,7 +1,7 @@
 <script setup>
 import IconSave from "@/assets/svg/save.svg";
 import { VDataTable } from "vuetify/lib/labs/components.mjs";
-import { useElectricityStore } from "~/store/electricity";
+import { useWaterStore } from "~/store/water";
 import { useToast } from "vue-toastification";
 import { cloneDeep } from "lodash-es";
 
@@ -19,13 +19,13 @@ const dataTable = ref(DeepData);
 const toast = useToast();
 // state
 // store
-const electricityStore = useElectricityStore();
+const waterStore = useWaterStore();
 
 const tableHeaders = ref([
   {
     title: "Nhà",
     key: "name",
-    sortable: true,
+    sortable: false,
     width: "200px",
   },
   {
@@ -35,20 +35,20 @@ const tableHeaders = ref([
     width: "200px",
   },
   {
-    title: "CS Điện Cũ",
-    key: "prevElectricityIndex",
+    title: "CS Nước Cũ",
+    key: "prevWaterIndex",
     sortable: true,
     width: "200px",
   },
   {
-    title: "CS Điện Mới",
-    key: "currentElectricityIndex",
+    title: "CS Nước Mới",
+    key: "currentWaterIndex",
     sortable: false,
     width: "200px",
   },
   {
     title: "Sử dụng",
-    key: "electricityUsed",
+    key: "waterUsed",
     sortable: true,
     width: "150px",
   },
@@ -68,29 +68,28 @@ const onHandleSave = async (item) => {
   const payload = {
     monthYear: item.monthYear,
     isWarning: true,
-    prevElectricityIndex: item.prevElectricityIndex,
-    currentElectricityIndex: item.currentElectricityIndex,
+    prevWaterIndex: item.prevWaterIndex,
+    currentWaterIndex: item.currentWaterIndex,
     roomId: item.roomId._id,
   };
   try {
-    const res = await electricityStore.updateElectricity(payload);
+    const res = await waterStore.updateWater(payload);
     if (res.data.success) {
       toast.success(res.data.message);
     }
   } catch (error) {
     console.log(error);
-    toast.error("Lưu số điện thất bại ");
+    toast.error("Lưu số nước thất bại ");
   }
 };
 
-const onChangeElec = (item) => {
-  item.prevElectricityIndex = Number(item.prevElectricityIndex);
-  item.currentElectricityIndex = Number(item.currentElectricityIndex);
+const onChangeWater = (item) => {
+  item.prevWaterIndex = Number(item.prevWaterIndex);
+  item.currentWaterIndex = Number(item.currentWaterIndex);
   if (
-    Number(item.currentElectricityIndex) - Number(item.prevElectricityIndex) <
-      0 ||
-    Number(item.currentElectricityIndex) < 0 ||
-    Number(item.prevElectricityIndex) < 0
+    Number(item.currentWaterIndex) - Number(item.prevWaterIndex) < 0 ||
+    Number(item.currentWaterIndex) < 0 ||
+    Number(item.prevWaterIndex) < 0
   ) {
     const dataYes = dataTable._rawValue.map((element) => {
       if (element._id == item._id) {
@@ -103,10 +102,9 @@ const onChangeElec = (item) => {
       return element;
     });
     dataTable.value = dataYes;
-    return toast.error("Giá điện không phải là số âm");
+    return toast.error("Giá nước không phải là số âm");
   }
-  item.electricityUsed =
-    Number(item.currentElectricityIndex) - Number(item.prevElectricityIndex);
+  item.waterUsed = Number(item.currentWaterIndex) - Number(item.prevWaterIndex);
 };
 </script>
 
@@ -117,12 +115,11 @@ const onChangeElec = (item) => {
         <tr class="tw-relative tw-group">
           <td>{{ item?.roomId?.motelId.name }}</td>
           <td>{{ item?.roomId?.name }}</td>
-
           <td>
             <g-input
               type="number"
-              @change="onChangeElec(item)"
-              v-model="item.prevElectricityIndex"
+              @change="onChangeWater(item)"
+              v-model="item.prevWaterIndex"
             >
             </g-input>
           </td>
@@ -130,12 +127,12 @@ const onChangeElec = (item) => {
             <g-input
               type="number"
               min="0"
-              @change="onChangeElec(item)"
-              v-model="item.currentElectricityIndex"
+              @change="onChangeWater(item)"
+              v-model="item.currentWaterIndex"
             >
             </g-input>
           </td>
-          <td>{{ item.electricityUsed }}</td>
+          <td>{{ item.waterUsed }}</td>
           <td>
             <span class="tw-flex tw-gap-x-3">
               <g-button

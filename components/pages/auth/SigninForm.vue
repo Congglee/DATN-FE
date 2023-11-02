@@ -12,7 +12,7 @@ import { useToast } from "vue-toastification";
 
 //composable
 
-const toast = useToast()
+const toast = useToast();
 
 //store
 const authStore = useAuthStore();
@@ -48,11 +48,13 @@ const handleSignin = handleSubmit(async () => {
   const payload = { ...values };
   const res = await authStore.signin(payload);
   if (res.data) {
+    const { avatar, name, _id } = res.data.owner;
+    window.localStorage.setItem("owner", JSON.stringify({ avatar, name, _id }));
     useSetToken(res.data.accessToken);
-    navigateTo("/")
+    navigateTo("/");
   }
-  if(res.error){
-    toast.error(res.error.data.message)
+  if (res.error) {
+    toast.error(res.error.data.message);
   }
 });
 </script>

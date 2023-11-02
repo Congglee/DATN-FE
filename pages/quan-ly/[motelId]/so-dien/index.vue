@@ -2,33 +2,37 @@
 import ElectricTable from "@/components/pages/so-dien/ElectricityTable.vue";
 import { useElectricityStore } from "~/store/electricity";
 import { useMotelStore } from "@/store/motel";
+import CreateElectricityForm from "~/components/pages/so-dien/CreateElectricityForm.vue";
 
 // store
 const electricityStore = useElectricityStore();
 const motelStore = useMotelStore();
-
+const owner = JSON.parse(window.localStorage.getItem("owner"));
 // state
 const dataElectricity = ref(null);
-const DateFilter = ref(null);
+const DateFilter = ref(Date());
 const MotelFilter = ref(null);
 const DataMotels = ref(null);
+const isDisplayCreateElec = ref(false);
+const fetchListElectricityEventBus = useEventBus(`fetch-list-electricity`);
+// function
 const getAllMotels = async () => {
   try {
-    const res = await motelStore.getMotels();
+    const res = await motelStore.getMotels(owner._id);
     if (res.data) {
       DataMotels.value = res.data.motels.map((motel) => ({
         title: motel.name,
         id: motel._id,
       }));
-      MotelFilter.value = res.data.motels[0]?._id;
     }
   } catch (error) {}
 };
 getAllMotels();
 const getAllElectricity = async (params) => {
   try {
-    params = params !== null ? params : "";
-    const res = await electricityStore.getAllElectricity(params);
+    const res = await electricityStore.getAllElectricity(
+      params !== null ? params : ""
+    );
     if (res.data) {
       dataElectricity.value = null;
       dataElectricity.value = res.data.electricityUsages;
@@ -40,15 +44,32 @@ const getAllElectricity = async (params) => {
 getAllElectricity(`monthDate=${formatMonthYear(Date())}`);
 
 const onHandleDate = async (event) => {
-  if (DateFilter.value == null) {
-    return;
-  }
   dataElectricity.value = null;
-  getAllElectricity(
-    `motel=${MotelFilter?._value}&monthDate=${formatMonthYear(
-      DateFilter._value
-    )}&limit=10&page=1`
-  );
+  if (DateFilter._value == null) {
+    if (MotelFilter._value == null) {
+      return getAllElectricity(
+        `${"monthDate=" + formatMonthYear(Date())}&limit=25&page=1`
+      );
+    }
+    DateFilter.value = Date();
+    getAllElectricity(
+      `${
+        MotelFilter._value == "all" ? "" : "motel=" + MotelFilter._value + "&"
+      }${"monthDate=" + formatMonthYear(Date())}&limit=25&page=1`
+    );
+  } else {
+    if (MotelFilter._value == null || MotelFilter._value == "all") {
+      getAllElectricity(
+        `${"monthDate=" + formatMonthYear(DateFilter._value)}&limit=25&page=1`
+      );
+    } else if (MotelFilter._value == "all") {
+      getAllElectricity(
+        `${"motel=" + MotelFilter._value + "&"}${
+          "monthDate=" + formatMonthYear(DateFilter?._value)
+        }&limit=25&page=1`
+      );
+    }
+  }
 };
 
 const onHandleMotels = async (event) => {
@@ -56,21 +77,27 @@ const onHandleMotels = async (event) => {
   dataElectricity.value = null;
   try {
     getAllElectricity(
-      `motel=${event.target.value}&monthDate=${formatMonthYear(
-        DateFilter?._value
-      )}&limit=10&page=1`
+      `${
+        event.target.value == "all" ? "" : "motel=" + event.target.value + "&"
+      }monthDate=${formatMonthYear(DateFilter?._value)}&limit=25&page=1`
     );
   } catch (error) {
     console.log(error);
     throw error;
   }
 };
+
+fetchListElectricityEventBus.on(() => {
+  dataElectricity.value = null;
+  getAllElectricity(`monthDate=${formatMonthYear(Date())}`);
+});
 </script>
 <template>
   <header class="tw-grid tw-grid-cols-4 tw-items-end tw-gap-x-3">
     <g-date-picker
       class="tw-pt-4"
       label="Theo tháng"
+      :placeholder="formatMonthYear(Date())"
       @blur="onHandleDate($event)"
       v-model="DateFilter"
     ></g-date-picker>
@@ -84,14 +111,20 @@ const onHandleMotels = async (event) => {
         "
         @change="onHandleMotels($event)"
       >
-        <option value="" selected disabled>Chọn nhà trọ</option>
+        <option value="all">Tất cả nhà trọ</option>
         <option v-for="item in DataMotels" :key="item.id" :value="item.id">
           {{ item.title }}
         </option>
       </select>
     </div>
+    <g-button class="!tw-h-[38px] !tw-w-40" @click="isDisplayCreateElec = true">
+      Cập nhật số điện
+    </g-button>
   </header>
   <section>
     <ElectricTable v-if="dataElectricity !== null" :data="dataElectricity" />
   </section>
+  <v-dialog v-model="isDisplayCreateElec" width="544">
+    <CreateElectricityForm @close="isDisplayCreateElec = false" />
+  </v-dialog>
 </template>
