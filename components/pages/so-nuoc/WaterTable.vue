@@ -113,7 +113,7 @@ const onChangeWater = (item) => {
     <v-data-table :headers="tableHeaders" :items="dataTable" class="s-table">
       <template #item="{ item, index }">
         <tr class="tw-relative tw-group">
-          <td>{{ item?.roomId?.motelId.name }}</td>
+          <td>{{ item?.roomId?.motelId?.name }}</td>
           <td>{{ item?.roomId?.name }}</td>
           <td>
             <g-input

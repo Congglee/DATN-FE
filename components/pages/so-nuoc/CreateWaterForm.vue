@@ -11,6 +11,7 @@ import { useMotelStore } from "~/store/motel";
 //composable
 const toast = useToast();
 const route = useRoute();
+const idMotel = route.params?.motelId;
 const fetchListWaterEventBus = useEventBus(`fetch-list-water`);
 
 //emit
@@ -24,9 +25,8 @@ const waterStore = useWaterStore();
 const owner = JSON.parse(window.localStorage.getItem("owner"));
 
 //state
-const note = ref("");
 const listMotel = ref(null);
-const listRoom = ref(null);
+const listRoom = ref([]);
 const waterUsed = ref(0);
 const roomId = ref(null);
 
@@ -59,25 +59,10 @@ const loading = ref(false);
 
 //methods
 
-const getAllMotels = async () => {
-  try {
-    const res = await motelStore.getMotels(owner._id);
-    if (res.data) {
-      listMotel.value = res.data.motels;
-    }
-  } catch (error) {
-    console.log(error);
-    throw error;
-  }
-};
-getAllMotels();
-
-const onHandleOneMotel = async (event) => {
-  if (event.target.value == "all")
-    return (listRoom.value = []), (roomId.value = null);
+const getAllRoom = async (idMotel) => {
   try {
     listRoom.value = [];
-    const res = await motelStore.getOneMotels(event.target.value);
+    const res = await motelStore.getOneMotels(idMotel);
     if (res.data) {
       listRoom.value = res.data.motelData.roomIds;
     }
@@ -86,6 +71,20 @@ const onHandleOneMotel = async (event) => {
     throw error;
   }
 };
+getAllRoom(idMotel);
+const getAllMotels = async () => {
+  try {
+    const res = await motelStore.getMotels(owner._id);
+    if (res.data) {
+      listMotel.value = res.data.motels.filter((item) => item._id == idMotel);
+    }
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+};
+getAllMotels();
+
 const onHandleRoom = (event) => {
   if (event.target.value == "all") return (roomId.value = null);
   roomId.value = event.target.value;
@@ -143,11 +142,14 @@ const updatewaterUsed = (event) => {
               border: 1px solid rgb(218, 218, 218) !important ;
               border-radius: 3px;
             "
-            @change="onHandleOneMotel($event)"
           >
-            <option value="all" selected>Tất cả nhà trọ</option>
-            <option v-for="item in listMotel" :key="item.id" :value="item._id">
-              {{ item.name }}
+            <option
+              v-for="item in listMotel"
+              :key="item?.id"
+              :value="item?._id"
+              selected
+            >
+              {{ item?.name }}
             </option>
           </select>
         </div>
@@ -162,8 +164,8 @@ const updatewaterUsed = (event) => {
             @change="onHandleRoom($event)"
           >
             <option value="all" selected>Danh sách phòng</option>
-            <option v-for="item in listRoom" :key="item.id" :value="item._id">
-              {{ item.name }}
+            <option v-for="item in listRoom" :key="item?.id" :value="item?._id">
+              {{ item?.name }}
             </option>
           </select>
         </div>
@@ -190,6 +192,7 @@ const updatewaterUsed = (event) => {
           label="Sử dụng"
           :placeholder="waterUsed"
           v-model="waterUsed"
+          disabled="true"
         >
         </g-input>
       </div>

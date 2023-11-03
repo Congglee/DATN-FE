@@ -24,7 +24,7 @@ const closePopupAll = () => {
 </script>
 <template>
   <div class="tw-flex tw-flex-col tw-bg-white tw-rounded-xl tw-p-4">
-    <nuxt-link :to="'/quan-ly/' + item._id">
+    <nuxt-link :to="`/quan-ly/${item._id}/thong-ke`">
       <img
         class="tw-rounded-xl"
         src="https://cafefcdn.com/thumb_w/640/203337114487263232/2021/3/3/photo1614738126212-16147381266471125055486.jpg"

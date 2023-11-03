@@ -5,6 +5,10 @@ export const AUTH = {
   RESET_PASSWORD: "/owners/reset-password",
   SEND_MAIL_RESET_PASSWORD: "/owners/send-mail-reset-password",
 };
+export const USER = {
+  GET_ONE_USER: "/owners/get-info-owner",
+  UPDATE_USER: "/owners/update-owner",
+};
 export const ADMINISTRATIVE = {
   GET_ALL_PROVINCES: "/provinces/getAll",
   GET_ALL_DISTRICT: "/districts/getAll",

@@ -27,13 +27,13 @@ getRoomStatic();
 <template>
   <div class="tw-grid tw-grid-cols-2 tw-gap-4">
     <div class="tw-p-10 tw-bg-white tw-rounded-xl">
-      <IncomeBarChart :roomData="roomData"/>
+      <IncomeBarChart :roomData="roomData" />
     </div>
     <div class="tw-p-10 tw-bg-white tw-rounded-xl">
-      <CompareIncomePieChart :roomData="roomData"/>
+      <CompareIncomePieChart :roomData="roomData" />
     </div>
     <div class="tw-p-10 tw-bg-white tw-rounded-xl">
-      <RoomStatusPieChart :roomData="roomData"/>
+      <RoomStatusPieChart :roomData="roomData" />
     </div>
   </div>
 </template>
