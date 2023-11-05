@@ -92,7 +92,7 @@ const createMotel = handleSubmit(async () => {
     district: choosedDistrict.value.name,
     ward: choosedWard.value.name,
   };
-  const res = await motelStore.createMotel(payload);
+  const res = await motelStore.createMotel(removeEmptyFields(payload));
   if (res.data) {
     toast.success("Tạo nhà trọ thành công!");
     fetchListMotel.emit();

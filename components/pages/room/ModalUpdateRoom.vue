@@ -58,13 +58,13 @@ const validateFormData = reactive({
 
 const formData = reactive({
   description: props.roomInfo.description,
-  status: props.roomInfo.status,
+  // status: props.roomInfo.status,
 });
 //methods
 
 const updateRoom = handleSubmit(async () => {
-  const payload = { ...values, ...formData, status: formData.status.status };
-  const res = await roomStore.updateRoom(payload, props.roomInfo._id);
+  const payload = { ...values, ...formData };
+  const res = await roomStore.updateRoom(removeEmptyFields(payload), props.roomInfo._id);
   if (res.data) {
     fetchListRoomEventBus.emit();
     toast.success("Cập nhật phòng thành công!");
@@ -127,13 +127,13 @@ const updateRoom = handleSubmit(async () => {
       </div>
       <hr class="tw-mt-8" />
       <div class="tw-w-full tw-py-8">
-        <g-autocomplete
+        <!-- <g-autocomplete
           label="Trạng thái phòng"
           required
           :items="ROOM_STATUS"
           title="title"
           v-model="formData.status"
-        ></g-autocomplete>
+        ></g-autocomplete> -->
       </div>
       <!-- <g-input
         class="tw-pt-4"

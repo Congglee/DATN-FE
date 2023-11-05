@@ -27,7 +27,7 @@ const memberStore = useMemberStore();
 const { values, errors, defineComponentBinds, handleSubmit } = useForm({
   validationSchema: yup.object({
     name: yup.string().trim().required(),
-    phone: yup.string(),
+    phone: yup.string().length(10),
     // gender: yup.string(),
     // vehicle_number: yup.string(),
     // identify_code: yup.string(),

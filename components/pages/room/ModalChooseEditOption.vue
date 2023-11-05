@@ -2,17 +2,20 @@
 import IconPhone from "@/assets/svg/phone.svg";
 import IconAddUser from "@/assets/svg/add-user.svg";
 import IconXMark from "@/assets/svg/x-mark.svg";
-import IconDelete from '@/assets/svg/delete.svg'
+import IconDelete from "@/assets/svg/delete.svg";
 
 const props = defineProps({
   roomInfo: {
     type: Object,
-    default: {}
-  }
-})
+    default: {},
+  },
+});
 
+const isRoomEmpty = ref(true);
 
-
+if (props.roomInfo.status === "Trống") {
+  isRoomEmpty.value = false;
+}
 </script>
 
 <template>
@@ -29,11 +32,11 @@ const props = defineProps({
             </template>
             <span class="tw-font-semibold">Thay đổi thông tin phòng</span>
           </g-button>
-          <g-button variant="bezeled" @click="$emit('addRoomMember')">
+          <g-button variant="bezeled" @click="$emit('addRoomMember')" :disabled="isRoomEmpty">
             <template #prepend>
               <IconAddUser />
             </template>
-            <span class="tw-font-semibold"> Thêm người thuê phòng </span>
+            <span class="tw-font-semibold"> Thêm chủ phòng trọ </span>
           </g-button>
           <g-button variant="bezeled" @click="$emit('deleteRoom')">
             <template #prepend>

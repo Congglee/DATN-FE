@@ -116,7 +116,10 @@ const updateMotel = handleSubmit(async () => {
     district: choosedDistrict.value.name,
     ward: choosedWard.value.name,
   };
-  const res = await motelStore.updateMotel(payload, id.value);
+  const res = await motelStore.updateMotel(
+    removeEmptyFields(payload),
+    id.value
+  );
   if (res.data) {
     toast.success("Cập nhà trọ thành công!");
     fetchListMotel.emit();

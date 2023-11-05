@@ -17,9 +17,7 @@ const props = defineProps({
 
 const toast = useToast();
 const route = useRoute();
-const fetchRoomEventBus = useEventBus(
-  `fetch-room-${route.params.roomId}`
-);
+const fetchRoomEventBus = useEventBus(`fetch-room-${route.params.roomId}`);
 
 const emit = defineEmits(["close"]);
 
@@ -90,7 +88,10 @@ const handleCreateRoomHost = handleSubmit(async () => {
     ),
     gender: gender.value,
   };
-  const res = await memberStore.updateRoomHost(payload, props.userInfo._id);
+  const res = await memberStore.updateRoomHost(
+    removeEmptyFields(payload),
+    props.userInfo._id
+  );
   if (res.data) {
     toast.success("Chỉnh sửa thông tin chủ phòng thành công!");
     fetchRoomEventBus.emit();

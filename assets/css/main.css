@@ -418,7 +418,8 @@ body {
 }
 
 .conduct-v-card-text .s-table .v-data-table-footer {
-  display: none;
+  background-color: #ffffff;
+  padding-top: 12px;
 }
 
 .conduct-v-card-text .s-table tr:nth-child(odd) td {
