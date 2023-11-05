@@ -14,6 +14,8 @@ const props = defineProps({
   },
 });
 
+console.log(props.roomInfo);
+
 //composable
 const route = useRoute();
 const router = useRouter();
@@ -42,6 +44,11 @@ const handleRemoveRoom = async (e) => {
   if (res.data) {
     toast.success("Xóa phòng thành công!");
     fetchListRoomEventBus.emit();
+    isShowConfirmDeleteRoom.value = false;
+    isShowChooseEditOption.value = false;
+  }
+  if (res.error) {
+    toast.error(res.error.data.message);
     isShowConfirmDeleteRoom.value = false;
     isShowChooseEditOption.value = false;
   }

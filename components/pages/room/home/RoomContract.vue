@@ -55,7 +55,7 @@ const handleCreateNewContract = handleSubmit(async () => {
     ),
   };
   const res = await contractStore.createNewContractByRoom(
-    payload,
+    removeEmptyFields(payload),
     route.params.roomId
   );
   if (res.data) {
@@ -128,7 +128,7 @@ async function handleExport() {
       >
     </div>
   </div>
-  <div v-else>
+  <div v-else class="tw-flex tw-flex-col tw-gap-y-3">
     <quill-editor
       id="exportAll"
       v-model:content="contract"
@@ -137,6 +137,6 @@ async function handleExport() {
       theme="snow"
       class=""
     />
-    <g-button @click="handleExport">Tạo hợp đồng</g-button>
+    <g-button class="tw-w-[150px]" @click="handleExport">Tải hợp đồng</g-button>
   </div>
 </template>

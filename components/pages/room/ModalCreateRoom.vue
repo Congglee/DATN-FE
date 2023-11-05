@@ -64,7 +64,7 @@ const createRoom = handleSubmit(async () => {
     ...formData,
     motelId: route.params.motelId,
   };
-  const res = await roomStore.createRoom(payload);
+  const res = await roomStore.createRoom(removeEmptyFields(payload));
   if (res.data) {
     fetchListRoomEventBus.emit();
     toast.success("Tạo phòng thành công!");

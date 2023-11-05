@@ -75,6 +75,7 @@ getRoomDetail();
 fetchRoomEventBus.on(() => {
   getRoomDetail();
 });
+
 </script>
 <template>
   <div class="tw-pt-[50px]">
@@ -107,6 +108,11 @@ fetchRoomEventBus.on(() => {
           <div class="tw-flex tw-flex-col">
             <span class="small-text">Trạng thái</span>
             <span class="large-text">{{ room.status }}</span>
+          </div>
+          <IconBorder />
+          <div class="tw-flex tw-flex-col">
+            <span class="small-text">Ngày bắt đầu</span>
+            <span class="large-text">{{ convertDateType(room.createdAt, "DD/MM/YYYY") }}</span>
           </div>
         </div>
       </div>

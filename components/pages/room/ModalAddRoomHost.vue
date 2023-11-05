@@ -82,7 +82,7 @@ const handleCreateRoomHost = handleSubmit(async () => {
     roomId: props.roomInfo._id,
     gender: gender.value,
   };
-  const res = await memberStore.createRoomHost(payload);
+  const res = await memberStore.createRoomHost(removeEmptyFields(payload));
   if (res.data) {
     toast.success("Thêm chủ phòng thành công");
     fetchListRoomEventBus.emit();
@@ -128,6 +128,7 @@ const handleCreateRoomHost = handleSubmit(async () => {
           label="Email"
           v-bind="validateFormData.email"
           :error="errors.email"
+          required
         >
         </g-input>
         <g-input
@@ -135,6 +136,7 @@ const handleCreateRoomHost = handleSubmit(async () => {
           label="Số điện thoại"
           v-bind="validateFormData.phone"
           :error="errors.phone"
+          required
         >
         </g-input>
         <div class="tw-w-full tw-py-8">

@@ -3,6 +3,9 @@ import avatarDefault from "@/assets/images/defaultAvt.png";
 import { useToast } from "vue-toastification";
 
 export const convertDateType = (date: Date, format: string) => {
+  if(date === undefined){
+    return undefined
+  }
   return dayjs(date).format(format);
 };
 
@@ -56,8 +59,20 @@ export const convertDepositRoomType = (type: boolean) => {
   }
 };
 
+export const convertPaidStatus = (status: boolean) => {
+  switch (status) {
+    case true:
+      return "Đã thanh toán";
+    case false:
+      return "Chưa thanh toán";
+    default:
+      return status;
+  }
+};
+
 export const formatCurrency = (amount: number) => {
-  const strAmount = amount.toString();
+  const roundedAmount = amount.toFixed(2); 
+  const strAmount = roundedAmount.toString();
   const result = strAmount.replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,");
   return result + " VND";
 };
