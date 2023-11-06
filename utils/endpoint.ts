@@ -40,8 +40,7 @@ export const MEMBERS = {
   GET_ALL_MEMBER_IN_ROOM: "/members/get-all-member-in-room",
   GET_ONE_MEMBER_IN_ROOM: "/members/get-one-member",
   DELETE_ONE_MEMBER_IN_ROOM: "/members/delete-member",
-  CREATE_ROOM_OWNER:
-    "/members/create-neconvertDateType(room.value.createdAt)w-host-member",
+  CREATE_ROOM_OWNER: "/members/create-new-host-member",
   CREATE_ROOM_MEMBER: "/members/create-new-room-normal-member",
   UPDATE_ROOM_OWNER: "/members/update-host-member-info",
   UPDATE_MEMBER: "/members/update-room-normal-member",
@@ -78,5 +77,5 @@ export const BILL = {
   GET_ONE_BILL: "/bills/get-one-bill",
   UPDATE_BILL_PAID_AMOUNT: "/bills/update-bill-paid-amount",
   DELETE_BILL: "/bills/delete-bill",
-  SEND_MAIL_MONTHLY_BILL: '/bills/send-mail-monthly-bill'
-}
+  SEND_MAIL_MONTHLY_BILL: "/bills/send-mail-monthly-bill",
+};
