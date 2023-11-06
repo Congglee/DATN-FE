@@ -64,7 +64,7 @@ const formData = reactive({
 
 const updateRoom = handleSubmit(async () => {
   const payload = { ...values, ...formData };
-  const res = await roomStore.updateRoom(removeEmptyFields(payload), props.roomInfo._id);
+  const res = await roomStore.updateRoom(payload, props.roomInfo._id);
   if (res.data) {
     fetchListRoomEventBus.emit();
     toast.success("Cập nhật phòng thành công!");

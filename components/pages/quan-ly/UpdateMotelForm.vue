@@ -117,7 +117,7 @@ const updateMotel = handleSubmit(async () => {
     ward: choosedWard.value.name,
   };
   const res = await motelStore.updateMotel(
-    removeEmptyFields(payload),
+    payload,
     id.value
   );
   if (res.data) {
