@@ -63,7 +63,7 @@ const handleCreateRoomMember = handleSubmit(async () => {
     date_of_birth: dateOfBirthConverted,
     gender: gender.value,
   };
-  const res = await memberStore.updateRoomMember(removeEmptyFields(payload), props.userInfo._id);
+  const res = await memberStore.updateRoomMember(payload, props.userInfo._id);
   if (res.data) {
     toast.success("Chỉnh sửa thông tin thành viên thành công!");
     fetchRoomEventBus.emit();
