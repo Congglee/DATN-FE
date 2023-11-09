@@ -33,6 +33,9 @@ const { values, errors, defineComponentBinds, handleSubmit } = useForm({
       .string()
       .matches(/^[^0-9]*$/, "Tên không được chứa ký tự số")
       .trim("Tên không được bỏ trống")
+      .strict(true)
+      .min(3, "Tối thiểu 3 ký tự")
+      .max(64, "Tối đa 64 ký tự")
       .required("Tên là trường bắt buộc"),
     phone: yup
       .string()
@@ -45,18 +48,43 @@ const { values, errors, defineComponentBinds, handleSubmit } = useForm({
         }
       )
       .required("Số điện là trường bắt buộc"),
-    date_of_birth: yup.string().required("Ngày sinh là trường bắt buộc"),
+    date_of_birth: yup
+      .date()
+      .required("Ngày sinh là trường bắt buộc")
+      .test(
+        "age",
+        "Bạn quá nhỏ tuổi (Chưa đủ tuổi quản lý trọ >=18)",
+        function (birthdate) {
+          const cutoff = new Date();
+          cutoff.setFullYear(cutoff.getFullYear() - 18);
+          return birthdate <= cutoff;
+        }
+      ),
     date_of_identify_code: yup
-      .string()
-      .trim("Ngày của mã xác định không được bỏ trống"),
+      .date()
+      .required("Ngày đăng ký CCCD/CMND")
+      .test(
+        "date_of_identify_code",
+        "Ngày đăng ký CCCD/CMND không được lớn hơn ngày hiện tại",
+        function (date) {
+          const today = new Date();
+          return date <= today;
+        }
+      ),
     address: yup
       .string()
+      .strict(true)
       .trim("Địa chỉ không được bỏ trống")
+      .min(3, "Tối thiểu 3 ký tự")
+      .max(128, "Tối đa 128 ký tự")
       .required("Địa chỉ là trường bắt buộc"),
     avatar: yup.string(),
     address_issue_identify_code: yup
-      .number()
-      .typeError("Mã xác định vấn đề về địa chỉ phải là số"),
+      .string()
+      .trim("Nơi cấp CCCD/CMND không phải là khoảng trống")
+      .min(3, "Tối thiểu 3 ký tự")
+      .max(128, "Tối đa 128 ký tự")
+      .strict(true),
   }),
   initialValues: props.data,
 });
@@ -151,12 +179,7 @@ const onHandleAvt = (e) => {
           class="tw-pt-4"
           label="Ngày sinh"
         ></g-date-picker>
-        <g-date-picker
-          v-bind="validateFormData.date_of_identify_code"
-          :error="errors.date_of_identify_code"
-          class="tw-pt-4"
-          label="Ngày đăng ký CCCD"
-        ></g-date-picker>
+
         <g-input
           class="tw-pt-4"
           label="Email"
@@ -188,9 +211,15 @@ const onHandleAvt = (e) => {
             />
           </div>
         </div>
+        <g-date-picker
+          v-bind="validateFormData.date_of_identify_code"
+          :error="errors.date_of_identify_code"
+          class="tw-pt-4"
+          label="Ngày đăng ký CCCD"
+        ></g-date-picker>
         <g-input
           class="tw-pt-4"
-          label="address_issue_identify_code"
+          label="Nơi cấp CCCD/CMND"
           v-bind="validateFormData.address_issue_identify_code"
           :error="errors.address_issue_identify_code"
         >

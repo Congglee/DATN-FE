@@ -65,6 +65,9 @@ const onHandleSave = async (item) => {
   if (item.roomId == null) {
     return toast.error("Nhà trọ đã bị xoá !");
   }
+  if (Number(item.currentWaterIndex) - Number(item.prevWaterIndex) < 0) {
+    return toast.error(" Giá nước không phải là số âm!");
+  }
   const payload = {
     monthYear: item.monthYear,
     isWarning: true,
@@ -86,24 +89,6 @@ const onHandleSave = async (item) => {
 const onChangeWater = (item) => {
   item.prevWaterIndex = Number(item.prevWaterIndex);
   item.currentWaterIndex = Number(item.currentWaterIndex);
-  if (
-    Number(item.currentWaterIndex) - Number(item.prevWaterIndex) < 0 ||
-    Number(item.currentWaterIndex) < 0 ||
-    Number(item.prevWaterIndex) < 0
-  ) {
-    const dataYes = dataTable._rawValue.map((element) => {
-      if (element._id == item._id) {
-        return JSON.parse(
-          JSON.stringify(
-            JsonData.filter((element) => element._id == item._id)[0]
-          )
-        );
-      }
-      return element;
-    });
-    dataTable.value = dataYes;
-    return toast.error("Giá nước không phải là số âm");
-  }
   item.waterUsed = Number(item.currentWaterIndex) - Number(item.prevWaterIndex);
 };
 </script>

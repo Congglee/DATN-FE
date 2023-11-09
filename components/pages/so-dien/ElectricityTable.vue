@@ -65,6 +65,9 @@ const onHandleSave = async (item) => {
   if (item.roomId == null) {
     return toast.error("Nhà trọ đã bị xoá !");
   }
+  if (Number(item.currentWaterIndex) - Number(item.prevWaterIndex) < 0) {
+    return toast.error(" Giá nước không phải là số âm!");
+  }
   const payload = {
     monthYear: item.monthYear,
     isWarning: true,
@@ -86,25 +89,6 @@ const onHandleSave = async (item) => {
 const onChangeElec = (item) => {
   item.prevElectricityIndex = Number(item.prevElectricityIndex);
   item.currentElectricityIndex = Number(item.currentElectricityIndex);
-  if (
-    Number(item.currentElectricityIndex) - Number(item.prevElectricityIndex) <
-      0 ||
-    Number(item.currentElectricityIndex) < 0 ||
-    Number(item.prevElectricityIndex) < 0
-  ) {
-    const dataYes = dataTable._rawValue.map((element) => {
-      if (element._id == item._id) {
-        return JSON.parse(
-          JSON.stringify(
-            JsonData.filter((element) => element._id == item._id)[0]
-          )
-        );
-      }
-      return element;
-    });
-    dataTable.value = dataYes;
-    return toast.error("Giá điện không phải là số âm");
-  }
   item.electricityUsed =
     Number(item.currentElectricityIndex) - Number(item.prevElectricityIndex);
 };
