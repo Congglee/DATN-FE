@@ -1,10 +1,10 @@
 <script setup>
 import IconRemove from "@/assets/svg/remove.svg";
 import IconEdit from "@/assets/svg/edit.svg";
-import IconMessage from "@/assets/svg/grow-arrow.svg";
+import IconPhone from "@/assets/svg/phone.svg";
 import { useBillStore } from "@/store/bill";
 import { useToast } from "vue-toastification";
-import { debounce } from "lodash";
+import ModalBillInfo from "./ModalBillInfo.vue";
 import ModalPaid from "./ModalPaid.vue";
 const props = defineProps({
   item: {
@@ -15,6 +15,10 @@ const props = defineProps({
     type: Number,
     default: 0,
   },
+  services: {
+    type: Array,
+    default: [],
+  },
 });
 
 const toast = useToast();
@@ -23,8 +27,10 @@ const getBillEventBus = useEventBus(`get-bill-event-bus`);
 const billStore = useBillStore();
 
 const billInfo = ref({});
+const billId = ref("");
 const isShowPaidModal = ref(false);
 const isShowConfirmDeleteBill = ref(false);
+const isShowBillInfo = ref(false);
 
 const handleDeleteBill = async () => {
   const res = await billStore.deleteBill(billInfo.value._id);
@@ -34,9 +40,19 @@ const handleDeleteBill = async () => {
     isShowConfirmDeleteBill.value = false;
   }
 };
+
+watch(
+  () => billInfo.value,
+  (newVal) => {
+    console.log(newVal);
+  }
+);
 </script>
 <template>
-  <tr class="tw-relative tw-group hover:tw-bg-[e3e3e3]">
+  <tr
+    class="tw-relative tw-group hover:tw-bg-[e3e3e3] tw-cursor-pointer"
+    @click="(isShowBillInfo = true), (billId = item._id)"
+  >
     <td class="tw-text-center">{{ index + 1 }}</td>
     <td>{{ item.roomId?.name }}</td>
     <td>{{ item.memberId?.name }}</td>
@@ -52,26 +68,18 @@ const handleDeleteBill = async () => {
           :loading="loading"
           class="!tw-ml-0 !tw-p-1"
           variant="bezeled"
-          @click="(isShowPaidModal = true), (billInfo = item)"
+          @click.prevent.stop="(isShowPaidModal = true), (billInfo = item)"
         >
           <IconEdit />
-          Cập nhật số tiền
         </g-button>
       </div>
       <div>
         <g-button
           class="!tw-ml-0 !tw-p-1"
           variant="bezeled"
-          @click="handleSendingMail"
-        >
-        <IconMessage/>
-        </g-button>
-      </div>
-      <div>
-        <g-button
-          class="!tw-ml-0 !tw-p-1"
-          variant="bezeled"
-          @click="(isShowConfirmDeleteBill = true), (billInfo = item)"
+          @click.prevent.stop="
+            (isShowConfirmDeleteBill = true), (billInfo = item)
+          "
         >
           <IconRemove class="!tw-ml-0" />
         </g-button>
@@ -80,6 +88,13 @@ const handleDeleteBill = async () => {
   </tr>
   <v-dialog v-model="isShowPaidModal" width="544">
     <ModalPaid @close="isShowPaidModal = false" :billInfo="billInfo" />
+  </v-dialog>
+  <v-dialog v-model="isShowBillInfo" width="544">
+    <ModalBillInfo
+      @close="isShowBillInfo = false"
+      :billId="billId"
+      :services="services"
+    />
   </v-dialog>
   <g-modal-confirm
     v-model="isShowConfirmDeleteBill"

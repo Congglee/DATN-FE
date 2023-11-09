@@ -2,6 +2,7 @@
 import { useRoomStore } from "~/store/room";
 import { VDataTable } from "vuetify/lib/labs/components.mjs";
 import BillByRoomItem from "@/components/pages/hoa-don/BillByRoomItem.vue";
+import { timeTables } from "~/utils/constants";
 
 const route = useRoute();
 
@@ -14,7 +15,7 @@ const headers = [
     title: "STT",
     sortable: false,
     key: "STT",
-    width: "73px"
+    width: "73px",
   },
   {
     title: "Tên phòng",
@@ -47,8 +48,6 @@ const getAllRoomOfMotel = async (query) => {
   };
   const res = await roomStore.getAllRoomOfMotel(payload);
   if (res.data) {
-    // listRoom.value = res.data.rooms;
-    // console.log(listRoom.value)
     res.data.rooms.map((el) => {
       if (el.memberIds.length > 0) {
         listRoom.value.push(el);
@@ -61,11 +60,13 @@ getAllRoomOfMotel();
 </script>
 
 <template>
-  <g-date-picker
+  <g-autocomplete
     class="tw-w-[200px] tw-mb-5"
     label="Chọn kì"
     v-model="billDate"
-  ></g-date-picker>
+    :items="timeTables"
+    item-title="label"
+  ></g-autocomplete>
   <v-data-table :headers="headers" class="s-table" :items="listRoom">
     <template #item="{ item, index }">
       <BillByRoomItem :item="item" :index="index" :billDate="billDate" />

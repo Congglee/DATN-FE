@@ -138,5 +138,6 @@ async function handleExport() {
       class=""
     />
     <g-button class="tw-w-[150px]" @click="handleExport">Tải hợp đồng</g-button>
+    <g-button class="tw-w-[150px]" @click="handleCreateNewContract">Cập nhật hợp đồng</g-button>
   </div>
 </template>

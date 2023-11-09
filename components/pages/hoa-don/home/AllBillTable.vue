@@ -2,11 +2,16 @@
 import { useBillStore } from "~/store/bill";
 import { VDataTable } from "vuetify/lib/labs/components.mjs";
 import BillItem from "@/components/pages/hoa-don/BillItem.vue";
+import { timeTables } from "~/utils/constants";
+import { useServiceStore } from "@/store/services";
+
+const route = useRoute();
 
 const getBillEventBus = useEventBus(`get-bill-event-bus`);
 
 //store
 const billStore = useBillStore();
+const serviceStore = useServiceStore();
 
 //state
 const bills = ref([]);
@@ -51,28 +56,59 @@ const headers = [
     title: "Trạng thái",
     sortable: false,
     key: "paidStatus",
-    sortable: true
+    sortable: true,
   },
 ];
 
+const time = ref("");
+const services = ref(null);
+
 //method
-const getAllBills = async () => {
-  const res = await billStore.getAllBill();
+const getAllBills = async (monthDate) => {
+  const payload = {
+    motel: route.params.motelId,
+    monthDate: monthDate.value,
+  };
+  const res = await billStore.getAllBill(payload);
   if (res.data) {
     bills.value = res.data.bills;
   }
 };
 
-getAllBills();
+const getServiceInfo = async () => {
+  const res = await serviceStore.getAllServices();
+  if (res.data) {
+    services.value = res.data.services;
+  }
+};
+getServiceInfo();
+
+// getAllBills();
 
 getBillEventBus.on(() => {
-  getAllBills();
+  getAllBills(time.value);
 });
+
+watch(
+  () => time.value,
+  (newVal) => {
+    getAllBills(newVal);
+  }
+);
 </script>
 <template>
+  <div>
+    <g-autocomplete
+      v-model="time"
+      class="tw-w-[200px] tw-mb-3"
+      label="Chọn kì"
+      :items="timeTables"
+      item-title="label"
+    ></g-autocomplete>
+  </div>
   <v-data-table :headers="headers" class="s-table" :items="bills">
     <template #item="{ item, index }">
-      <BillItem :item="item" :index="index" />
+      <BillItem :item="item" :index="index" :services="services"/>
     </template>
   </v-data-table>
 </template>

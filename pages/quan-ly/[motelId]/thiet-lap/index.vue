@@ -22,7 +22,6 @@ const updateSampleContract = async () => {
   const payload = { sample_contract: contract.value };
   const res = await contractStore.updateSampleContract(payload);
   if (res.data) {
-    console.log(res.data);
     getSampleContract();
     loading.value = false;
     toast.success("Chỉnh sửa hợp đồng mẫu thành công")

@@ -40,3 +40,22 @@ export const genders = [
     value: "Nữ",
   },
 ];
+
+export const timeTables = [
+  {
+    label: "09/2023",
+    value: "09/2023",
+  },
+  {
+    label: "10/2023",
+    value: "10/2023",
+  },
+  {
+    label: "11/2023",
+    value: "11/2023",
+  },
+  {
+    label: "12/2023",
+    value: "12/2023",
+  },
+];
