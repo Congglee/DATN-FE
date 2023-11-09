@@ -11,9 +11,13 @@ export const useBillStore = defineStore({
       });
       return res;
     },
-    async getAllBill() {
+    async getAllBill(payload: any) {
       const res = await useFetchData(`${BILL.GET_ALL_BILLS}`, {
         method: "GET",
+        params: {
+          motel: payload.motel,
+          monthDate: payload.monthDate,
+        },
       });
       return res;
     },

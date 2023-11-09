@@ -14,10 +14,11 @@ const props = defineProps({
     default: 0,
   },
   billDate: {
-    type: String,
-    default: "",
+    type: Object,
+    default: {},
   },
 });
+
 
 const toast = useToast();
 
@@ -30,7 +31,6 @@ const getRoomHost = () => {
   props.item.memberIds.map((el) => {
     if (el.isHost == true) {
       host.value = el;
-      console.log(host.value);
       return;
     }
   });
@@ -39,33 +39,22 @@ const getRoomHost = () => {
 getRoomHost();
 
 const handleCreateBill = debounce(async (e) => {
-  if (!props.billDate) {
+  if (!props.billDate?.value) {
     toast.error("Vui lòng chọn kì thanh toán!");
     return;
   }
   loading.value = true;
-
   const payload = {
     roomId: e._id,
-    monthYear: convertDateType(props.billDate, "MM/YYYY"),
+    monthYear: props.billDate.value,
   };
+
   const res = await billStore.createMonthlyBill(payload);
   if (res.data) {
     loading.value = false;
     toast.success("Tạo hóa đơn thành công!");
   }
 });
-
-const handleSendingMail = () => {
-  
-}
-
-watch(
-  () => props.billDate,
-  (newVal) => {
-    console.log(newVal);
-  }
-);
 </script>
 <template>
   <tr class="tw-relative tw-group hover:tw-bg-[e3e3e3]">
@@ -88,7 +77,7 @@ watch(
           Tạo/Cập nhật
         </g-button>
       </div>
-      <div>
+      <!-- <div>
         <g-button
           class="!tw-ml-0 !tw-p-1"
           variant="bezeled"
@@ -97,7 +86,7 @@ watch(
           <IconRemove class="!tw-ml-0" />
           Gửi hóa đơn
         </g-button>
-      </div>
+      </div> -->
     </div>
   </tr>
 </template>
