@@ -6,6 +6,7 @@ import { useForm } from "vee-validate";
 import * as yup from "yup";
 import { useToast } from "vue-toastification";
 import { useUserStore } from "~/store/user";
+import { useUploadImagesStore } from "~/store/uploadImages";
 
 // compatibility
 const fetchDataUserEventBus = useEventBus(`fetch-data-user`);
@@ -22,10 +23,13 @@ const route = useRoute();
 // state
 
 const IAvatar = ref(props.data.avatar);
+const checkImgesOld = ref(props.data.avatar);
+const checkImgesNew = ref(0);
 
 //store
 
 const userStore = useUserStore();
+const uploadImagesStore = useUploadImagesStore();
 
 const { values, errors, defineComponentBinds, handleSubmit } = useForm({
   validationSchema: yup.object({
@@ -103,8 +107,31 @@ const validateFormData = reactive({
 });
 
 //method
+const handleUploadImages = async (file) => {
+  try {
+    const formData = new FormData();
+    formData.append("images", file);
+    const res = await uploadImagesStore.uploadImages(formData);
+    if (res.data) {
+      return { status: true, data: res.data.data };
+    }
+  } catch (error) {
+    throw error;
+  }
+};
 
 const handleUpdateUser = handleSubmit(async () => {
+  if (checkImgesNew._value == 0) {
+  } else {
+    const res = await handleUploadImages(checkImgesNew._value);
+    checkImgesNew.value = 0;
+    if (res.status) {
+      IAvatar.value = res.data[0].url;
+    } else {
+      toast.error("Tải ảnh lên thất bại");
+      return res;
+    }
+  }
   const sendData = {
     name: values.name,
     phone: values.phone,
@@ -140,6 +167,11 @@ const handleUpdateUser = handleSubmit(async () => {
 });
 
 const onHandleAvt = (e) => {
+  if (e.target.files[0] === undefined) {
+    checkImgesNew.value = 0;
+  } else {
+    checkImgesNew.value = e.target.files[0];
+  }
   IAvatar.value = props.data.avatar;
   const file = e.target.files[0];
   const reader = new FileReader();
@@ -159,7 +191,10 @@ const onHandleAvt = (e) => {
         Thông tin người dùng
       </h5>
     </div>
-    <div class="modal-change-information__form">
+    <div
+      class="modal-change-information__form"
+      style="min-height: 103vh !important"
+    >
       <div class="tw-mt-6 tw-flex-col tw-gap-y-4">
         <g-input
           label="Tên"

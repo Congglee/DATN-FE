@@ -79,3 +79,6 @@ export const BILL = {
   DELETE_BILL: "/bills/delete-bill",
   SEND_MAIL_MONTHLY_BILL: "/bills/send-mail-monthly-bill",
 };
+export const UPLOAD_IMAGES = {
+  UPLOAD_IMAGES: "/images/upload",
+};
