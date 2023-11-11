@@ -40,5 +40,23 @@ export const useServiceStore = defineStore({
       });
       return res;
     },
+    async addServiceToRoom(roomId: string, serviceId: string) {
+      const res = await useFetchData(
+        `${SERVICES.ADD_SERVICE_TO_ROOM}/${roomId}/${serviceId}`,
+        {
+          method: "POST",
+        }
+      );
+      return res;
+    },
+    async deleteServiceFromRoom(roomId: string, serviceId: string) {
+      const res = await useFetchData(
+        `${SERVICES.DELETE_SERVICE_FROM_ROOM }/${roomId}/${serviceId}`,
+        {
+          method: "DELETE",
+        }
+      );
+      return res;
+    },
   },
 });
