@@ -71,7 +71,7 @@ export const convertPaidStatus = (status: boolean) => {
 };
 
 export const formatCurrency = (amount: number) => {
-  const roundedAmount = amount.toFixed(2); 
+  const roundedAmount = amount.toFixed(0); 
   const strAmount = roundedAmount.toString();
   const result = strAmount.replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,");
   return result + " VND";
