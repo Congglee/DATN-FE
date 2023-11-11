@@ -82,3 +82,8 @@ export const BILL = {
 export const UPLOAD_IMAGES = {
   UPLOAD_IMAGES: "/images/upload",
 };
+
+export const PROVINCES = {
+  GET_PROVINCES: "/provinces",
+  GET_DISTRICT: "/province",
+};

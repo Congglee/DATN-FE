@@ -6,6 +6,7 @@ import { useForm } from "vee-validate";
 import { useToast } from "vue-toastification";
 import { useMotelStore } from "@/store/motel";
 import { useAdministrativeStore } from "@/store/administrative";
+import { useProvinceStore } from "~/store/province";
 //props
 const props = defineProps({});
 
@@ -18,7 +19,8 @@ const route = useRoute();
 
 //store
 const motelStore = useMotelStore();
-const administrativeStore = useAdministrativeStore();
+// const administrativeStore = useAdministrativeStore();
+const provinceStore = useProvinceStore();
 
 //state
 const { values, errors, defineComponentBinds, handleSubmit } = useForm({
@@ -54,36 +56,56 @@ const choosedWard = ref(null);
 
 //methods
 
+// const getDistrictOfHaNoi = async () => {
+//   const params = {
+//     provinceCode: "01",
+//     limit: "-1",
+//   };
+//   const res = await administrativeStore.getDistrictOfHaNoi(params);
+//   if (res.data) {
+//     districts.value = res.data.data.data;
+//   }
+// };
+
+// getDistrictOfHaNoi();
+
+// const getWards = async (e) => {
+//   const params = {
+//     districtCode: e.code,
+//     limit: "-1",
+//   };
+//   const res = await administrativeStore.getWardByDistrict(params);
+//   if (res.data) {
+//     wards.value = res.data.data.data;
+//   }
+// };
+
+// watch(
+//   () => choosedDistrict.value,
+//   (newVal) => {
+//     getWards(newVal);
+//   }
+// );
+
 const getDistrictOfHaNoi = async () => {
-  const params = {
-    provinceCode: "01",
-    limit: "-1",
+  const payload = {
+    depth: 1,
   };
-  const res = await administrativeStore.getDistrictOfHaNoi(params);
+  const res = await provinceStore.getDistrictOfHaNoi(payload);
   if (res.data) {
-    districts.value = res.data.data.data;
-  }
-};
-
-getDistrictOfHaNoi();
-
-const getWards = async (e) => {
-  const params = {
-    districtCode: e.code,
-    limit: "-1",
-  };
-  const res = await administrativeStore.getWardByDistrict(params);
-  if (res.data) {
-    wards.value = res.data.data.data;
+    districts.value = res.data[0].districts;
   }
 };
 
 watch(
   () => choosedDistrict.value,
   (newVal) => {
-    getWards(newVal);
+    choosedWard.value = "";
+    wards.value = newVal.wards;
   }
 );
+
+getDistrictOfHaNoi();
 
 const createMotel = handleSubmit(async () => {
   const payload = {
@@ -96,7 +118,7 @@ const createMotel = handleSubmit(async () => {
   if (res.data) {
     toast.success("Tạo nhà trọ thành công!");
     fetchListMotel.emit();
-    emit("close")
+    emit("close");
   }
   if (res.error) {
     toast.error("Tạo nhà trọ thất bại!");
