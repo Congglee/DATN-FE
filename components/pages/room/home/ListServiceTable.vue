@@ -59,7 +59,7 @@ getRoomInfo();
     :headers="headers"
     class="s-table"
     :items="services"
-    v-if="services"
+    v-if="roomInfo"
   >
     <template #item="{ item, index }">
       <ServiceItem :item="item" :index="index" :roomServices="roomInfo.serviceIds"/>
