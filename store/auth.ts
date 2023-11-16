@@ -15,13 +15,16 @@ interface ISignup {
 
 export const useAuthStore = defineStore({
   id: "auth",
-  state: () => ({}),
+  state: () => ({
+    owner: null,
+  }),
   actions: {
     async signin(payload: ISignin) {
       const res = await useFetchData(`${AUTH.SIGNIN}`, {
         method: "POST",
         body: payload,
       });
+      this.owner = res.data.owner;
       return res;
     },
     async signup(payload: ISignup) {

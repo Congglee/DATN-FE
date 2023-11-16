@@ -32,7 +32,7 @@ const submitOtp = async () => {
   }
   if (res.error) {
     loading.value = false;
-    toast.error(res.error.message);
+    toast.error(res.error.data.message);
   }
 };
 </script>

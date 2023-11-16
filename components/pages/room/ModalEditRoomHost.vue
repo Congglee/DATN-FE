@@ -30,7 +30,10 @@ const { values, errors, defineComponentBinds, handleSubmit } = useForm({
     email: yup.string().email().trim(),
     phone: yup.string().trim().length(10),
     date_start: yup.string().trim(),
-    room_deposit_amount: yup.number(),
+    room_deposit_amount: yup
+      .number()
+      .typeError("Tiền cọc phải là số")
+      .min(0, "Tiền cọc không được nhỏ hơn 0"),
     vehicle_number: yup.string().trim(),
     identify_code: yup.string().trim(),
     date_of_identify_code: yup.string(),

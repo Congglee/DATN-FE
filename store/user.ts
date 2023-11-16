@@ -3,7 +3,9 @@ import { defineStore } from "pinia";
 
 export const useUserStore = defineStore({
   id: "user",
-  state: () => ({}),
+  state: () => ({
+    user: null,
+  }),
   actions: {
     async getOneUser() {
       const res = await useFetchData(`${USER.GET_ONE_USER}`, {

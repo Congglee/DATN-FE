@@ -35,17 +35,22 @@ const roomStore = useRoomStore();
 const { values, errors, defineComponentBinds, handleSubmit } = useForm({
   validationSchema: yup.object({
     name: yup.string().trim().required(),
-    // motelId: yup.string().trim().required(),
-    price: yup.number().required(),
-    // verify_code: yup.string().trim().required(),
+    price: yup
+      .number()
+      .required()
+      .typeError("Giá phòng phải là số")
+      .positive("Giá phòng không được âm"),
     max_customer: yup.number().required(),
-    // area: yup.string(),
+    area: yup
+      .number()
+      .typeError("Diện tích phải là số")
+      .min(0, "Diện tích phải lớn hơn 0"),
   }),
   initialValues: {
     name: props.roomInfo.name,
     price: props.roomInfo.price,
     max_customer: props.roomInfo.max_customer,
-    // verify_code: "",
+    area: props.roomInfo.area,
   },
 });
 
@@ -54,6 +59,7 @@ const validateFormData = reactive({
   price: defineComponentBinds("price"),
   // verify_code: defineComponentBinds("verify_code"),
   max_customer: defineComponentBinds("max_customer"),
+  area: defineComponentBinds("area"),
 });
 
 const formData = reactive({
@@ -115,6 +121,14 @@ const updateRoom = handleSubmit(async () => {
           required
           v-bind="validateFormData.max_customer"
           :error="errors.max_customer"
+        >
+        </g-input>
+        <g-input
+          class="tw-pt-4"
+          label="Diện tích"
+          required
+          v-bind="validateFormData.area"
+          :error="errors.area"
         >
         </g-input>
         <div class="tw-gap-y-1 tw-grid tw-pt-4">

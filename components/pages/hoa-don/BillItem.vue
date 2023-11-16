@@ -1,7 +1,7 @@
 <script setup>
 import IconRemove from "@/assets/svg/remove.svg";
 import IconEdit from "@/assets/svg/edit.svg";
-import IconPhone from "@/assets/svg/phone.svg";
+import IconThreeDots from "@/assets/svg/bill-info.svg";
 import { useBillStore } from "@/store/bill";
 import { useToast } from "vue-toastification";
 import ModalBillInfo from "./ModalBillInfo.vue";
@@ -49,10 +49,7 @@ watch(
 );
 </script>
 <template>
-  <tr
-    class="tw-relative tw-group hover:tw-bg-[e3e3e3] tw-cursor-pointer"
-    @click="(isShowBillInfo = true), (billId = item._id)"
-  >
+  <tr class="tw-relative tw-group hover:tw-bg-[e3e3e3]">
     <td class="tw-text-center">{{ index + 1 }}</td>
     <td>{{ item.roomId?.name }}</td>
     <td>{{ item.memberId?.name }}</td>
@@ -65,10 +62,19 @@ watch(
     >
       <div>
         <g-button
+          class="!tw-ml-0 !tw-p-3"
+          variant="bezeled"
+          @click="(isShowBillInfo = true), (billId = item._id)"
+        >
+          <IconThreeDots />
+        </g-button>
+      </div>
+      <div>
+        <g-button
           :loading="loading"
           class="!tw-ml-0 !tw-p-1"
           variant="bezeled"
-          @click.prevent.stop="(isShowPaidModal = true), (billInfo = item)"
+          @click="(isShowPaidModal = true), (billInfo = item)"
         >
           <IconEdit />
         </g-button>
@@ -77,9 +83,7 @@ watch(
         <g-button
           class="!tw-ml-0 !tw-p-1"
           variant="bezeled"
-          @click.prevent.stop="
-            (isShowConfirmDeleteBill = true), (billInfo = item)
-          "
+          @click="(isShowConfirmDeleteBill = true), (billInfo = item)"
         >
           <IconRemove class="!tw-ml-0" />
         </g-button>

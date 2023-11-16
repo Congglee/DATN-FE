@@ -36,9 +36,21 @@ const { values, errors, defineComponentBinds, handleSubmit } = useForm({
   validationSchema: yup.object({
     name: yup.string().trim().required(),
     // motelId: yup.string().trim().required(),
-    price: yup.number().required(),
-    max_customer: yup.number().required(),
-    area: yup.number().required(),
+    price: yup
+      .number()
+      .typeError("Giá phòng phải là số")
+      .positive("Giá phòng phải lớn hơn 0")
+      .required(),
+    max_customer: yup
+      .number()
+      .typeError("Số khách tối đa phải là số")
+      .positive("Số khách tối đa phải lớn hơn 0")
+      .required(),
+    area: yup
+      .number()
+      .typeError("Diện tích phòng phải là số")
+      .positive("Diện tích phòng phải lớn hơn 0")
+      .required(),
   }),
 });
 
@@ -73,7 +85,7 @@ const createRoom = handleSubmit(async () => {
   }
   if (res.error) {
     toast.error(res.error.data.message);
-    loading.value = false
+    loading.value = false;
   }
 });
 </script>
@@ -105,7 +117,7 @@ const createRoom = handleSubmit(async () => {
           label="Giá phòng"
           required
           v-bind="validateFormData.price"
-          :error="errors.name"
+          :error="errors.price"
         >
         </g-input>
         <g-input

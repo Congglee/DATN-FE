@@ -18,27 +18,31 @@ const authStore = useAuthStore();
 
 //state
 
+const requiredMessage = "Trường này không được bỏ trống";
+
 const { values, errors, defineComponentBinds, handleSubmit } = useForm({
   validationSchema: yup.object({
     email: yup
       .string()
+      .email("Định dạng email không hợp lệ")
+      .required(requiredMessage)
       .trim()
-      .required()
       .min(3, "Tên đăng nhập không thể nhỏ hơn 3 ký tự"),
     name: yup
       .string()
       .trim()
-      .required()
+      .required(requiredMessage)
       .min(3, "Tên đăng nhập không thể nhỏ hơn 3 ký tự"),
     password: yup
       .string()
       .trim()
-      .required()
+      .required(requiredMessage)
+      .min(8, "Mật khẩu không được nhỏ hơn 8 ký tự,")
       .max(255, "Mật khẩu không được lớn hơn 255 ký tự."),
     confirmPassword: yup
       .string()
       .trim()
-      .required()
+      .required(requiredMessage)
       .oneOf([yup.ref("password")], "Mật khẩu không khớp"),
   }),
 });
@@ -50,7 +54,7 @@ const formData = reactive({
   confirmPassword: defineComponentBinds("confirmPassword"),
 });
 
-const isCheck = ref(false);
+const isLoadingSignup = ref(false);
 const isShowPassword = ref(false);
 const isChangePassword = ref(false);
 const isShowConfirmPassword = ref(false);
@@ -58,16 +62,19 @@ const isShowOtpInputModal = ref(false);
 //method
 
 const handleSignup = handleSubmit(async () => {
+  isLoadingSignup.value = true;
   const payload = {
     ...values,
   };
   const res = await authStore.signup(payload);
   if (res.data) {
+    isLoadingSignup.value = false;
     toast.success(res.data.message);
     isShowOtpInputModal.value = true;
   }
   if (res.error) {
-    toast.error(res.error.data.message)
+    isLoadingSignup.value = false;
+    toast.error(res.error.data.message);
   }
 });
 </script>
@@ -121,7 +128,7 @@ const handleSignup = handleSubmit(async () => {
       </div>
       <div class="tw-w-full">
         <g-input
-          label="Mật khẩu"
+          label="Xác nhận mật khẩu"
           v-bind="formData.confirmPassword"
           :type="isShowConfirmPassword ? 'text' : 'password'"
           :error="errors.confirmPassword"
@@ -146,12 +153,13 @@ const handleSignup = handleSubmit(async () => {
         >
       </div>
       <div class="tw-w-full tw-flex tw-mt-[10px]">
-        <button
+        <g-button
           class="tw-w-full tw-py-4 tw-bg-black tw-text-white tw-rounded-[10px]"
           @click="handleSignup"
+          :loading="isLoadingSignup"
         >
-          Đăng nhập
-        </button>
+          Đăng ký
+        </g-button>
       </div>
     </div>
   </div>
