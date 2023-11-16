@@ -56,37 +56,6 @@ const choosedWard = ref(null);
 
 //methods
 
-// const getDistrictOfHaNoi = async () => {
-//   const params = {
-//     provinceCode: "01",
-//     limit: "-1",
-//   };
-//   const res = await administrativeStore.getDistrictOfHaNoi(params);
-//   if (res.data) {
-//     districts.value = res.data.data.data;
-//   }
-// };
-
-// getDistrictOfHaNoi();
-
-// const getWards = async (e) => {
-//   const params = {
-//     districtCode: e.code,
-//     limit: "-1",
-//   };
-//   const res = await administrativeStore.getWardByDistrict(params);
-//   if (res.data) {
-//     wards.value = res.data.data.data;
-//   }
-// };
-
-// watch(
-//   () => choosedDistrict.value,
-//   (newVal) => {
-//     getWards(newVal);
-//   }
-// );
-
 const getDistrictOfHaNoi = async () => {
   const payload = {
     depth: 1,

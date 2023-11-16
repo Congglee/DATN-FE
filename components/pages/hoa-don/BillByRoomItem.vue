@@ -19,7 +19,6 @@ const props = defineProps({
   },
 });
 
-
 const toast = useToast();
 
 const billStore = useBillStore();
@@ -39,16 +38,15 @@ const getRoomHost = () => {
 getRoomHost();
 
 const handleCreateBill = debounce(async (e) => {
-  if (!props.billDate?.value) {
+  if (!props.billDate) {
     toast.error("Vui lòng chọn kì thanh toán!");
     return;
   }
   loading.value = true;
   const payload = {
     roomId: e._id,
-    monthYear: props.billDate.value,
+    monthYear: convertDateType(props.billDate, 'MM/YYYY'),
   };
-
   const res = await billStore.createMonthlyBill(payload);
   if (res.data) {
     loading.value = false;
@@ -64,7 +62,7 @@ const handleCreateBill = debounce(async (e) => {
     <td>{{ host.phone }}</td>
     <td>{{ host.email }}</td>
     <div
-      class="tw-absolute tw-right-3 tw-top-[50%] tw-translate-y-[-50%] tw-hidden group-hover:tw-flex tw-space-x-2"
+      class="tw-absolute tw-right-3 tw-top-[50%] tw-translate-y-[-50%] tw-flex tw-space-x-2"
     >
       <div>
         <g-button

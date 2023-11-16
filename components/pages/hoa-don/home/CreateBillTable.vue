@@ -39,7 +39,8 @@ const headers = [
   },
 ];
 
-const billDate = ref("");
+const billDate = ref(getCurrentDateString());
+console.log(billDate.value);
 
 const getAllRoomOfMotel = async (query) => {
   const payload = {
@@ -57,16 +58,27 @@ const getAllRoomOfMotel = async (query) => {
 };
 
 getAllRoomOfMotel();
+
+watch(
+  () => billDate.value,
+  (newVal) => {
+    console.log(newVal);
+  }
+);
 </script>
 
 <template>
-  <g-autocomplete
+  <!-- <g-autocomplete
     class="tw-w-[200px] tw-mb-5"
     label="Chọn kì"
     v-model="billDate"
     :items="timeTables"
     item-title="label"
-  ></g-autocomplete>
+  ></g-autocomplete> -->
+  <g-date-picker
+    class="tw-w-[200px] tw-mb-10"
+    v-model="billDate"
+  ></g-date-picker>
   <v-data-table :headers="headers" class="s-table" :items="listRoom">
     <template #item="{ item, index }">
       <BillByRoomItem :item="item" :index="index" :billDate="billDate" />

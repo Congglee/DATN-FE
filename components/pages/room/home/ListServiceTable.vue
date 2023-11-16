@@ -34,7 +34,7 @@ const headers = [
     key: "activeService",
   },
 ];
-const services = ref(null);
+const services = ref([]);
 const roomInfo = ref(null);
 
 const getAllService = async () => {
@@ -49,17 +49,19 @@ const getRoomInfo = async () => {
   const res = await roomStore.getRoomDetail(route.params.roomId);
   if (res.data) {
     roomInfo.value = res.data.room;
+    console.log(roomInfo.value)
   }
 };
 
 getRoomInfo();
+
+console.log(1)
 </script>
 <template>
   <v-data-table
     :headers="headers"
     class="s-table"
     :items="services"
-    v-if="roomInfo"
   >
     <template #item="{ item, index }">
       <ServiceItem :item="item" :index="index" :roomServices="roomInfo.serviceIds"/>

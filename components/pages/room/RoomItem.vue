@@ -14,6 +14,7 @@ const props = defineProps({
   },
 });
 
+console.log(props.roomInfo)
 
 //composable
 const route = useRoute();
@@ -29,6 +30,17 @@ const isShowChooseEditOption = ref(false);
 const isShowUpdateRoom = ref(false);
 const isShowAddRoomMember = ref(false);
 const isShowConfirmDeleteRoom = ref(false);
+const roomOwner = ref(null);
+
+const findRoomOwner = () => {
+  props.roomInfo.memberIds.find((el) => {
+    if (el.isHost === true) {
+      roomOwner.value = el;
+    }
+  });
+};
+
+findRoomOwner();
 
 const handleEnterRoomDetail = () => {
   if (props.roomInfo.status === "Trống") {
@@ -73,7 +85,15 @@ const handleRemoveRoom = async (e) => {
         </div>
         <div>
           <dt class="tw-sr-only">Address</dt>
-          <dd class="tw-font-medium">{{ roomInfo.name }}</dd>
+          <dd class="tw-font-bold">{{ roomInfo.name }}</dd>
+          <p v-if="roomOwner">
+            <span class="tw-font-bold tw-text-[12px]">Chủ phòng:</span>
+            {{ roomOwner.name }}
+          </p>
+          <p v-else>
+            <span class="tw-font-bold tw-text-[12px]">Trạng thái phòng:</span>
+            {{ roomInfo.status }}
+          </p>
         </div>
       </dl>
       <div

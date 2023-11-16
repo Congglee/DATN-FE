@@ -19,7 +19,7 @@ const toast = useToast();
 
 const { values, errors, defineComponentBinds, handleSubmit } = useForm({
   validationSchema: yup.object({
-    ContractNo: yup.string().required(),
+    ContractNo: yup.string(),
     ContractDate: yup.string().required(),
     DateStartContract: yup.string().required(),
     DateEndContract: yup.string().required(),
@@ -27,8 +27,10 @@ const { values, errors, defineComponentBinds, handleSubmit } = useForm({
 });
 
 const contract = ref(null);
+
+
 const contractData = reactive({
-  ContractNo: defineComponentBinds("ContractNo"),
+  ContractNo: randomString(6),
   ContractDate: defineComponentBinds("ContractDate"),
   DateStartContract: defineComponentBinds("DateStartContract"),
   DateEndContract: defineComponentBinds("DateEndContract"),
@@ -93,9 +95,8 @@ async function handleExport() {
         <div class="tw-max-w-[300px]">
           <g-input
             label="Hợp đồng số"
-            required
-            v-bind="contractData.ContractNo"
-            :error="errors.ContractNo"
+            disabled
+            v-model="contractData.ContractNo"
           ></g-input>
         </div>
         <div>
@@ -138,6 +139,6 @@ async function handleExport() {
       class=""
     />
     <g-button class="tw-w-[150px]" @click="handleExport">Tải hợp đồng</g-button>
-    <g-button class="tw-w-[150px]" @click="handleCreateNewContract">Cập nhật hợp đồng</g-button>
+    <!-- <g-button class="tw-w-[150px]" @click="handleCreateNewContract">Cập nhật hợp đồng</g-button> -->
   </div>
 </template>

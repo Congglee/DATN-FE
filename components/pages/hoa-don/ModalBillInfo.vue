@@ -108,35 +108,28 @@ async function handleExport() {
       />
       <hr class="tw-mt-3" />
       <BillItemField
-        label="Tổng hóa đơn"
-        :value="formatCurrency(billInfo.totalBill)"
+        label="Tiền phòng"
+        :value="formatCurrency(billInfo.roomId?.price)"
       />
       <BillItemField
-        label="Số tiền đã thanh toán"
-        :value="formatCurrency(billInfo.paidAmount)"
-      />
-      <BillItemField
-        label="Số tiền còn lại"
-        :value="formatCurrency(billInfo.totalBill - billInfo.paidAmount)"
-      />
-      <BillItemField
-        v-if="billInfo.roomElectricUsed"
+        v-if="billInfo.roomElectricityUsed"
         :label="
           'Số điện đã sử dụng: ' +
-          billInfo.roomWaterUsed?.currentWaterIndex +
+          billInfo.roomElectricityUsed?.currentElectricityIndex +
           ' - ' +
-          billInfo.roomWaterUsed?.prevWaterIndex +
+          billInfo.roomElectricityUsed?.prevElectricityIndex +
           ' = ' +
-          billInfo.roomWaterUsed?.waterUsed
+          billInfo.roomElectricityUsed?.electricityUsed
         "
         :value="
           formatCurrency(
-            billInfo.roomWaterUsed?.waterUsed * electricService.price
+            billInfo.roomElectricityUsed?.electricityUsed *
+              electricService.price
           )
         "
       />
       <BillItemField
-      v-if="billInfo.roomWaterUsed"
+        v-if="billInfo.roomWaterUsed"
         :label="
           'Số nước đã sử dụng: ' +
           billInfo.roomWaterUsed?.currentWaterIndex +
@@ -148,6 +141,18 @@ async function handleExport() {
         :value="
           formatCurrency(billInfo.roomWaterUsed?.waterUsed * waterService.price)
         "
+      />
+      <BillItemField
+        label="Tổng hóa đơn"
+        :value="formatCurrency(billInfo.totalBill)"
+      />
+      <BillItemField
+        label="Số tiền đã thanh toán"
+        :value="formatCurrency(billInfo.paidAmount)"
+      />
+      <BillItemField
+        label="Số tiền còn lại"
+        :value="formatCurrency(billInfo.totalBill - billInfo.paidAmount)"
       />
     </div>
     <div

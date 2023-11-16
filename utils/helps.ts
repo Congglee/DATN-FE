@@ -3,8 +3,8 @@ import avatarDefault from "@/assets/images/defaultAvt.png";
 import { useToast } from "vue-toastification";
 
 export const convertDateType = (date: Date, format: string) => {
-  if(date === undefined){
-    return undefined
+  if (date === undefined) {
+    return undefined;
   }
   return dayjs(date).format(format);
 };
@@ -71,7 +71,7 @@ export const convertPaidStatus = (status: boolean) => {
 };
 
 export const formatCurrency = (amount: number) => {
-  const roundedAmount = amount.toFixed(0); 
+  const roundedAmount = amount.toFixed(0);
   const strAmount = roundedAmount.toString();
   const result = strAmount.replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,");
   return result + " VND";
@@ -104,3 +104,30 @@ export const removeEmptyFields = (obj: any) => {
 
   return obj;
 };
+
+export const randomString = (length: number) => {
+  let result = "";
+  const characters = "0123456789";
+  const charactersLength = characters.length;
+  for (let i = 0; i < length; i++) {
+    result += characters.charAt(Math.floor(Math.random() * charactersLength));
+  }
+  return result;
+};
+
+export const getCurrentDateString = () => {
+  const date = new Date();
+
+  const day = date.toLocaleString("default", { weekday: "long" });
+  const month = date.toLocaleString("default", { month: "long" });
+  const dayOfMonth = date.getDate();
+  const year = date.getFullYear();
+  const hour = date.getHours();
+  const minutes = date.getMinutes();
+  const seconds = date.getSeconds();
+
+  const timezone = date.getTimezoneOffset() / 60;
+  const timezoneName = timezone > 0 ? "GMT" + timezone : "GMT" + timezone;
+
+  return `${day} ${month} ${dayOfMonth} ${year} ${hour}:${minutes}:${seconds} ${timezoneName} (Giờ Đông Dương)`;
+}

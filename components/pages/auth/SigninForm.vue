@@ -18,18 +18,20 @@ const toast = useToast();
 const authStore = useAuthStore();
 
 //state
-
+const requiredMessage = "Trường này không được bỏ trống";
 const { values, errors, defineComponentBinds, handleSubmit } = useForm({
   validationSchema: yup.object({
     email: yup
       .string()
+      .email("Định dạng email chưa hợp lệ")
       .trim()
-      .required()
+      .required(requiredMessage)
       .min(3, "Tên đăng nhập không thể nhỏ hơn 3 ký tự"),
     password: yup
       .string()
       .trim()
-      .required()
+      .required(requiredMessage)
+      .min(8, "Mật khẩu không được nhỏ hơn 8 ký tự")
       .max(255, "Mật khẩu không được lớn hơn 255 ký tự."),
   }),
 });
@@ -39,21 +41,25 @@ const formData = reactive({
   password: defineComponentBinds("password"),
 });
 
-const isCheck = ref(false);
 const isShowPassword = ref(false);
+const isLoadingSignin = ref(false);
 
 //method
 
 const handleSignin = handleSubmit(async () => {
+  isLoadingSignin.value = true;
   const payload = { ...values };
   const res = await authStore.signin(payload);
   if (res.data) {
     const { avatar, name, _id } = res.data.owner;
     window.localStorage.setItem("owner", JSON.stringify({ avatar, name, _id }));
     useSetToken(res.data.accessToken);
+    isLoadingSignin.value = false;
+    toast.success("Đăng nhập thành công");
     navigateTo("/");
   }
   if (res.error) {
+    isLoadingSignin.value = false;
     toast.error(res.error.data.message);
   }
 });
@@ -103,12 +109,13 @@ const handleSignin = handleSubmit(async () => {
         >
       </div>
       <div class="tw-w-full tw-flex tw-mt-[10px]">
-        <button
+        <g-button
           class="tw-w-full tw-py-4 tw-bg-black tw-text-white tw-rounded-[10px]"
           @click="handleSignin"
+          :loading="isLoadingSignin"
         >
           Đăng nhập
-        </button>
+        </g-button>
       </div>
     </div>
   </div>

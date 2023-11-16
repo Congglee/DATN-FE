@@ -6,6 +6,7 @@ import { useForm } from "vee-validate";
 import { useToast } from "vue-toastification";
 import { useMotelStore } from "@/store/motel";
 import { useAdministrativeStore } from "@/store/administrative";
+import { useProvinceStore } from "~/store/province";
 //props
 const props = defineProps({
   motelInfo: {
@@ -23,7 +24,7 @@ const route = useRoute();
 
 //store
 const motelStore = useMotelStore();
-const administrativeStore = useAdministrativeStore();
+const provinceStore = useProvinceStore();
 
 //state
 const { values, errors, defineComponentBinds, handleSubmit } = useForm({
@@ -58,7 +59,6 @@ const validateFormData = reactive({
 const province = ref("Hà Nội");
 const districts = ref([]);
 const wards = ref([]);
-const initialDistrict = ref(null);
 const choosedDistrict = ref(props.motelInfo.district);
 const choosedWard = ref(props.motelInfo.ward);
 const id = ref(props.motelInfo._id);
@@ -66,48 +66,24 @@ const id = ref(props.motelInfo._id);
 //methods
 
 const getDistrictOfHaNoi = async () => {
-  const params = {
-    provinceCode: "01",
-    limit: "-1",
+  const payload = {
+    depth: 1,
   };
-  const res = await administrativeStore.getDistrictOfHaNoi(params);
+  const res = await provinceStore.getDistrictOfHaNoi(payload);
   if (res.data) {
-    districts.value = res.data.data.data;
-    districts.value.map((el) => {
-      if (el.name == choosedDistrict.value) {
-        initialDistrict.value = el;
-      }
-    });
+    districts.value = res.data[0].districts;
   }
 };
-
-getDistrictOfHaNoi();
-
-const getWards = async (e) => {
-  const params = {
-    districtCode: e?.code,
-    limit: "-1",
-  };
-  const res = await administrativeStore.getWardByDistrict(params);
-  if (res.data) {
-    wards.value = res.data.data.data;
-  }
-};
-
-watch(
-  () => initialDistrict.value,
-  (newVal) => {
-    getWards(newVal);
-  }
-);
 
 watch(
   () => choosedDistrict.value,
   (newVal) => {
     choosedWard.value = "";
-    getWards(newVal);
+    wards.value = newVal.wards;
   }
 );
+
+getDistrictOfHaNoi();
 
 const updateMotel = handleSubmit(async () => {
   const payload = {
@@ -116,10 +92,7 @@ const updateMotel = handleSubmit(async () => {
     district: choosedDistrict.value.name,
     ward: choosedWard.value.name,
   };
-  const res = await motelStore.updateMotel(
-    payload,
-    id.value
-  );
+  const res = await motelStore.updateMotel(payload, id.value);
   if (res.data) {
     toast.success("Cập nhà trọ thành công!");
     fetchListMotel.emit();
@@ -189,7 +162,7 @@ const updateMotel = handleSubmit(async () => {
     <div
       class="tw-grid tw-grid-cols-2 tw-justify-between tw-gap-x-3 tw-bg-white tw-px-[24px] tw-py-[22px] tw-rounded-b-xl"
     >
-      <g-button @click="updateMotel">Thêm</g-button
+      <g-button @click="updateMotel">Chỉnh sửa</g-button
       ><g-button variant="bezeled" class="tw-w-full" @click="$emit('close')">
         <template #prepend>
           <IconXMark />

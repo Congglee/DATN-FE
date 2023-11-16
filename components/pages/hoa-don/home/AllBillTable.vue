@@ -4,6 +4,7 @@ import { VDataTable } from "vuetify/lib/labs/components.mjs";
 import BillItem from "@/components/pages/hoa-don/BillItem.vue";
 import { timeTables } from "~/utils/constants";
 import { useServiceStore } from "@/store/services";
+import { getCurrentDateString } from "~/utils/helps";
 
 const route = useRoute();
 
@@ -60,20 +61,22 @@ const headers = [
   },
 ];
 
-const time = ref("");
-const services = ref(null);
+const time = ref(getCurrentDateString());
+const services = ref([]);
 
 //method
 const getAllBills = async (monthDate) => {
   const payload = {
     motel: route.params.motelId,
-    monthDate: monthDate.value,
+    monthDate: monthDate,
   };
   const res = await billStore.getAllBill(payload);
   if (res.data) {
     bills.value = res.data.bills;
   }
 };
+
+getAllBills(convertDateType(time.value, "MM/YYYY"));
 
 const getServiceInfo = async () => {
   const res = await serviceStore.getAllServices();
@@ -86,29 +89,21 @@ getServiceInfo();
 // getAllBills();
 
 getBillEventBus.on(() => {
-  getAllBills(time.value);
+  getAllBills(convertDateType(time.value, "MM/YYYY"));
 });
 
 watch(
   () => time.value,
   (newVal) => {
-    getAllBills(newVal);
+    getAllBills(convertDateType(newVal, "MM/YYYY"));
   }
 );
 </script>
 <template>
-  <div>
-    <g-autocomplete
-      v-model="time"
-      class="tw-w-[200px] tw-mb-3"
-      label="Chọn kì"
-      :items="timeTables"
-      item-title="label"
-    ></g-autocomplete>
-  </div>
+  <g-date-picker class="tw-w-[200px] tw-mb-10" v-model="time"></g-date-picker>
   <v-data-table :headers="headers" class="s-table" :items="bills">
     <template #item="{ item, index }">
-      <BillItem :item="item" :index="index" :services="services"/>
+      <BillItem :item="item" :index="index" :services="services" />
     </template>
   </v-data-table>
 </template>
