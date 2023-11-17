@@ -7,6 +7,13 @@ import ModalEditRoomHost from "../ModalEditRoomHost.vue";
 import ModalEditRoomMember from "../ModalEditRoomMember.vue";
 import { useToast } from "vue-toastification";
 
+const props = defineProps({
+  roomInfo: {
+    type: Object,
+    default: {},
+  },
+});
+
 const route = useRoute();
 const toast = useToast();
 const fetchRoomEventBus = useEventBus(`fetch-room-${route.params.roomId}`);
@@ -71,12 +78,13 @@ const isShowAddRoomMember = ref(false);
 const userInfo = ref(null);
 const isShowConfirmDeleteMember = ref(false);
 const isShowConfirmDeleteHost = ref(false);
+const roomInfo = ref({});
+const isHavingContract = ref(false);
 
 const getAllMemberInRoom = async () => {
   const res = await memberStore.getAllMemberInRoom(route.params.roomId);
   if (res.data) {
     roomMembers.value = res.data.roomMembers;
-    console.log(roomMembers.value);
   }
 };
 
@@ -117,6 +125,16 @@ const handleRemoveMember = async (e) => {
 fetchRoomEventBus.on(() => {
   getAllMemberInRoom();
 });
+
+watch(
+  () => props.roomInfo,
+  (newVal) => {
+    roomInfo.value = newVal;
+    if (roomInfo.value.contractId) {
+      isHavingContract.value = true;
+    }
+  }
+);
 </script>
 <template>
   <v-data-table :headers="headers" class="s-table" :items="roomMembers">
@@ -131,7 +149,9 @@ fetchRoomEventBus.on(() => {
         </td>
         <td>{{ item.phone || "Không có" }}</td>
         <td>{{ item.vehicle_number || "Không có" }}</td>
-        <td>{{ convertDateType(item.date_start, 'DD/MM/YYYY') || "Không có" }}</td>
+        <td>
+          {{ convertDateType(item.date_start, "DD/MM/YYYY") || "Không có" }}
+        </td>
         <div
           class="tw-absolute tw-right-3 tw-top-[50%] tw-translate-y-[-50%] tw-hidden group-hover:tw-flex tw-space-x-2"
         >
@@ -161,6 +181,7 @@ fetchRoomEventBus.on(() => {
     <ModalEditRoomHost
       @close="isShowAddRoomHost = false"
       :userInfo="userInfo"
+      :isHavingContract="isHavingContract"
     />
   </v-dialog>
   <v-dialog v-model="isShowAddRoomMember" width="544">

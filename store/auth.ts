@@ -24,7 +24,6 @@ export const useAuthStore = defineStore({
         method: "POST",
         body: payload,
       });
-      this.owner = res.data.owner;
       return res;
     },
     async signup(payload: ISignup) {

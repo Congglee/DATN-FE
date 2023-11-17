@@ -102,15 +102,19 @@ async function handleExport() {
     </div>
     <div class="modal-change-information__form tw-flex tw-flex-col tw-gap-y-3">
       <BillItemField label="Tên chủ trọ" :value="billInfo.memberId?.name" />
-      <BillItemField
-        label="Thời hạn thanh toán"
-        :value="convertDateType(billInfo.billDate, 'DD/MM/YYYY')"
-      />
       <hr class="tw-mt-3" />
       <BillItemField
         label="Tiền phòng"
-        :value="formatCurrency(billInfo.roomId?.price)"
+        :value="formatCurrency(billInfo.housePrice)"
       />
+      <span v-for="item in billInfo.roomId.serviceIds">
+        <BillItemField
+          v-if="item?.type !== 'ĐIỆN' && item?.type !== 'NƯỚC'"
+          :label="'Tiền ' + item.name"
+          :value="formatCurrency(item.price)"
+        />
+      </span>
+
       <BillItemField
         v-if="billInfo.roomElectricityUsed"
         :label="

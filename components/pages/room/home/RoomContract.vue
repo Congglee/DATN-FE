@@ -3,7 +3,6 @@ import { useForm } from "vee-validate";
 import { useContractStore } from "~/store/contract";
 import * as yup from "yup";
 import { useToast } from "vue-toastification";
-// import { toPng, toJpeg, toBlob, toPixelData, toSvg } from "html-to-image";
 
 const props = defineProps({
   roomInfo: {
@@ -27,7 +26,6 @@ const { values, errors, defineComponentBinds, handleSubmit } = useForm({
 });
 
 const contract = ref(null);
-
 
 const contractData = reactive({
   ContractNo: randomString(6),
@@ -86,6 +84,13 @@ async function handleExport() {
   fileDownload.click();
   document.body.removeChild(fileDownload);
 }
+
+watch(
+  () => props.roomInfo,
+  (newVal) => {
+    contract.value = newVal.contractId.content;
+  }
+);
 </script>
 <template>
   <div class="tw-text-center tw-flex tw-justify-center" v-if="!contract">

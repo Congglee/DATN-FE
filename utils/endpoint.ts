@@ -31,7 +31,7 @@ export const ROOM = {
   ROOM_STATISTICAL: "/rooms/statistical",
   CREATE_ROOM: "/rooms/create-new-room",
   UPDATE_ROOM: "/rooms/update-room-info",
-  MOVE_MEMBER_ROOM: "/rooms/move-member-room-in-room",
+  MOVE_MEMBER_ROOM: "/rooms/move-member-in-room",
   DELETE_ROOM: "/rooms/delete-room",
 };
 
@@ -69,6 +69,7 @@ export const CONTRACT = {
   CREATE_SAMPLE_CONTRACT: "/contracts/create-new-samplecontract",
   UPDATE_SAMPLE_CONTRACT: "/contracts/update-samplecontract",
   CREATE_NEW_CONTRACT_BY_ROOM: "/contracts/create-new-contract",
+  UPDATE_CONTRACT_IN_ROOM: "/contracts/update-member-info-in-contract",
 };
 
 export const BILL = {

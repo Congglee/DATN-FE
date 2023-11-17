@@ -5,9 +5,12 @@ export const useServiceStore = defineStore({
   id: "service",
   state: () => ({}),
   actions: {
-    async getAllServices() {
+    async getAllServices(payload: any) {
       const res = await useFetchData(`${SERVICES.GET_SERVICES}`, {
         method: "GET",
+        params: {
+          isActive: payload?.isActive,
+        },
       });
       return res;
     },
@@ -51,7 +54,7 @@ export const useServiceStore = defineStore({
     },
     async deleteServiceFromRoom(roomId: string, serviceId: string) {
       const res = await useFetchData(
-        `${SERVICES.DELETE_SERVICE_FROM_ROOM }/${roomId}/${serviceId}`,
+        `${SERVICES.DELETE_SERVICE_FROM_ROOM}/${roomId}/${serviceId}`,
         {
           method: "DELETE",
         }

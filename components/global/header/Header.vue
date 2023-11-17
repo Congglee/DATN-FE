@@ -62,6 +62,9 @@ const handleLogout = () => {
                 >
               </li>
               <li>
+                <NuxtLink to="/thong-ke" class="tw-block">Thống kê</NuxtLink>
+              </li>
+              <li>
                 <button @click="handleLogout" class="tw-block">
                   Đăng xuất
                 </button>

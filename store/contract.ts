@@ -33,5 +33,14 @@ export const useContractStore = defineStore({
       );
       return res;
     },
+    async updateContractInRoom(id: string) {
+      const res = await useFetchData(
+        `${CONTRACT.UPDATE_CONTRACT_IN_ROOM}/${id}`,
+        {
+          method: "PUT",
+        }
+      );
+      return res;
+    },
   },
 });
