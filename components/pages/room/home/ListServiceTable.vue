@@ -38,7 +38,10 @@ const services = ref([]);
 const roomInfo = ref(null);
 
 const getAllService = async () => {
-  const res = await serviceStore.getAllServices();
+  const payload = {
+    isActive: true,
+  };
+  const res = await serviceStore.getAllServices(payload);
   if (res.data) {
     services.value = res.data.services;
   }
@@ -49,22 +52,22 @@ const getRoomInfo = async () => {
   const res = await roomStore.getRoomDetail(route.params.roomId);
   if (res.data) {
     roomInfo.value = res.data.room;
-    console.log(roomInfo.value)
+    console.log(roomInfo.value);
   }
 };
 
 getRoomInfo();
 
-console.log(1)
+console.log(1);
 </script>
 <template>
-  <v-data-table
-    :headers="headers"
-    class="s-table"
-    :items="services"
-  >
+  <v-data-table :headers="headers" class="s-table" :items="services">
     <template #item="{ item, index }">
-      <ServiceItem :item="item" :index="index" :roomServices="roomInfo.serviceIds"/>
+      <ServiceItem
+        :item="item"
+        :index="index"
+        :roomServices="roomInfo.serviceIds"
+      />
     </template>
   </v-data-table>
 </template>

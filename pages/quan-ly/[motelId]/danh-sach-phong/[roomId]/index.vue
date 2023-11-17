@@ -1,8 +1,5 @@
 <script setup>
-import DepositTable from "@/components/pages/deposit/DepositTable.vue";
 import IconBorder from "@/assets/svg/border.svg";
-import IconArrowBack from "@/assets/svg/arrow-back.svg";
-import IconSearch from "@/assets/svg/search.svg";
 import { useRoomStore } from "@/store/room";
 import IconSetting from "@/assets/svg/setting.svg";
 import ModalAddRoomMember from "@/components/pages/room/ModalAddRoomMember.vue";
@@ -19,6 +16,7 @@ import IconArrowLeft from "@/assets/svg/arrow-left.svg";
 import ListMemberTable from "@/components/pages/room/home/ListMemberTable.vue";
 import ListServiceTable from "@/components/pages/room/home/ListServiceTable.vue";
 import RoomContract from "~/components/pages/room/home/RoomContract.vue";
+import ModalChangeRoom from "~/components/pages/room/ModalChangeRoom.vue";
 
 //composable
 const route = useRoute();
@@ -30,12 +28,10 @@ const roomStore = useRoomStore();
 const memberStore = useMemberStore();
 
 //state
-const searchKeyword = ref("");
-const roomHost = ref(null);
-const roomMembers = ref(null);
 const tab = ref("");
 const room = ref({});
 const isShowAddMemberInRoom = ref(false);
+const isShowModalChangeRoom = ref(false);
 const isFullMember = ref(false);
 const roomFactorList = ref([
   {
@@ -70,25 +66,15 @@ const getRoomDetail = async () => {
     }
   }
 };
+
 getRoomDetail();
 
 fetchRoomEventBus.on(() => {
   getRoomDetail();
 });
-
 </script>
 <template>
   <div class="tw-pt-[50px]">
-    <div class="tw-mb-4">
-      <nuxt-link :to="'/quan-ly/' + route.params.motelId + '/danh-sach-phong'">
-        <g-button rounded="true" variant="ghosted">
-          <template #prepend>
-            <IconArrowLeft />
-          </template>
-          Quay lại trang phòng trọ</g-button
-        >
-      </nuxt-link>
-    </div>
     <div class="tw-px-5">
       <div class="tw-pb-4">
         <h5 class="tw-text-[20px] tw-font-extrabold tw-mb-2">
@@ -108,11 +94,6 @@ fetchRoomEventBus.on(() => {
           <div class="tw-flex tw-flex-col">
             <span class="small-text">Trạng thái</span>
             <span class="large-text">{{ room.status }}</span>
-          </div>
-          <IconBorder />
-          <div class="tw-flex tw-flex-col">
-            <span class="small-text">Ngày bắt đầu</span>
-            <span class="large-text">{{ convertDateType(room.createdAt, "DD/MM/YYYY") }}</span>
           </div>
         </div>
       </div>
@@ -136,6 +117,11 @@ fetchRoomEventBus.on(() => {
             :disabled="isFullMember"
           >
             <span class="tw-text-[14px] tw-font-semibold">Thêm thành viên</span>
+          </g-button>
+          <g-button variant="filled" @click="isShowModalChangeRoom = true">
+            <span class="tw-text-[14px] tw-font-semibold"
+              >Chuyển phòng trọ</span
+            >
           </g-button>
         </div>
       </div>
@@ -170,6 +156,16 @@ fetchRoomEventBus.on(() => {
         getRoomDetail();
         getAllMemberInRoom();
       "
+    />
+  </v-dialog>
+  <v-dialog v-model="isShowModalChangeRoom" width="544">
+    <ModalChangeRoom
+      @close="isShowModalChangeRoom = false"
+      @fetchRoomData="
+        getRoomDetail();
+        getAllMemberInRoom();
+      "
+      :roomInfo="room"
     />
   </v-dialog>
 </template>

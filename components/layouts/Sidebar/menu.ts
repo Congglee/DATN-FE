@@ -18,12 +18,6 @@ const menu = computed(() => {
   const motelId = route.params.motelId;
   return [
     {
-      text: "Thống kê",
-      path: `/quan-ly/${motelId}/thong-ke`,
-      icon: IconThongKe,
-      mainPath: "thong-ke",
-    },
-    {
       text: "Danh sách phòng",
       path: `/quan-ly/${motelId}/danh-sach-phong`,
       icon: IconPhong,

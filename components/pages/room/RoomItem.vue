@@ -14,8 +14,6 @@ const props = defineProps({
   },
 });
 
-console.log(props.roomInfo)
-
 //composable
 const route = useRoute();
 const router = useRouter();

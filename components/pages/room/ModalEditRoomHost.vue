@@ -7,11 +7,16 @@ import { genders } from "@/utils/constants";
 import * as yup from "yup";
 import { useMemberStore } from "~/store/member";
 import { useToast } from "vue-toastification";
+import { useContractStore } from "~/store/contract";
 
 const props = defineProps({
   userInfo: {
     type: Object,
     default: {},
+  },
+  isHavingContract: {
+    type: Boolean,
+    default: false,
   },
 });
 
@@ -23,6 +28,7 @@ const emit = defineEmits(["close"]);
 
 //store
 const memberStore = useMemberStore();
+const contractStore = useContractStore();
 
 const { values, errors, defineComponentBinds, handleSubmit } = useForm({
   validationSchema: yup.object({
@@ -67,14 +73,12 @@ const validateFormData = reactive({
   date_of_birth: defineComponentBinds("date_of_birth"),
 });
 const gender = ref(genders[0].value);
+const loading = ref(false);
 
 //method
 
-const handleCreateRoomHost = handleSubmit(async () => {
-  // const startDateConverted = convertDateType(
-  //   validateFormData.date_start.modelValue,
-  //   "DD/MM/YYYY"
-  // );
+const handleUpdateRoomHost = handleSubmit(async () => {
+  loading.value = true;
   const payload = {
     ...values,
     date_start: convertDateType(
@@ -93,11 +97,16 @@ const handleCreateRoomHost = handleSubmit(async () => {
   };
   const res = await memberStore.updateRoomHost(payload, props.userInfo._id);
   if (res.data) {
+    loading.value = false;
     toast.success("Chỉnh sửa thông tin chủ phòng thành công!");
+    if (props.isHavingContract) {
+      await contractStore.updateContractInRoom(route.params.roomId);
+    }
     fetchRoomEventBus.emit();
     emit("close");
   }
   if (res.error) {
+    loading.value = false;
     toast.error(res.error.data.message);
   }
 });
@@ -212,7 +221,9 @@ const handleCreateRoomHost = handleSubmit(async () => {
         </template>
         Hủy
       </g-button>
-      <g-button @click="handleCreateRoomHost">Xác nhận</g-button>
+      <g-button :loading="loading" @click="handleUpdateRoomHost"
+        >Xác nhận</g-button
+      >
     </div>
   </div>
 </template>

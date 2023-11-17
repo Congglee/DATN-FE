@@ -59,5 +59,14 @@ export const useRoomStore = defineStore({
       });
       return res;
     },
+    async getAllEmptyRoomOfMotel(id: string, payload: any) {
+      const res = await useFetchData(`${ROOM.GET_LIST_ROOM}/${id}`, {
+        method: "GET",
+        query: {
+          status: payload.status,
+        },
+      });
+      return res;
+    },
   },
 });
