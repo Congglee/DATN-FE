@@ -77,19 +77,23 @@ const updateService = handleSubmit(async () => {
     data: {
       ...values,
       isActive: values.isActive == "Hoạt động" ? true : false,
-      note: note._value,
+      note: note._value.trim(),
     },
     _id: props.data._id,
   };
-  const res = await serviceStore.updateService(payload);
-  if (res.data) {
-    fetchListServiceEventBus.emit();
-    toast.success("Cập nhật dịch vụ thành công!");
-    loading.value = false;
-    emit("close");
-  }
-  if (res.error) {
-    toast.error(res.error.data.message.verify_code);
+  try {
+    const res = await serviceStore.updateService(payload);
+    if (res.data) {
+      fetchListServiceEventBus.emit();
+      toast.success("Cập nhật dịch vụ thành công!");
+      loading.value = false;
+      emit("close");
+    }
+    if (res.error) {
+      toast.error(res.error.data.message);
+    }
+  } catch (error) {
+    throw error;
   }
 });
 </script>

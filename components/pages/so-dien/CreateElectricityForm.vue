@@ -156,7 +156,7 @@ const updateElecUsed = (event) => {
           </select>
         </div>
         <div class="tw-flex tw-flex-col tw-text-black">
-          <h5 class="tw-text-[14px] tw-py-2">Nhà Trọ</h5>
+          <h5 class="tw-text-[14px] tw-py-2">Phòng trọ</h5>
           <select
             class="form-control tw-h-[38px] tw-border-gray-400 focus:tw-outline-none tw-px-2 tw-bg-white tw-text-[16px] tw-text-gray-600"
             style="

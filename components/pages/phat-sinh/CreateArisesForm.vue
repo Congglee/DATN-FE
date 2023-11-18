@@ -4,15 +4,17 @@ import IconXMark from "@/assets/svg/x-mark.svg";
 import * as yup from "yup";
 import { useForm } from "vee-validate";
 import { useToast } from "vue-toastification";
-import { useWaterStore } from "~/store/water";
+import { useArisesStore } from "~/store/arises";
 import { useMotelStore } from "~/store/motel";
+import { convertMonthYear, formatMonthYear } from "~/utils/helps";
+
 //props
 
 //composable
 const toast = useToast();
 const route = useRoute();
 const idMotel = route.params?.motelId;
-const fetchListWaterEventBus = useEventBus(`fetch-list-water`);
+const fetchListArisesEventBus = useEventBus(`fetch-list-arises`);
 
 //emit
 
@@ -21,44 +23,42 @@ const emit = defineEmits("close");
 //store
 
 const motelStore = useMotelStore();
-const waterStore = useWaterStore();
+const arisesStore = useArisesStore();
 const owner = JSON.parse(window.localStorage.getItem("owner"));
 
 //state
 const listMotel = ref(null);
 const listRoom = ref([]);
-const waterUsed = ref(0);
 const roomId = ref(null);
+const monthYear = ref(null);
+const msg_err_room = ref(null);
+const msg_err_note = ref(null);
 
 const { values, errors, defineComponentBinds, handleSubmit } = useForm({
   validationSchema: yup.object({
-    prevWaterIndex: yup
+    monthYear: yup
+      .string()
+      .trim()
+      .required("Ngày tháng phát sinh không được bỏ trống"),
+    price: yup
       .number()
-      .default(0)
-      .typeError("Chỉ số nước phải là một số")
-      .min(0, "Chỉ số nước phải lớn hơn 0"),
-    currentWaterIndex: yup
-      .number()
-      .default(1)
-      .typeError("Chỉ số nước phải là một số")
-      .nullable()
-      .moreThan(
-        yup.ref("prevWaterIndex"),
-        "Số nước mới không được bé hơn số nước cũ"
-      ),
+      .typeError("Chi phí phải là số")
+      .min(0, "Chi phí phải là một số dương")
+      .required("Chi phí không được bỏ trống"),
   }),
 });
 const validateFormData = reactive({
-  prevWaterIndex: defineComponentBinds("prevWaterIndex"),
-  currentWaterIndex: defineComponentBinds("currentWaterIndex"),
+  monthYear: defineComponentBinds("monthYear"),
+  price: defineComponentBinds("price"),
 });
 
-const formData = reactive({});
+const formData = reactive({
+  note: "",
+});
 
 const loading = ref(false);
 
 //methods
-
 const getAllRoom = async (idMotel) => {
   try {
     listRoom.value = [];
@@ -72,6 +72,7 @@ const getAllRoom = async (idMotel) => {
   }
 };
 getAllRoom(idMotel);
+
 const getAllMotels = async () => {
   try {
     const res = await motelStore.getMotels(owner._id);
@@ -90,32 +91,33 @@ const onHandleRoom = (event) => {
   roomId.value = event.target.value;
 };
 
-const createRoomWater = handleSubmit(async () => {
-  if (roomId.value == null) return toast.warning("Vui lòng chọn phòng trọ");
-  try {
-    loading.value = true;
-    const payload = {
-      ...values,
-      roomId: roomId.value,
-    };
-    const res = await waterStore.updateWater(payload);
-    if (res.data) {
-      fetchListWaterEventBus.emit();
-      toast.success("Cập nhật số nước thành công!");
-      loading.value = false;
-      emit("close");
-    }
-  } catch (error) {
-    throw error;
+const handleCreateArises = handleSubmit(async () => {
+  const payload = {
+    ...values,
+    monthYear: convertDateType(values.monthYear, "MM/YYYY"),
+    ...formData,
+    roomId: roomId?._value,
+  };
+  if (payload.roomId == null) {
+    return toast.error("Vui lòng chọn phòng");
+  }
+  if (payload.note.trim() == "") {
+    return toast.error("Nội dung chi phí không được bỏ trống");
+  }
+  loading.value = true;
+  const res = await arisesStore.createArises(payload);
+  if (res.data) {
+    fetchListArisesEventBus.emit();
+    toast.success("Cập nhật chi phi phát sinh thành công!");
+    loading.value = false;
+    emit("close");
+  }
+  if (res.error) {
+    fetchListArisesEventBus.emit();
+    emit("close");
+    toast.error(res.error.data.message);
   }
 });
-const updatewaterUsed = (event) => {
-  if (values.prevWaterIndex < values.currentWaterIndex) {
-    waterUsed.value = values.currentWaterIndex - values.prevWaterIndex;
-  } else {
-    waterUsed.value = 0;
-  }
-};
 </script>
 <template>
   <div class="modal-change-information">
@@ -129,7 +131,7 @@ const updatewaterUsed = (event) => {
       <h5
         class="tw-text-center tw-text-xl tw-leading-6 tw-font-extrabold tw-mb-3 tw-mt-3"
       >
-        Cập nhật chỉ số nước của phòng
+        Chi phí phát sinh
       </h5>
     </div>
     <div class="modal-change-information__form">
@@ -154,7 +156,7 @@ const updatewaterUsed = (event) => {
           </select>
         </div>
         <div class="tw-flex tw-flex-col tw-text-black">
-          <h5 class="tw-text-[14px] tw-py-2">Phòng trọ</h5>
+          <h5 class="tw-text-[14px] tw-py-2">Nhà Trọ</h5>
           <select
             class="form-control tw-h-[38px] tw-border-gray-400 focus:tw-outline-none tw-px-2 tw-bg-white tw-text-[16px] tw-text-gray-600"
             style="
@@ -169,32 +171,29 @@ const updatewaterUsed = (event) => {
             </option>
           </select>
         </div>
+
+        <g-date-picker
+          class="tw-pt-4"
+          label="Theo tháng"
+          v-bind="validateFormData.monthYear"
+          :error="errors.monthYear"
+        ></g-date-picker>
         <g-input
           class="tw-pt-4"
-          label="Số nước cũ"
-          :placeholder="0"
-          v-bind="validateFormData.prevWaterIndex"
-          :error="errors.prevWaterIndex"
-          @change="updatewaterUsed($event)"
+          label="Số tiền phát sinh"
+          placeholder="0"
+          v-bind="validateFormData.price"
+          :error="errors.price"
         >
         </g-input>
-        <g-input
-          class="tw-pt-4"
-          label="Số nước mới"
-          :placeholder="0"
-          v-bind="validateFormData.currentWaterIndex"
-          :error="errors.currentWaterIndex"
-          @change="updatewaterUsed($event)"
-        >
-        </g-input>
-        <g-input
-          class="tw-pt-4"
-          label="Sử dụng"
-          :placeholder="waterUsed"
-          v-model="waterUsed"
-          disabled="true"
-        >
-        </g-input>
+        <div class="tw-gap-y-1 tw-grid tw-pt-4">
+          <p>Ghi chú</p>
+          <textarea
+            placeholder="Nội dung ...."
+            v-model="formData.note"
+            class="tw-resize-none tw-rounded-[10px] tw-bg-white tw-outline tw-p-3 !tw-outline-[#c0c0c0] tw-outline-[1px] focus:!tw-outline-[#f88125] tw-w-full tw-h-[158px] focus:!tw-shadow-[0px_0px_0px_2px_rgba(248,129,37,0.2)]"
+          ></textarea>
+        </div>
       </div>
     </div>
     <div
@@ -206,7 +205,9 @@ const updatewaterUsed = (event) => {
         </template>
         Hủy
       </g-button>
-      <g-button @click="createRoomWater" :loading="loading">Cập nhật</g-button>
+      <g-button @click="handleCreateArises" :loading="loading"
+        >Cập nhật</g-button
+      >
     </div>
   </div>
 </template>

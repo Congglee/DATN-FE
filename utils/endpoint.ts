@@ -88,3 +88,18 @@ export const PROVINCES = {
   GET_PROVINCES: "/provinces",
   GET_DISTRICT: "/province",
 };
+
+export const DEPOSITS = {
+  CREATE_DEPOSIT: "/deposits/create-new-deposit",
+  GET_ONE_DEPOSITS: "/deposits/get-one-deposit",
+  GET_ALL_DEPOSITS: "/deposits/get-all-deposit",
+  UPDATE_DEPOSITS: "/deposits/update-deposit",
+  DELETE_DEPOSITS: "/deposits/delete-deposit",
+};
+export const ARISES = {
+  CREATE_ARISES: "/arises/create-new-arise",
+  GET_ALL_ARISES: "/arises/get-all-arise",
+  GET_ONE_ARISES: "/arises",
+  UPDATE_ARISES: "/arises/update-arise",
+  DELETE_ARISES: "/arises/delete-arise",
+};

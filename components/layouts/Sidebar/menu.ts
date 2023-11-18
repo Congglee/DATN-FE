@@ -1,5 +1,6 @@
 import IconPhong from "@/assets/svg/menu/phong.svg";
 import IconCocPhong from "@/assets/svg/menu/coc-phong.svg";
+import IconPhatSinh from "@/assets/svg/menu/phat-sinh.svg";
 import IconTongQuan from "@/assets/svg/menu/tong-quan.svg";
 import IconHoaDon from "@/assets/svg/menu/hoa-don.svg";
 import IconThongKe from "@/assets/svg/menu/thong-ke.svg";
@@ -46,6 +47,12 @@ const menu = computed(() => {
       path: `/quan-ly/${motelId}/so-nuoc`,
       icon: IconSoDienNuoc,
       mainPath: "so-nuoc",
+    },
+    {
+      text: "Phát sinh",
+      path: `/quan-ly/${motelId}/phat-sinh`,
+      icon: IconPhatSinh,
+      mainPath: "phat-sinh",
     },
     {
       text: "Hóa đơn hàng tháng",
