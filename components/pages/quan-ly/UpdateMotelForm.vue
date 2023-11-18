@@ -62,6 +62,7 @@ const wards = ref([]);
 const choosedDistrict = ref(props.motelInfo.district);
 const choosedWard = ref(props.motelInfo.ward);
 const id = ref(props.motelInfo._id);
+const loading = ref(false);
 
 //methods
 
@@ -86,6 +87,7 @@ watch(
 getDistrictOfHaNoi();
 
 const updateMotel = handleSubmit(async () => {
+  loading.value = true;
   const payload = {
     ...values,
     city: province.value,
@@ -94,11 +96,13 @@ const updateMotel = handleSubmit(async () => {
   };
   const res = await motelStore.updateMotel(payload, id.value);
   if (res.data) {
+    loading.value = false;
     toast.success("Cập nhà trọ thành công!");
     fetchListMotel.emit();
     emit("close");
   }
   if (res.error) {
+    loading.value = false;
     toast.error("Tạo nhà trọ thất bại!");
   }
 });
@@ -162,13 +166,13 @@ const updateMotel = handleSubmit(async () => {
     <div
       class="tw-grid tw-grid-cols-2 tw-justify-between tw-gap-x-3 tw-bg-white tw-px-[24px] tw-py-[22px] tw-rounded-b-xl"
     >
-      <g-button @click="updateMotel">Chỉnh sửa</g-button
-      ><g-button variant="bezeled" class="tw-w-full" @click="$emit('close')">
+      <g-button variant="bezeled" class="tw-w-full" @click="$emit('close')">
         <template #prepend>
           <IconXMark />
         </template>
         Hủy
       </g-button>
+      <g-button :loading="loading" @click="updateMotel">Chỉnh sửa</g-button>
     </div>
   </div>
 </template>

@@ -53,6 +53,7 @@ const districts = ref([]);
 const wards = ref([]);
 const choosedDistrict = ref(null);
 const choosedWard = ref(null);
+const loading = ref(false)
 
 //methods
 
@@ -77,6 +78,7 @@ watch(
 getDistrictOfHaNoi();
 
 const createMotel = handleSubmit(async () => {
+  loading.value = true
   const payload = {
     ...values,
     city: province.value,
@@ -85,11 +87,13 @@ const createMotel = handleSubmit(async () => {
   };
   const res = await motelStore.createMotel(removeEmptyFields(payload));
   if (res.data) {
+    loading.value = false
     toast.success("Tạo nhà trọ thành công!");
     fetchListMotel.emit();
     emit("close");
   }
   if (res.error) {
+    loading.value = false
     toast.error("Tạo nhà trọ thất bại!");
   }
 });
@@ -153,13 +157,13 @@ const createMotel = handleSubmit(async () => {
     <div
       class="tw-grid tw-grid-cols-2 tw-justify-between tw-gap-x-3 tw-bg-white tw-px-[24px] tw-py-[22px] tw-rounded-b-xl"
     >
-      <g-button @click="createMotel">Thêm</g-button
-      ><g-button variant="bezeled" class="tw-w-full" @click="$emit('close')">
+      <g-button variant="bezeled" class="tw-w-full" @click="$emit('close')">
         <template #prepend>
           <IconXMark />
         </template>
         Hủy
       </g-button>
+      <g-button @click="createMotel" :loading="loading">Thêm</g-button>
     </div>
   </div>
 </template>
