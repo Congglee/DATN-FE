@@ -29,15 +29,20 @@ const { values, errors, defineComponentBinds, handleSubmit } = useForm({});
 //   password: defineComponentBinds("password"),
 // });
 
+const loading = ref(false);
+
 //methods
 const deleteMotel = handleSubmit(async () => {
+  loading.value = true;
   const res = await motelStore.deleteMotel(props.item._id);
   if (res.data) {
+    loading.value = false;
     toast.success("Xoá nhà trọ thành công!");
     emit("close");
     fetchListMotel.emit();
   }
   if (res.error) {
+    loading.value = false;
     toast.error(res.error.data.message);
     emit("close");
   }
@@ -77,7 +82,7 @@ const deleteMotel = handleSubmit(async () => {
     <div
       class="tw-grid tw-grid-cols-2 tw-justify-between tw-gap-x-3 tw-bg-white tw-px-[24px] tw-py-[22px] tw-rounded-b-xl"
     >
-      <g-button @click="deleteMotel">Xoá</g-button
+      <g-button :loading="loading" @click="deleteMotel">Xoá</g-button
       ><g-button variant="bezeled" class="tw-w-full" @click="$emit('close')">
         <template #prepend>
           <IconXMark />
