@@ -23,12 +23,10 @@ const getAllDeposits = async () => {
 };
 
 getAllDeposits();
-const searchKeyword = ref("");
 
 fetchListDepositsEventBus.on(() => {
   getAllDeposits();
 });
-const handleSearch = () => {};
 </script>
 <template>
   <div

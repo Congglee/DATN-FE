@@ -16,7 +16,6 @@ const props = defineProps({
     default: [],
   },
 });
-console.log(props.roomDeposits);
 //composable
 const toast = useToast();
 const route = useRoute();
@@ -66,26 +65,14 @@ const { values, errors, defineComponentBinds, handleSubmit } = useForm({
       .required("Ngày đặt cọc không được bỏ trống"),
     checkInDate: yup.string().trim().required("Ngày bắt đầu vào ở"),
     note: yup.string().default("").trim(),
-    status: yup.string().required("Trạng thái là trường bắt buộc"),
   }),
 });
-const status_data = [
-  {
-    title: "Đã thanh toán",
-    status: true,
-  },
-  {
-    title: "Chưa thanh toán",
-    status: false,
-  },
-];
 const validateFormData = reactive({
   name: defineComponentBinds("name"),
   money: defineComponentBinds("money"),
   phone: defineComponentBinds("phone"),
   bookingDate: defineComponentBinds("bookingDate"),
   checkInDate: defineComponentBinds("checkInDate"),
-  status: defineComponentBinds("status"),
 });
 
 const formData = reactive({
@@ -130,20 +117,6 @@ const getAllRoom = async (idMotel) => {
   }
 };
 getAllRoom(idMotel);
-
-// {
-//   "name": "Nguyễn Văn A",
-//   "phone": "0987654321",
-//   "money": 5000000,
-//   "bookingDate": "01/11/2023",
-//   "checkInDate": "05/11/2023",
-//   "expectedArrivalDate": "05/11/2023",
-//   "note": "Thanh toán trước khi nhận phòng.",
-//   "status": "Chưa thanh toán",
-//   "roomId": "615e862ebc78f4a2c89d736d",
-//   "motelId": "615e862ebc78f4a2c89d736e"
-// }
-
 const createDeposits = handleSubmit(async () => {
   const payload = {
     ...values,
@@ -151,13 +124,16 @@ const createDeposits = handleSubmit(async () => {
     bookingDate: convertDateType(values.bookingDate, "DD/MM/YYYY"),
     checkInDate: convertDateType(values.checkInDate, "DD/MM/YYYY"),
     expectedArrivalDate: convertDateType(values.checkInDate, "DD/MM/YYYY"),
-    status: values.status,
     note: note._value,
     roomId: roomId._value,
     motelId: idMotel,
+    status: "Chưa thanh toán",
   };
   if (payload.roomId == null || payload.roomId == "all") {
     return toast.error("Kiểm tra lại phòng cọc");
+  }
+  if (new Date(values.bookingDate) > new Date(values.checkInDate)) {
+    return toast.error("Ngày đặt cọc phải bé hơn ngày vào ở");
   }
   loading.value = true;
   const res = await depositsStore.createDeposits(payload);
@@ -169,11 +145,11 @@ const createDeposits = handleSubmit(async () => {
   }
   if (res.error) {
     toast.error(res.error.data.message);
+    loading.value = false;
   }
 });
 
 const onHandleRoom = (event) => {
-  console.log(event.target.value);
   if (event.target.value == "all") return (roomId.value = null);
   roomId.value = event.target.value;
 };
@@ -270,15 +246,6 @@ const onHandleRoom = (event) => {
             class="tw-resize-none tw-rounded-[10px] tw-bg-white tw-outline tw-p-3 !tw-outline-[#c0c0c0] tw-outline-[1px] focus:!tw-outline-[#f88125] tw-w-full tw-h-[158px] focus:!tw-shadow-[0px_0px_0px_2px_rgba(248,129,37,0.2)]"
           ></textarea>
         </div>
-        <g-select
-          class="tw-pt-4"
-          label="Trạng thái"
-          :items="status_data"
-          required
-          v-bind="validateFormData.status"
-          :error="errors.status"
-        >
-        </g-select>
       </div>
     </div>
     <div

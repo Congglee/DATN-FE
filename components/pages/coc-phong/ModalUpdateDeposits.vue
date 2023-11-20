@@ -16,11 +16,10 @@ const props = defineProps({
     default: [],
   },
 });
-console.log(props.data);
+
 //composable
 const toast = useToast();
 const route = useRoute();
-const idMotel = route.params?.motelId;
 const fetchListDepositsEventBus = useEventBus(`fetch-list-deposits`);
 
 //emit
@@ -28,14 +27,17 @@ const fetchListDepositsEventBus = useEventBus(`fetch-list-deposits`);
 const emit = defineEmits("close");
 
 //store
-const motelStore = useMotelStore();
 const depositsStore = useDepositsStore();
 const owner = JSON.parse(window.localStorage.getItem("owner"));
-const roomId = ref(null);
+const depositId = props.data._id;
+
 //state
-const note = ref("");
-const listMotel = ref(null);
-const listRoom = ref([]);
+const note = ref(props.data.note);
+
+function convertDATE(dateString) {
+  const [day, month, year] = dateString.split("/");
+  return `${month}/${day}/${year}`;
+}
 
 const { values, errors, defineComponentBinds, handleSubmit } = useForm({
   validationSchema: yup.object({
@@ -60,19 +62,15 @@ const { values, errors, defineComponentBinds, handleSubmit } = useForm({
         }
       )
       .required("Số điện thoại là trường bắt buộc"),
-    bookingDate: yup
-      .string()
-      .trim()
-      .required("Ngày đặt cọc không được bỏ trống"),
+    bookingDate: yup.string().trim().required("Ngày đặt cọc"),
     checkInDate: yup.string().trim().required("Ngày bắt đầu vào ở"),
     note: yup.string().default("").trim(),
     status: yup.string().required("Trạng thái là trường bắt buộc"),
   }),
   initialValues: {
-    name: props.data.name,
-    price: props.data.price,
-    type: props.data.type,
-    isActive: props.data.isActive ? "Hoạt động" : "Không hoạt động",
+    ...props.data,
+    bookingDate: convertDATE(props.data.bookingDate),
+    checkInDate: convertDATE(props.data.checkInDate),
   },
 });
 const status_data = [
@@ -100,42 +98,13 @@ const formData = reactive({
 
 const loading = ref(false);
 
-//methods
-const getAllMotels = async () => {
-  try {
-    const res = await motelStore.getMotels(owner._id);
-    if (res.data) {
-      listMotel.value = res.data.motels.filter((item) => item._id == idMotel);
-    }
-  } catch (error) {
-    console.log(error);
-    throw error;
-  }
-};
-getAllMotels();
-const getAllRoom = async (idMotel) => {
-  try {
-    listRoom.value = [];
-    const res = await motelStore.getOneMotels(idMotel);
-    if (res.data) {
-      const propsRoomDeposits = props.roomDeposits;
-      const resDataRoomIds = res.data.motelData.roomIds;
-      // Lọc các phòng không trùng nhau
-      const filteredRoomIds = resDataRoomIds.filter(
-        (roomId) => item.roomId._id === roomId._id
-      );
-
-      // In ra mảng sau khi lọc
-      listRoom.value = filteredRoomIds;
-    }
-  } catch (error) {
-    console.log(error);
-    throw error;
-  }
-};
-getAllRoom(idMotel);
+// //methods
 
 const createDeposits = handleSubmit(async () => {
+  function removeUnwantedProperties(obj) {
+    const { _id, createdAt, updatedAt, __v, ...cleanedObj } = obj;
+    return cleanedObj;
+  }
   const payload = {
     ...values,
     ...formData,
@@ -144,30 +113,32 @@ const createDeposits = handleSubmit(async () => {
     expectedArrivalDate: convertDateType(values.checkInDate, "DD/MM/YYYY"),
     status: values.status,
     note: note._value,
-    roomId: roomId._value,
-    motelId: idMotel,
+    roomId: props.data.roomId._id,
+    motelId: props.data.motelId._id,
   };
   if (payload.roomId == null || payload.roomId == "all") {
     return toast.error("Kiểm tra lại phòng cọc");
   }
+  if (new Date(values.bookingDate) > new Date(values.checkInDate)) {
+    return toast.error("Ngày đặt cọc phải bé hơn ngày vào ở");
+  }
+  const sendData = removeUnwantedProperties(payload);
   loading.value = true;
-  const res = await depositsStore.createDeposits(payload);
+  const res = await depositsStore.updateDeposits({
+    _id: props.data._id,
+    data: sendData,
+  });
   if (res.data) {
     fetchListDepositsEventBus.emit();
-    toast.success("Đặt cọc thành công!");
+    toast.success("Cập nhật cọc phòng thành công!");
     loading.value = false;
     emit("close");
   }
   if (res.error) {
     toast.error(res.error.data.message);
+    loading.value = false;
   }
 });
-
-const onHandleRoom = (event) => {
-  console.log(event.target.value);
-  if (event.target.value == "all") return (roomId.value = null);
-  roomId.value = event.target.value;
-};
 </script>
 <template>
   <div class="modal-change-information">
@@ -188,38 +159,27 @@ const onHandleRoom = (event) => {
       <div class="tw-mt-6 tw-flex-col tw-gap-y-4">
         <div class="tw-flex tw-flex-col tw-text-black">
           <h5 class="tw-text-[14px] tw-py-2">Nhà Trọ</h5>
-          <select
-            class="form-control tw-h-[38px] tw-border-gray-400 focus:tw-outline-none tw-px-2 tw-bg-white tw-text-[16px] tw-text-gray-600"
+          <div
+            class="form-control tw-h-[38px] tw-flex tw-justify-center tw-items-center tw-border-gray-400 focus:tw-outline-none tw-px-2 tw-bg-white tw-text-[16px] tw-text-gray-600"
             style="
               border: 1px solid rgb(218, 218, 218) !important ;
               border-radius: 3px;
             "
           >
-            <option
-              v-for="item in listMotel"
-              :key="item?.id"
-              :value="item?._id"
-              selected
-            >
-              {{ item?.name }}
-            </option>
-          </select>
+            <span>{{ props.data?.motelId?.name }}</span>
+          </div>
         </div>
         <div class="tw-flex tw-flex-col tw-text-black">
           <h5 class="tw-text-[14px] tw-py-2">Phòng trọ</h5>
-          <select
-            class="form-control tw-h-[38px] tw-border-gray-400 focus:tw-outline-none tw-px-2 tw-bg-white tw-text-[16px] tw-text-gray-600"
+          <div
+            class="form-control tw-h-[38px] tw-flex tw-justify-center tw-items-center tw-border-gray-400 focus:tw-outline-none tw-px-2 tw-bg-white tw-text-[16px] tw-text-gray-600"
             style="
               border: 1px solid rgb(218, 218, 218) !important ;
               border-radius: 3px;
             "
-            @change="onHandleRoom($event)"
           >
-            <option value="all" selected>Danh sách phòng</option>
-            <option v-for="item in listRoom" :key="item?.id" :value="item?._id">
-              {{ item?.name }}
-            </option>
-          </select>
+            <span>{{ props.data?.roomId?.name }}</span>
+          </div>
         </div>
         <g-input
           label="Họ tên người cọc"
@@ -281,7 +241,7 @@ const onHandleRoom = (event) => {
         </template>
         Đóng
       </g-button>
-      <g-button @click="createDeposits" :loading="loading">Đặt cọc</g-button>
+      <g-button @click="createDeposits" :loading="loading">Cập nhật</g-button>
     </div>
   </div>
 </template>
