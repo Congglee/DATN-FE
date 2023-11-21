@@ -142,7 +142,7 @@ const handleUpdateUser = handleSubmit(async () => {
     avatar: values.avatar,
     date_of_birth: formatDayMonthYear(values.date_of_birth),
     date_of_identify_code: formatDayMonthYear(values.date_of_identify_code),
-    address_issue_identify_code: values.address_issue_identify_code,
+    // address_issue_identify_code: "",
   };
   if (props.data.avatar !== IAvatar._value) {
     sendData.avatar = IAvatar._value;

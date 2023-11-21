@@ -104,7 +104,6 @@ export const removeEmptyFields = (obj: any) => {
 
   return obj;
 };
-
 export const randomString = (length: number) => {
   let result = "";
   const characters = "0123456789";
@@ -130,4 +129,19 @@ export const getCurrentDateString = () => {
   const timezoneName = timezone > 0 ? "GMT" + timezone : "GMT" + timezone;
 
   return `${day} ${month} ${dayOfMonth} ${year} ${hour}:${minutes}:${seconds} ${timezoneName} (Giờ Đông Dương)`;
-}
+};
+
+export const convertMonthYear = (ngayThang: string) => {
+  // Kiểm tra định dạng hiện tại và chuyển đổi
+  if (ngayThang.includes("/")) {
+    // Nếu là "MM/YYYY", chuyển sang "YYYY-MM"
+    const [thang, nam] = ngayThang.split("/");
+    return `${nam}-${thang}`;
+  } else if (ngayThang.includes("-")) {
+    // Nếu là "YYYY-MM", chuyển sang "MM/YYYY"
+    const [nam, thang] = ngayThang.split("-");
+    return `${thang}/${nam}`;
+  } else {
+    return null;
+  }
+};
