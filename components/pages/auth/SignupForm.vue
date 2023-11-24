@@ -18,31 +18,30 @@ const authStore = useAuthStore();
 
 //state
 
-const requiredMessage = "Trường này không được bỏ trống";
 
 const { values, errors, defineComponentBinds, handleSubmit } = useForm({
   validationSchema: yup.object({
     email: yup
       .string()
       .email("Định dạng email không hợp lệ")
-      .required(requiredMessage)
+      .required('Email không được để trống')
       .trim()
       .min(3, "Tên đăng nhập không thể nhỏ hơn 3 ký tự"),
     name: yup
       .string()
       .trim()
-      .required(requiredMessage)
+      .required('Tên người dùng không được để trống')
       .min(3, "Tên đăng nhập không thể nhỏ hơn 3 ký tự"),
     password: yup
       .string()
       .trim()
-      .required(requiredMessage)
+      .required('Mật khẩu không được để trống')
       .min(8, "Mật khẩu không được nhỏ hơn 8 ký tự,")
       .max(255, "Mật khẩu không được lớn hơn 255 ký tự."),
     confirmPassword: yup
       .string()
       .trim()
-      .required(requiredMessage)
+      .required('Xác nhận mật khẩu không được để trống')
       .oneOf([yup.ref("password")], "Mật khẩu không khớp"),
   }),
 });

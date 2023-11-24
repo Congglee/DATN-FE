@@ -17,15 +17,19 @@ import ListMemberTable from "@/components/pages/room/home/ListMemberTable.vue";
 import ListServiceTable from "@/components/pages/room/home/ListServiceTable.vue";
 import RoomContract from "~/components/pages/room/home/RoomContract.vue";
 import ModalChangeRoom from "~/components/pages/room/ModalChangeRoom.vue";
+import { useLiquidateStore } from "~/store/liquidate-bill";
+import { useToast } from "vue-toastification";
+import ListAssetTable from "~/components/pages/room/home/ListAssetTable.vue";
 
 //composable
 const route = useRoute();
+const toast = useToast();
 
 const fetchRoomEventBus = useEventBus(`fetch-room-${route.params.roomId}`);
 
 //store
 const roomStore = useRoomStore();
-const memberStore = useMemberStore();
+const liquidateStore = useLiquidateStore();
 
 //state
 const tab = ref("");
@@ -33,6 +37,7 @@ const room = ref({});
 const isShowAddMemberInRoom = ref(false);
 const isShowModalChangeRoom = ref(false);
 const isFullMember = ref(false);
+const isShowModalConfirmLiquidate = ref(false);
 const roomFactorList = ref([
   {
     _id: "1",
@@ -46,14 +51,21 @@ const roomFactorList = ref([
   },
   {
     _id: "3",
+    title: "Tài sản",
+    value: "ASSET",
+  },
+  {
+    _id: "4",
     title: "Hợp đồng",
     value: "CONTRACT",
   },
 ]);
+
 const listComponent = {
   MEMBERS: ListMemberTable,
   SERVICES: ListServiceTable,
   CONTRACT: RoomContract,
+  ASSET: ListAssetTable,
 };
 
 //method
@@ -68,6 +80,23 @@ const getRoomDetail = async () => {
 };
 
 getRoomDetail();
+
+const handleCreateLiquidateBill = async () => {
+  const date = new Date();
+  const payload = {
+    roomId: route.params.roomId,
+    dateReturnRoom: convertDateType(date, "DD/MM/YYYY"),
+  };
+  const res = await liquidateStore.createLiquidateBill(payload);
+  if (res.data) {
+    isShowModalConfirmLiquidate.value = false;
+    toast.success("Tạo hóa đơn thanh lý phòng thành công!");
+    await liquidateStore.sendingLiquidateBillMail(res.data._id);
+  }
+  if (res.error) {
+    toast.error(res.error.data.message);
+  }
+};
 
 fetchRoomEventBus.on(() => {
   getRoomDetail();
@@ -123,6 +152,14 @@ fetchRoomEventBus.on(() => {
               >Chuyển phòng trọ</span
             >
           </g-button>
+          <g-button
+            variant="filled"
+            @click="isShowModalConfirmLiquidate = true"
+          >
+            <span class="tw-text-[14px] tw-font-semibold">
+              Thanh lý phòng trọ
+            </span>
+          </g-button>
         </div>
       </div>
     </div>
@@ -168,6 +205,12 @@ fetchRoomEventBus.on(() => {
       :roomInfo="room"
     />
   </v-dialog>
+  <g-modal-confirm
+    v-model="isShowModalConfirmLiquidate"
+    title="Thanh lý phòng này?"
+    description="Hành động này không thể hoàn tác!"
+    @ok="handleCreateLiquidateBill"
+  ></g-modal-confirm>
 </template>
 <style scoped>
 @import url("./index.scss");

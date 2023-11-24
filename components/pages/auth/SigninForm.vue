@@ -73,7 +73,8 @@ const handleSignin = handleSubmit(async () => {
     <div class="tw-flex tw-flex-col tw-gap-y-[12px] tw-w-[400px]">
       <div class="tw-w-full">
         <g-input
-          label="Tên tài khoản"
+          label="Email"
+          placeholder="Nhập email"
           v-bind="formData.email"
           :error="errors.email"
         >
@@ -85,6 +86,7 @@ const handleSignin = handleSubmit(async () => {
       <div class="tw-w-full">
         <g-input
           label="Mật khẩu"
+          placeholder="Nhập mật khẩu"
           v-bind="formData.password"
           :type="isShowPassword ? 'text' : 'password'"
           :error="errors.password"

@@ -81,7 +81,6 @@ const onHandleSave = async (item) => {
       toast.success(res.data.message);
     }
   } catch (error) {
-    console.log(error);
     toast.error("Lưu số nước thất bại ");
   }
 };

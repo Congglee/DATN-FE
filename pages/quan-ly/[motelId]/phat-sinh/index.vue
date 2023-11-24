@@ -45,14 +45,11 @@ const getAllArises = async (monthYear) => {
     const res = await arisesStore.getAllArises(
       `?motelId=${idMotel}&monthDate=${monthYear}&limit=100&page=1`
     );
-    // console.log(res);
-    // ?motelId=609bdcb845ba0e0020e7855b&monthDate=10/2023&limit=20&page=2
     if (res.data) {
       dataArises.value = null;
       dataArises.value = res.data.arises;
     }
   } catch (error) {
-    console.log(error);
   }
 };
 getAllArises(formatMonthYear(Date()));

@@ -32,7 +32,6 @@ const getBillInfo = async () => {
   const res = await billStore.getOneBill(props.billId);
   if (res.data) {
     billInfo.value = res.data.billData;
-    console.log(billInfo.value);
     body.value = `<div class="ql-editor"><h2 class="ql-align-center" style="text-align: center;"><strong>Chi tiết hợp đồng</strong></h2><p><br></p><h4 class="ql-align-justify"><strong>Tên chủ trọ: </strong>${
       billInfo.value?.memberId?.name
     }</h4><p class="ql-align-justify"><strong>Thời hạn thanh toán: </strong>${convertDateType(
@@ -44,7 +43,11 @@ const getBillInfo = async () => {
       billInfo.value.paidAmount
     )}</p><p class="ql-align-justify">Cần thanh toán: ${formatCurrency(
       billInfo.value.totalBill - billInfo.value.paidAmount
-    )}</p><p class="ql-align-justify">Số điện sử dụng: </p><p class="ql-align-justify">Số nước sử dụng: </p><p class="ql-align-justify">Danh sách dịch vụ: </p><ul><li class="ql-align-justify">Rác:</li><li class="ql-align-justify">Mạng:</li><li class="ql-align-justify">Gửi xe:</li></ul></div><div class="ql-clipboard" contenteditable="true" tabindex="-1"></div><div class="ql-tooltip ql-hidden"><a class="ql-preview" rel="noopener noreferrer" target="_blank" href="about:blank"></a><input type="text" data-formula="e=mc^2" data-link="https://quilljs.com" data`;
+    )}</p>
+    <p class="ql-align-justify">Số điện sử dụng: </p><p class="ql-align-justify">Số nước sử dụng: </p><p class="ql-align-justify">Danh sách dịch vụ: </p><ul><li class="ql-align-justify">Rác:</li><li class="ql-align-justify">Mạng:</li><li class="ql-align-justify">Gửi xe:</li></ul>
+    <p class="ql-align-justify">Thông tin thanh toán: 05821127301 - Ngân hàng tiên phong TPBank</p>
+     <p class="ql-align-justify">Chủ tài khoản: TRAN TRUNG NGHIA</p>
+     </div><div class="ql-clipboard" contenteditable="true" tabindex="-1"></div><div class="ql-tooltip ql-hidden"><a class="ql-preview" rel="noopener noreferrer" target="_blank" href="about:blank"></a><input type="text" data-formula="e=mc^2" data-link="https://quilljs.com" data`;
   }
 };
 

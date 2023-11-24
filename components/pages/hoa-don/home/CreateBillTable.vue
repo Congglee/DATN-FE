@@ -40,12 +40,11 @@ const headers = [
 ];
 
 const billDate = ref(getCurrentDateString());
-console.log(billDate.value);
 
 const getAllRoomOfMotel = async (query) => {
   const payload = {
     motelId: route.params.motelId,
-    status: query?.status,
+    status: "Đã có người ở",
   };
   const res = await roomStore.getAllRoomOfMotel(payload);
   if (res.data) {
@@ -59,12 +58,6 @@ const getAllRoomOfMotel = async (query) => {
 
 getAllRoomOfMotel();
 
-watch(
-  () => billDate.value,
-  (newVal) => {
-    console.log(newVal);
-  }
-);
 </script>
 
 <template>

@@ -35,7 +35,7 @@ const { values, errors, defineComponentBinds, handleSubmit } = useForm({
     room_deposit_amount: yup
       .number()
       .typeError("Tiền cọc phải là số")
-      .positive("Tiền cọc không được âm")
+      .min(0, "Tiền cọc không được âm")
       .required(),
     vehicle_number: yup.string().trim(),
     identify_code: yup.string().trim(),

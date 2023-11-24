@@ -37,7 +37,11 @@ fetchListDepositsEventBus.on(() => {
     </div>
   </div>
   <div>
-    <DepositsTable v-if="dataDeposits !== null" :data="dataDeposits" />
+    <DepositsTable
+      v-if="dataDeposits !== null"
+      :data="dataDeposits"
+      @getListDeposit="getAllDeposits"
+    />
   </div>
   <v-dialog v-model="isDisplayCreateDeposits" width="544">
     <ModalCreateDeposits

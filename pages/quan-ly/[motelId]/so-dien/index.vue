@@ -50,7 +50,6 @@ const getAllElectricity = async (params) => {
       dataElectricity.value = res.data.electricityUsages;
     }
   } catch (error) {
-    console.log(error);
   }
 };
 getAllElectricity(formatMonthYear(Date()));
