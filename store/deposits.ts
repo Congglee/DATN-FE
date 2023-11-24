@@ -24,14 +24,11 @@ export const useDepositsStore = defineStore({
       });
       return res;
     },
-    async updateDeposits(payload: any) {
-      const res = await useFetchData(
-        `${DEPOSITS.UPDATE_DEPOSITS}/${payload["_id"]}`,
-        {
-          method: "PUT",
-          body: payload["data"],
-        }
-      );
+    async updateDeposits(id: string, payload: any) {
+      const res = await useFetchData(`${DEPOSITS.UPDATE_DEPOSITS}/${id}`, {
+        method: "PUT",
+        body: payload,
+      });
       return res;
     },
     async deleteDeposits(id: number | string) {

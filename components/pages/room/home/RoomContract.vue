@@ -11,10 +11,10 @@ const props = defineProps({
   },
 });
 
-const contractStore = useContractStore();
-
 const route = useRoute();
 const toast = useToast();
+
+const contractStore = useContractStore();
 
 const { values, errors, defineComponentBinds, handleSubmit } = useForm({
   validationSchema: yup.object({
@@ -40,7 +40,7 @@ if (props.roomInfo.contractId?.content) {
 
 const handleCreateNewContract = handleSubmit(async () => {
   const payload = {
-    ContractNo: contractData.ContractNo.modelValue,
+    ContractNo: contractData.ContractNo,
     ContractDate: convertDateType(
       contractData.ContractDate.modelValue,
       "DD/MM/YYYY"
@@ -60,6 +60,10 @@ const handleCreateNewContract = handleSubmit(async () => {
   );
   if (res.data) {
     contract.value = res.data.contract.content;
+    toast.success("Tạo hợp đồng thành công");
+  }
+  if (res.error) {
+    toast.error(res.error.data.message);
   }
 });
 
@@ -100,8 +104,8 @@ watch(
         <div class="tw-max-w-[300px]">
           <g-input
             label="Hợp đồng số"
-            disabled
             v-model="contractData.ContractNo"
+            disabled
           ></g-input>
         </div>
         <div>

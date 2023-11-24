@@ -41,7 +41,7 @@ const handleLogout = () => {
     </NuxtLink>
 
     <ul
-      class="tw-my-5 tw-px-2 menu-nav tw-overflow-y-auto tw-max-h-[calc(100vh-252px)]"
+      class="tw-my-5 tw-px-2 menu-nav tw-overflow-y-auto tw-max-h-[calc(100vh-100px)]"
     >
       <li v-for="item in listMenu" class="tw-flex tw-items-center">
         <SMenu

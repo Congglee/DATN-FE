@@ -49,9 +49,7 @@ const getAllWater = async (params) => {
       dataWater.value = null;
       dataWater.value = res.data.waterUsages;
     }
-  } catch (error) {
-    console.log(error);
-  }
+  } catch (error) {}
 };
 getAllWater(formatMonthYear(Date()));
 

@@ -67,7 +67,6 @@ const getAllRoom = async (idMotel) => {
       listRoom.value = res.data.motelData.roomIds;
     }
   } catch (error) {
-    console.log(error);
     throw error;
   }
 };
@@ -79,7 +78,6 @@ const getAllMotels = async () => {
       listMotel.value = res.data.motels.filter((item) => item._id == idMotel);
     }
   } catch (error) {
-    console.log(error);
     throw error;
   }
 };

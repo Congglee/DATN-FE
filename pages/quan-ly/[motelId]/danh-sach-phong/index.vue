@@ -70,7 +70,6 @@ const handleFilter = () => {
   const query = {
     status: roomStatus.value.value,
   };
-  console.log(query)
   getAllRoomOfMotel(query);
 };
 

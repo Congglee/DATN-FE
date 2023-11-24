@@ -3,10 +3,12 @@ import { VDataTable } from "vuetify/lib/labs/components.mjs";
 import { useServiceStore } from "@/store/services";
 import ServiceItem from "@/components/pages/room/ServiceItem.vue";
 import { useRoomStore } from "~/store/room";
+import { useAssetStore } from "~/store/assets";
+import AssetItem from "../AssetItem.vue";
 
 const route = useRoute();
 
-const serviceStore = useServiceStore();
+const assetStore = useAssetStore();
 const roomStore = useRoomStore();
 
 const headers = [
@@ -17,16 +19,20 @@ const headers = [
     width: "73px",
   },
   {
-    title: "Tên dịch vụ",
+    title: "Tên tài sản",
     sortable: false,
     key: "name",
     width: "400px",
   },
   {
-    title: "Giá dịch vụ",
+    title: "Giá tài sản",
     sortable: false,
     key: "price",
-    width: "400px",
+  },
+  {
+    title: "Ghi chú",
+    sortable: false,
+    key: "description",
   },
   {
     title: "Kích hoạt",
@@ -34,19 +40,17 @@ const headers = [
     key: "activeService",
   },
 ];
-const services = ref([]);
-const roomInfo = ref(null);
+const assets = ref([]);
+const roomInfo = ref({});
 
-const getAllService = async () => {
-  const payload = {
-    isActive: true,
-  };
-  const res = await serviceStore.getAllServices(payload);
+const getAllAssets = async () => {
+  const res = await assetStore.getAllAssets();
   if (res.data) {
-    services.value = res.data.services;
+    assets.value = res.data.listInterior;
   }
 };
-getAllService();
+
+getAllAssets();
 
 const getRoomInfo = async () => {
   const res = await roomStore.getRoomDetail(route.params.roomId);
@@ -58,13 +62,9 @@ const getRoomInfo = async () => {
 getRoomInfo();
 </script>
 <template>
-  <v-data-table :headers="headers" class="s-table" :items="services">
+  <v-data-table :headers="headers" class="s-table" :items="assets">
     <template #item="{ item, index }">
-      <ServiceItem
-        :item="item"
-        :index="index"
-        :roomServices="roomInfo.serviceIds"
-      />
+      <AssetItem :item="item" :index="index" :roomInfo="roomInfo" />
     </template>
   </v-data-table>
 </template>

@@ -40,13 +40,6 @@ const handleDeleteBill = async () => {
     isShowConfirmDeleteBill.value = false;
   }
 };
-
-watch(
-  () => billInfo.value,
-  (newVal) => {
-    console.log(newVal);
-  }
-);
 </script>
 <template>
   <tr class="tw-relative tw-group hover:tw-bg-[e3e3e3]">
