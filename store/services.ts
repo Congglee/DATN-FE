@@ -61,5 +61,14 @@ export const useServiceStore = defineStore({
       );
       return res;
     },
+    async deleteAllServiceRoom(serviceId: string) {
+      const res = await useFetchData(
+        `${SERVICES.DELETE_SERVICE_ALL_ROOM}/${serviceId}`,
+        {
+          method: "DELETE",
+        }
+      );
+      return res;
+    },
   },
 });
