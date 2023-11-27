@@ -75,18 +75,34 @@ const onHandleEdit = (item) => {
 };
 const onHandleRemove = async (item) => {
   if (item === true) {
-    try {
-      const res = await serviceStore.deleteService(data_remove.value._id);
-      if (res.data.success) {
-        fetchListServiceEventBus.emit();
-        toast.success("Xóa dịch vụ thành công !");
-        isShowConfirmDeleteService.value = false;
-        isDisplayUpdateService.value = false;
-      }
-    } catch (error) {
-      toast.error("Xoá dịch vụ thất bại !");
+    const res = await serviceStore.deleteService(data_remove.value._id);
+    const resDelAll = await serviceStore.deleteAllServiceRoom(
+      data_remove.value._id
+    );
+    if (res.data.success) {
+      fetchListServiceEventBus.emit();
+      toast.success("Xóa dịch vụ thành công !");
+      isShowConfirmDeleteService.value = false;
+      isDisplayUpdateService.value = false;
     }
-    return;
+    if (resDelAll.data.success) {
+      fetchListServiceEventBus.emit();
+      toast.success("Xóa dịch vụ ra khỏi tất cả các phòng thành công !");
+      isShowConfirmDeleteService.value = false;
+      isDisplayUpdateService.value = false;
+    }
+    if (!res.data.success) {
+      fetchListServiceEventBus.emit();
+      toast.success("Xóa dịch vụ thất bại !");
+      isShowConfirmDeleteService.value = false;
+      isDisplayUpdateService.value = false;
+    }
+    if (!resDelAll.data.success) {
+      fetchListServiceEventBus.emit();
+      toast.success("Xóa tất cả dịch vụ ra khỏi phòng thất bại !");
+      isShowConfirmDeleteService.value = false;
+      isDisplayUpdateService.value = false;
+    }
   } else {
     data_remove.value = item;
     isShowConfirmDeleteService.value = true;

@@ -56,6 +56,7 @@ export const SERVICES = {
   DELETE_SERVICES: "/services/delete-service",
   ADD_SERVICE_TO_ROOM: "/add-services-room",
   DELETE_SERVICE_FROM_ROOM: "/delete-services-one-room",
+  DELETE_SERVICE_ALL_ROOM: "/delete-services-all-room",
 };
 
 export const ELECTRICITY = {

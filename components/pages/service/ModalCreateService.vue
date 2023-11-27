@@ -54,6 +54,20 @@ const isActive_data = [
     status: false,
   },
 ];
+const typeService_data = [
+  {
+    title: "ĐIỆN",
+    status: "ĐIỆN",
+  },
+  {
+    title: "NƯỚC",
+    status: "NƯỚC",
+  },
+  {
+    title: "KHÁC",
+    status: "KHÁC",
+  },
+];
 const validateFormData = reactive({
   name: defineComponentBinds("name"),
   price: defineComponentBinds("price"),
@@ -118,14 +132,15 @@ const createService = handleSubmit(async () => {
           :error="errors.price"
         >
         </g-input>
-        <g-input
+        <g-select
           class="tw-pt-4"
           label="Loại dịch vụ"
+          :items="typeService_data"
           required
           v-bind="validateFormData.type"
           :error="errors.type"
         >
-        </g-input>
+        </g-select>
         <div class="tw-gap-y-1 tw-grid tw-pt-4">
           <p>Ghi chú</p>
           <textarea
