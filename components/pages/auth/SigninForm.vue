@@ -51,8 +51,6 @@ const handleSignin = handleSubmit(async () => {
   const payload = { ...values };
   const res = await authStore.signin(payload);
   if (res.data) {
-    const { avatar, name, _id } = res.data.owner;
-    window.localStorage.setItem("owner", JSON.stringify({ avatar, name, _id }));
     useSetToken(res.data.accessToken);
     isLoadingSignin.value = false;
     toast.success("Đăng nhập thành công");

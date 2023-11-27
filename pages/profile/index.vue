@@ -1,5 +1,7 @@
 <script setup>
 import CardUser from "@/components/pages/user-info/index.vue";
+import Header from "@/components/global/header/Header.vue";
+import Footer from "@/components/global/footer/Footer.vue";
 import { useUserStore } from "~/store/user";
 
 // compatibility
@@ -29,5 +31,7 @@ fetchDataUserEventBus.on(() => {
 });
 </script>
 <template>
+  <Header />
   <CardUser v-if="userData !== null" :data="userData" />
+  <Footer />
 </template>

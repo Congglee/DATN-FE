@@ -6,6 +6,7 @@ import { useForm } from "vee-validate";
 import { useToast } from "vue-toastification";
 import { useWaterStore } from "~/store/water";
 import { useMotelStore } from "~/store/motel";
+import { useUserStore } from "~/store/user";
 //props
 
 //composable
@@ -19,10 +20,10 @@ const fetchListWaterEventBus = useEventBus(`fetch-list-water`);
 const emit = defineEmits("close");
 
 //store
-
+const userStore = useUserStore();
 const motelStore = useMotelStore();
 const waterStore = useWaterStore();
-const owner = JSON.parse(window.localStorage.getItem("owner"));
+const owner = userStore.user;
 
 //state
 const listMotel = ref(null);

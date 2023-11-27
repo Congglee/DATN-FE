@@ -85,12 +85,6 @@ const menu = computed(() => {
       mainPath: "quan-ly-thanh-toan",
     },
     {
-      text: "Thông tin người dùng",
-      path: `/quan-ly/${motelId}/thong-tin-nguoi-dung`,
-      icon: IconEditUser,
-      mainPath: "thong-tin-nguoi-dung",
-    },
-    {
       text: "Thiết lập",
       path: `/quan-ly/${motelId}/thiet-lap`,
       icon: IconQuanLyThanhToan,

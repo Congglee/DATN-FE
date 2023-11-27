@@ -30,7 +30,6 @@ const emit = defineEmits("close");
 //store
 const roomStore = useRoomStore();
 const depositsStore = useDepositsStore();
-const owner = JSON.parse(window.localStorage.getItem("owner"));
 //state
 
 const { values, errors, defineComponentBinds, handleSubmit } = useForm({

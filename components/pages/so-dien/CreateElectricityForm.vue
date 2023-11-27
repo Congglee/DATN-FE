@@ -6,9 +6,12 @@ import { useForm } from "vee-validate";
 import { useToast } from "vue-toastification";
 import { useElectricityStore } from "~/store/electricity";
 import { useMotelStore } from "~/store/motel";
+import { useUserStore } from "~/store/user";
+
 //props
 
 //composable
+
 const toast = useToast();
 const route = useRoute();
 const idMotel = route.params?.motelId;
@@ -19,11 +22,10 @@ const fetchListElectricityEventBus = useEventBus(`fetch-list-electricity`);
 const emit = defineEmits("close");
 
 //store
-
+const userStore = useUserStore();
 const motelStore = useMotelStore();
 const electricityStore = useElectricityStore();
-const owner = JSON.parse(window.localStorage.getItem("owner"));
-
+const owner = userStore.user;
 //state
 const note = ref("");
 const listMotel = ref(null);

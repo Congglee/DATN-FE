@@ -28,7 +28,6 @@ const emit = defineEmits("close");
 
 //store
 const depositsStore = useDepositsStore();
-const owner = JSON.parse(window.localStorage.getItem("owner"));
 const depositId = props.data._id;
 
 //state

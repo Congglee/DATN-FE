@@ -3,14 +3,15 @@ import WaterTable from "@/components/pages/so-nuoc/WaterTable.vue";
 import { useWaterStore } from "~/store/water";
 import { useMotelStore } from "~/store/motel";
 import CreateWaterForm from "~/components/pages/so-nuoc/CreateWaterForm.vue";
+import { useUserStore } from "~/store/user";
 
 // compatibility
 const route = useRoute();
 const idMotel = route.params?.motelId;
 // store
+const userStore = useUserStore();
 const waterStore = useWaterStore();
 const motelStore = useMotelStore();
-const owner = JSON.parse(window.localStorage.getItem("owner"));
 // state
 const dataWater = ref(null);
 const DateFilter = ref(Date());
@@ -20,7 +21,8 @@ const fetchListWaterEventBus = useEventBus(`fetch-list-water`);
 // function
 const getAllMotels = async () => {
   try {
-    const res = await motelStore.getMotels(owner._id);
+    const resOwner = await userStore.getOneUser();
+    const res = await motelStore.getMotels(resOwner.data.message._id);
     if (res.data) {
       const motels = res.data.motels;
       const foundMotel = motels.find((motel) => motel._id === idMotel);

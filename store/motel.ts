@@ -10,14 +10,12 @@ export const useMotelStore = defineStore({
       const res = await useFetchData(`${MOTELS.GET_LIST_MOTELS}?owner=${id}`, {
         method: "GET",
       });
-      this.motels = res.data.motels;
       return res;
     },
     async getOneMotels(id: string) {
       const res = await useFetchData(`${MOTELS.GET_ONE_MOTELS}/${id}`, {
         method: "GET",
       });
-      this.motels = res.data.motels;
       return res;
     },
     async createMotel(payload: any) {
