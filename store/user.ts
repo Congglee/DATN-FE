@@ -11,6 +11,7 @@ export const useUserStore = defineStore({
       const res = await useFetchData(`${USER.GET_ONE_USER}`, {
         method: "GET",
       });
+      this.user = res.data.message;
       return res;
     },
     async updateUser(payload: any, id: string) {

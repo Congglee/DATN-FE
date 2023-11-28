@@ -7,6 +7,7 @@ import { useToast } from "vue-toastification";
 import { useArisesStore } from "~/store/arises";
 import { useMotelStore } from "~/store/motel";
 import { convertMonthYear, formatMonthYear } from "~/utils/helps";
+import { useUserStore } from "~/store/user";
 
 //props
 
@@ -21,10 +22,10 @@ const fetchListArisesEventBus = useEventBus(`fetch-list-arises`);
 const emit = defineEmits("close");
 
 //store
-
+const userStore = useUserStore();
 const motelStore = useMotelStore();
 const arisesStore = useArisesStore();
-const owner = JSON.parse(window.localStorage.getItem("owner"));
+const owner = userStore.user;
 
 //state
 const listMotel = ref(null);

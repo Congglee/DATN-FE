@@ -1,14 +1,13 @@
 <script setup>
 import Footer from "~/components/global/footer/Footer.vue";
+import { useUserStore } from "~/store/user";
 // viết hướng dẫn sử dụng ở đây
-let owner = window.localStorage.getItem("owner");
-if (owner) {
-  owner = JSON.parse(owner);
-} else {
-  document.cookie =
-    "accessToken=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
-  window.location.reload();
-}
+
+const userStore = useUserStore();
+const getOwner = async () => {
+  await userStore.getOneUser();
+};
+getOwner();
 </script>
 <template>
   <div>
@@ -37,7 +36,9 @@ if (owner) {
           class="w-full tw-w-1/3 max-lg:tw-w-full tw-flex tw-justify-around tw-flex-col tw-gap-2 tw-items-center"
         >
           <button class="cta">
-            <span class="tw-skew-x-[15deg]">Xin chào: {{ owner?.name }}</span>
+            <span class="tw-skew-x-[15deg]"
+              >Xin chào: {{ userStore.user?.name }}</span
+            >
           </button>
           <button>
             <NuxtLink to="/quan-ly" class="cta">

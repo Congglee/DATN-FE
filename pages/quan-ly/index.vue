@@ -6,24 +6,28 @@ import Footer from "~/components/global/footer/Footer.vue";
 import "@/assets/css/main.css";
 import IconAddMotel from "@/assets/svg/add-motel.svg";
 import AddMotelForm from "@/components/pages/quan-ly/AddMotelForm.vue";
-import { useAuthStore } from "~/store/auth";
-import * as yup from "yup";
+import { useUserStore } from "~/store/user";
 
 const fetchListMotel = useEventBus(`fetch-list-motel`);
 
 //store
 const motelStore = useMotelStore();
+const userStore = useUserStore();
 
-const owner = JSON.parse(window.localStorage.getItem("owner"));
-const motels = computed(() => motelStore.motels);
+const motels = ref(null);
 const isDisplayAddMotel = ref(false);
 
 const getAllMotels = async () => {
-  await motelStore.getMotels(owner._id);
+  await userStore.getOneUser();
+  const res = await motelStore.getMotels(userStore.user._id);
+  if (res.data) {
+    motels.value = res.data.motels;
+  }
 };
 getAllMotels();
 
 fetchListMotel.on(() => {
+  motels.value = [];
   getAllMotels();
 });
 </script>

@@ -2,14 +2,20 @@
 import listMenu from "@/components/layouts/Sidebar/menu";
 import { mdiChevronRight } from "@mdi/js";
 import IconArrowLeft from "@/assets/svg/arrow-left.svg";
+import { useUserStore } from "~/store/user";
+
 //store
+const userStore = useUserStore();
 
 //composable
 const route = useRoute();
 //state
 
 //methods
-
+const getOwner = async () => {
+  await userStore.getOneUser();
+};
+getOwner();
 const handleLogout = () => {
   useRemoveToken();
   navigateTo("/dang-nhap");

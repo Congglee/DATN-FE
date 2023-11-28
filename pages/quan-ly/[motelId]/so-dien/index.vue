@@ -3,14 +3,15 @@ import ElectricTable from "@/components/pages/so-dien/ElectricityTable.vue";
 import { useElectricityStore } from "~/store/electricity";
 import { useMotelStore } from "@/store/motel";
 import CreateElectricityForm from "~/components/pages/so-dien/CreateElectricityForm.vue";
+import { useUserStore } from "~/store/user";
 
 // compatibility
 const route = useRoute();
 const idMotel = route.params?.motelId;
 // store
+const userStore = useUserStore();
 const electricityStore = useElectricityStore();
 const motelStore = useMotelStore();
-const owner = JSON.parse(window.localStorage.getItem("owner"));
 // state
 const dataElectricity = ref(null);
 const DateFilter = ref(Date());
@@ -20,7 +21,8 @@ const fetchListElectricityEventBus = useEventBus(`fetch-list-electricity`);
 // function
 const getAllMotels = async () => {
   try {
-    const res = await motelStore.getMotels(owner._id);
+    const resOwner = await userStore.getOneUser();
+    const res = await motelStore.getMotels(resOwner.data.message._id);
     if (res.data) {
       const motels = res.data.motels;
       const foundMotel = motels.find((motel) => motel._id === idMotel);
@@ -49,8 +51,7 @@ const getAllElectricity = async (params) => {
       dataElectricity.value = null;
       dataElectricity.value = res.data.electricityUsages;
     }
-  } catch (error) {
-  }
+  } catch (error) {}
 };
 getAllElectricity(formatMonthYear(Date()));
 

@@ -25,6 +25,8 @@ const route = useRoute();
 const IAvatar = ref(props.data.avatar);
 const checkImgesOld = ref(props.data.avatar);
 const checkImgesNew = ref(0);
+const loadding = ref(false);
+const owner = ref(null);
 
 //store
 
@@ -71,8 +73,10 @@ const { values, errors, defineComponentBinds, handleSubmit } = useForm({
         "date_of_identify_code",
         "Ngày đăng ký CCCD/CMND không được lớn hơn ngày hiện tại",
         function (date) {
-          const today = new Date();
-          return date <= today;
+          if (date !== undefined) {
+            const today = new Date();
+            return date <= today;
+          }
         }
       ),
     address: yup
@@ -107,6 +111,15 @@ const validateFormData = reactive({
 });
 
 //method
+
+const getOwner = async () => {
+  const res = await userStore.getOneUser();
+  if (res.data) {
+    owner.value = res.data.message;
+  }
+};
+getOwner();
+
 const handleUploadImages = async (file) => {
   try {
     const formData = new FormData();
@@ -121,6 +134,7 @@ const handleUploadImages = async (file) => {
 };
 
 const handleUpdateUser = handleSubmit(async () => {
+  loadding.value = true;
   if (checkImgesNew._value == 0) {
   } else {
     const res = await handleUploadImages(checkImgesNew._value);
@@ -129,6 +143,7 @@ const handleUpdateUser = handleSubmit(async () => {
       IAvatar.value = res.data[0].url;
     } else {
       toast.error("Tải ảnh lên thất bại");
+      loadding.value = false;
       return res;
     }
   }
@@ -142,7 +157,7 @@ const handleUpdateUser = handleSubmit(async () => {
     avatar: values.avatar,
     date_of_birth: formatDayMonthYear(values.date_of_birth),
     date_of_identify_code: formatDayMonthYear(values.date_of_identify_code),
-    // address_issue_identify_code: "",
+    address_issue_identify_code: values.address_issue_identify_code,
   };
   if (props.data.avatar !== IAvatar._value) {
     sendData.avatar = IAvatar._value;
@@ -153,14 +168,11 @@ const handleUpdateUser = handleSubmit(async () => {
     const res = await userStore.updateUser(sendData, props.data._id);
     if (res.data) {
       fetchDataUserEventBus.emit();
-      const { avatar, name } = sendData;
-      window.localStorage.setItem(
-        "owner",
-        JSON.stringify({ avatar, name, _id: props.data._id })
-      );
+      loadding.value = false;
       toast.success("Cập nhật thông tin người dùng thành công !!!");
     }
   } catch (error) {
+    loadding.value = false;
     toast.error("Cập nhật thất bại");
     throw error;
   }
@@ -183,7 +195,7 @@ const onHandleAvt = (e) => {
 };
 </script>
 <template>
-  <div class="modal-change-information tw-max-w-3xl tw-m-auto">
+  <div class="modal-change-information tw-max-w-3xl tw-m-auto tw-my-3">
     <div class="">
       <h5
         class="tw-text-center tw-text-3xl tw-leading-6 tw-font-extrabold tw-mb-3 tw-mt-3"
@@ -265,13 +277,17 @@ const onHandleAvt = (e) => {
     <div
       class="tw-grid tw-grid-cols-2 tw-justify-between tw-gap-x-3 tw-bg-white tw-px-[24px] tw-py-[22px] tw-rounded-b-xl"
     >
-      <g-button variant="bezeled" class="tw-w-full">
-        <template #prepend>
-          <IconXMark />
-        </template>
-        Hủy
-      </g-button>
-      <g-button @click="handleUpdateUser">Cập nhật thông tin</g-button>
+      <NuxtLink to="/quan-ly">
+        <g-button variant="bezeled" @click="" class="tw-w-full">
+          <template #prepend>
+            <IconXMark />
+          </template>
+          Trở lại
+        </g-button></NuxtLink
+      >
+      <g-button @click="handleUpdateUser" :loading="loadding"
+        >Cập nhật thông tin</g-button
+      >
     </div>
   </div>
 </template>
