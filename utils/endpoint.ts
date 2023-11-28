@@ -35,6 +35,7 @@ export const ROOM = {
   UPDATE_ROOM: "/rooms/update-room-info",
   MOVE_MEMBER_ROOM: "/rooms/move-member-in-room",
   DELETE_ROOM: "/rooms/delete-room",
+  RETURN_ROOM: "/rooms/return-room"
 };
 
 export const MEMBERS = {

@@ -1,21 +1,21 @@
 <script setup>
 import IconClose from "@/assets/svg/close.svg";
 import IconXMark from "@/assets/svg/x-mark.svg";
-import IconRequired from "@/assets/svg/required.svg";
-import IconCalendar from "@/assets/svg/manage-student/calendar.svg";
 import * as yup from "yup";
 import { useForm } from "vee-validate";
 import { useToast } from "vue-toastification";
 import { useDepositsStore } from "~/store/deposits";
-import { useMotelStore } from "~/store/motel";
+import { useRoomStore } from "~/store/room";
 //props
 
 const props = defineProps({
-  data: {
-    Type: Array,
-    default: [],
+  roomInfo: {
+    type: Object,
+    default: {},
   },
 });
+
+console.log(props.roomInfo);
 
 //composable
 const toast = useToast();
@@ -24,19 +24,12 @@ const fetchListDepositsEventBus = useEventBus(`fetch-list-deposits`);
 
 //emit
 
-const emit = defineEmits("close");
+const emit = defineEmits(["close"]);
 
 //store
+
+const roomStore = useRoomStore();
 const depositsStore = useDepositsStore();
-const depositId = props.data._id;
-
-//state
-const note = ref(props.data.note);
-
-function convertDATE(dateString) {
-  const [day, month, year] = dateString.split("/");
-  return `${month}/${day}/${year}`;
-}
 
 const { values, errors, defineComponentBinds, handleSubmit } = useForm({
   validationSchema: yup.object({
@@ -62,80 +55,51 @@ const { values, errors, defineComponentBinds, handleSubmit } = useForm({
       )
       .required("Số điện thoại là trường bắt buộc"),
     bookingDate: yup.string().trim().required("Ngày đặt cọc"),
-    checkInDate: yup.string().trim().required("Ngày bắt đầu vào ở"),
-    note: yup.string().default("").trim(),
-    status: yup.string().required("Trạng thái là trường bắt buộc"),
+    expectedArrivalDate: yup.string().trim().required("Ngày bắt đầu vào ở"),
   }),
   initialValues: {
-    ...props.data,
-    bookingDate: convertDATE(props.data.bookingDate),
-    checkInDate: convertDATE(props.data.checkInDate),
+    name: props.roomInfo.name || "",
+    money: props.roomInfo.money || "",
+    phone: props.roomInfo.phone || "",
+    bookingDate: props.roomInfo.bookingDate,
+    expectedArrivalDate: props.roomInfo.expectedArrivalDate,
   },
 });
-const status_data = [
-  {
-    title: "Đã thanh toán",
-    status: true,
-  },
-  {
-    title: "Chưa thanh toán",
-    status: false,
-  },
-];
+
 const validateFormData = reactive({
   name: defineComponentBinds("name"),
   money: defineComponentBinds("money"),
   phone: defineComponentBinds("phone"),
   bookingDate: defineComponentBinds("bookingDate"),
-  checkInDate: defineComponentBinds("checkInDate"),
-  status: defineComponentBinds("status"),
+  expectedArrivalDate: defineComponentBinds("expectedArrivalDate"),
 });
 
-const formData = reactive({
-  note: "",
-});
-
+const listRoom = ref([]);
+const room = ref(props.roomInfo.roomId);
 const loading = ref(false);
+const note = ref(props.roomInfo.note);
 
-// //methods
-
-const createDeposits = handleSubmit(async () => {
-  function removeUnwantedProperties(obj) {
-    const { _id, createdAt, updatedAt, __v, ...cleanedObj } = obj;
-    return cleanedObj;
-  }
+const getAllRoom = async () => {
   const payload = {
-    ...values,
-    ...formData,
-    bookingDate: convertDateType(values.bookingDate, "DD/MM/YYYY"),
-    checkInDate: convertDateType(values.checkInDate, "DD/MM/YYYY"),
-    expectedArrivalDate: convertDateType(values.checkInDate, "DD/MM/YYYY"),
-    status: values.status,
-    note: note._value,
-    roomId: props.data.roomId._id,
-    motelId: props.data.motelId._id,
+    motelId: route.params.motelId,
+    status: "Trống",
   };
-  if (payload.roomId == null || payload.roomId == "all") {
-    return toast.error("Kiểm tra lại phòng cọc");
-  }
-  if (new Date(values.bookingDate) > new Date(values.checkInDate)) {
-    return toast.error("Ngày đặt cọc phải bé hơn ngày vào ở");
-  }
-  const sendData = removeUnwantedProperties(payload);
-  loading.value = true;
-  const res = await depositsStore.updateDeposits({
-    _id: props.data._id,
-    data: sendData,
-  });
+  const res = await roomStore.getAllRoomOfMotel(payload);
   if (res.data) {
-    fetchListDepositsEventBus.emit();
-    toast.success("Cập nhật cọc phòng thành công!");
-    loading.value = false;
-    emit("close");
+    listRoom.value = res.data.rooms;
   }
-  if (res.error) {
-    toast.error(res.error.data.message);
-    loading.value = false;
+};
+
+getAllRoom();
+
+const handleUpdateDepositInfo = handleSubmit(async () => {
+  const payload = { ...values, note: note.value, roomId: room.value._id };
+  console.log(props.roomInfo);
+  const res = await depositsStore.updateDeposits(props.roomInfo._id, payload);
+  if (res.data) {
+    toast.success("Cập nhật thông tin cọc phòng thành công");
+    emit("close");
+    fetchListDepositsEventBus.emit();
   }
 });
 </script>
@@ -156,35 +120,21 @@ const createDeposits = handleSubmit(async () => {
     </div>
     <div class="modal-change-information__form">
       <div class="tw-mt-6 tw-flex-col tw-gap-y-4">
-        <div class="tw-flex tw-flex-col tw-text-black">
-          <h5 class="tw-text-[14px] tw-py-2">Nhà Trọ</h5>
-          <div
-            class="form-control tw-h-[38px] tw-flex tw-justify-center tw-items-center tw-border-gray-400 focus:tw-outline-none tw-px-2 tw-bg-white tw-text-[16px] tw-text-gray-600"
-            style="
-              border: 1px solid rgb(218, 218, 218) !important ;
-              border-radius: 3px;
-            "
-          >
-            <span>{{ props.data?.motelId?.name }}</span>
-          </div>
-        </div>
-        <div class="tw-flex tw-flex-col tw-text-black">
-          <h5 class="tw-text-[14px] tw-py-2">Phòng trọ</h5>
-          <div
-            class="form-control tw-h-[38px] tw-flex tw-justify-center tw-items-center tw-border-gray-400 focus:tw-outline-none tw-px-2 tw-bg-white tw-text-[16px] tw-text-gray-600"
-            style="
-              border: 1px solid rgb(218, 218, 218) !important ;
-              border-radius: 3px;
-            "
-          >
-            <span>{{ props.data?.roomId?.name }}</span>
-          </div>
-        </div>
+        <g-autocomplete
+          :items="listRoom"
+          v-model="room"
+          label="Phòng trọ"
+          item-title="name"
+          required
+          class="tw-mb-4"
+        >
+        </g-autocomplete>
         <g-input
           label="Họ tên người cọc"
           required
           v-bind="validateFormData.name"
           :error="errors.name"
+          class="tw-mb-4"
         ></g-input>
         <g-input
           label="Số tiền cọc"
@@ -209,26 +159,16 @@ const createDeposits = handleSubmit(async () => {
         <g-date-picker
           class="tw-pt-4"
           label="Ngày bắt đầu ở"
-          v-bind="validateFormData.checkInDate"
-          :error="errors.checkInDate"
+          v-bind="validateFormData.expectedArrivalDate"
+          :error="errors.expectedArrivalDate"
         ></g-date-picker>
         <div class="tw-gap-y-1 tw-grid tw-pt-4">
           <p>Ghi chú</p>
           <textarea
-            :value="note"
-            @input="note = $event.target.value"
+            v-model="note"
             class="tw-resize-none tw-rounded-[10px] tw-bg-white tw-outline tw-p-3 !tw-outline-[#c0c0c0] tw-outline-[1px] focus:!tw-outline-[#f88125] tw-w-full tw-h-[158px] focus:!tw-shadow-[0px_0px_0px_2px_rgba(248,129,37,0.2)]"
           ></textarea>
         </div>
-        <g-select
-          class="tw-pt-4"
-          label="Trạng thái"
-          :items="status_data"
-          required
-          v-bind="validateFormData.status"
-          :error="errors.status"
-        >
-        </g-select>
       </div>
     </div>
     <div
@@ -240,7 +180,9 @@ const createDeposits = handleSubmit(async () => {
         </template>
         Đóng
       </g-button>
-      <g-button @click="createDeposits" :loading="loading">Cập nhật</g-button>
+      <g-button @click="handleUpdateDepositInfo" :loading="loading"
+        >Cập nhật</g-button
+      >
     </div>
   </div>
 </template>

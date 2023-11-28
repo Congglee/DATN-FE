@@ -17,6 +17,7 @@ const props = defineProps({
   },
 });
 const toast = useToast();
+
 // store
 const depositStore = useDepositsStore();
 
@@ -86,6 +87,7 @@ const tableHeaders = ref([
 
 const isShowConfirmAcceptDeposit = ref(false);
 const isShowConfirmDenineDeposit = ref(false);
+const isDisplayUpdateDeposits = ref(false);
 const roomInfo = ref({});
 
 // function
@@ -106,9 +108,9 @@ const handleDeniedDeposit = async () => {
   const payload = {
     status: "Hủy",
   };
-  const res = await depositStore.updateDeposits(roomInfo.value._id, payload);
+  const res = await depositStore.deleteDeposits(roomInfo.value._id);
   if (res.data) {
-    toast.success("Hủy phòng thành công");
+    toast.success("Hủy cọc thành công");
     isShowConfirmDenineDeposit.value = false;
     emit("getListDeposit");
   }
@@ -173,10 +175,10 @@ const handleDeniedDeposit = async () => {
           <td>{{ item?.note }}</td>
           <td>{{ item?.bookingDate }}</td>
           <td>{{ item?.expectedArrivalDate }}</td>
-          <td class="tw-flex tw-justify-center tw-items-center"> 
-            <span class="tw-flex tw-gap-x-3">
+          <td class="tw-flex tw-justify-center tw-items-center">
+            <span class="tw-flex tw-gap-x-3" v-if="!item.status">
               <g-button
-                @click="onHandleUpdate(item)"
+                @click="(isDisplayUpdateDeposits = true), (roomInfo = item)"
                 variant="bezeled"
                 size="none"
               >
@@ -188,7 +190,10 @@ const handleDeniedDeposit = async () => {
       </template>
     </v-data-table>
     <v-dialog v-model="isDisplayUpdateDeposits" width="544">
-      <ModalUpdateDeposits @close="isDisplayUpdateDeposits = false" />
+      <ModalUpdateDeposits
+        @close="isDisplayUpdateDeposits = false"
+        :roomInfo="roomInfo"
+      />
     </v-dialog>
     <g-modal-confirm
       v-model="isShowConfirmAcceptDeposit"

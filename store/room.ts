@@ -68,5 +68,11 @@ export const useRoomStore = defineStore({
       });
       return res;
     },
+    async returnRoom(id: string) {
+      const res = await useFetchData(`${ROOM.RETURN_ROOM}/${id}`, {
+        method: "PUT",
+      });
+      return res;
+    },
   },
 });

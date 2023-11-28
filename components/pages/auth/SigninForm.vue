@@ -58,7 +58,7 @@ const handleSignin = handleSubmit(async () => {
   }
   if (res.error) {
     isLoadingSignin.value = false;
-    toast.error(res.error.data.message);
+    toast.error(res.error.data?.message);
   }
 });
 </script>
