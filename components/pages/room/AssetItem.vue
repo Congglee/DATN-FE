@@ -1,5 +1,4 @@
 <script setup>
-import { useServiceStore } from "@/store/services";
 import { useToast } from "vue-toastification";
 import { useAssetStore } from "~/store/assets";
 
@@ -12,9 +11,9 @@ const props = defineProps({
     type: Number,
     default: 0,
   },
-  roomInfo: {
-    type: Object,
-    default: {},
+  roomAssets: {
+    type: Array,
+    default: [],
   },
 });
 
@@ -24,6 +23,14 @@ const toast = useToast();
 const assetStore = useAssetStore();
 
 const activeAsset = ref(false);
+
+const getAsset = () => {
+  const found = props.roomAssets.find((item) => item.name === props.item.name);
+  if (found) {
+    activeAsset.value = true;
+  }
+};
+getAsset();
 
 watch(
   () => activeAsset.value,

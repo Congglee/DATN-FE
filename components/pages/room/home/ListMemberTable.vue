@@ -114,7 +114,11 @@ const handleRemoveMember = async (e) => {
     toast.success("Xóa thành viên trong phòng thành công!");
     isShowConfirmDeleteHost.value = false;
     isShowConfirmDeleteMember.value = false;
-    getAllMemberInRoom();
+    getAllMemberInRoom().then((e) => {
+      if (roomMembers.value.length === 0) {
+        useRouter().back();
+      }
+    });
     emit("fetchRoomDetail");
   }
   if (res.error) {

@@ -15,19 +15,19 @@ const roomData = ref({});
 const getRoomStatic = async () => {
   const res = await roomStore.getRoomStatic();
   if (res.data) {
-    res.data.result.map((el) => {
-      if (el.motelId === route.params.motelId) {
-        roomData.value = el;
-      }
-    });
+    roomData.value = res.data.result;
   }
 };
 getRoomStatic();
+
+const handleBack = () => {
+  useRouter().back();
+};
 </script>
 <template>
   <div class="tw-mt-3 tw-p-5">
     <div class="tw-ml-5">
-      <g-button>Trở về trang quản lý</g-button>
+      <g-button @click="handleBack">Trở về trang quản lý</g-button>
     </div>
     <div class="tw-p-5 tw-ml-5">
       <span class="tw-text-[30px] tw-font-bold">Thống kê</span>

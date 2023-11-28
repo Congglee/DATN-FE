@@ -63,7 +63,7 @@ getRoomInfo();
       <ServiceItem
         :item="item"
         :index="index"
-        :roomServices="roomInfo.serviceIds"
+        :roomServices="roomInfo?.serviceIds"
       />
     </template>
   </v-data-table>

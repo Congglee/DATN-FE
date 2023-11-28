@@ -32,6 +32,7 @@ const getBillInfo = async () => {
   const res = await billStore.getOneBill(props.billId);
   if (res.data) {
     billInfo.value = res.data.billData;
+    console.log(billInfo.value)
     body.value = `<div class="ql-editor"><h2 class="ql-align-center" style="text-align: center;"><strong>Chi tiết hợp đồng</strong></h2><p><br></p><h4 class="ql-align-justify"><strong>Tên chủ trọ: </strong>${
       billInfo.value?.memberId?.name
     }</h4><p class="ql-align-justify"><strong>Thời hạn thanh toán: </strong>${convertDateType(

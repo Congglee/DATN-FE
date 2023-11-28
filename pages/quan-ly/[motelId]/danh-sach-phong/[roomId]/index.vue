@@ -10,9 +10,7 @@ import {
   VCardText,
   VWindow,
   VWindowItem,
-} from "vuetify/lib/components";
-import { useMemberStore } from "~/store/member";
-import IconArrowLeft from "@/assets/svg/arrow-left.svg";
+} from "vuetify/lib/components";``
 import ListMemberTable from "@/components/pages/room/home/ListMemberTable.vue";
 import ListServiceTable from "@/components/pages/room/home/ListServiceTable.vue";
 import RoomContract from "~/components/pages/room/home/RoomContract.vue";
@@ -24,6 +22,7 @@ import ListAssetTable from "~/components/pages/room/home/ListAssetTable.vue";
 //composable
 const route = useRoute();
 const toast = useToast();
+const router = useRouter();
 
 const fetchRoomEventBus = useEventBus(`fetch-room-${route.params.roomId}`);
 
@@ -91,7 +90,9 @@ const handleCreateLiquidateBill = async () => {
   if (res.data) {
     isShowModalConfirmLiquidate.value = false;
     toast.success("Tạo hóa đơn thanh lý phòng thành công!");
-    await liquidateStore.sendingLiquidateBillMail(res.data._id);
+    await liquidateStore.sendingLiquidateBillMail(res.data.liquidateBill._id);
+    await roomStore.returnRoom(route.params.roomId);
+    // router.replace(``);
   }
   if (res.error) {
     toast.error(res.error.data.message);

@@ -41,7 +41,7 @@ const headers = [
   },
 ];
 const assets = ref([]);
-const roomInfo = ref({});
+const roomInfo = ref(null);
 
 const getAllAssets = async () => {
   const res = await assetStore.getAllAssets();
@@ -62,9 +62,18 @@ const getRoomInfo = async () => {
 getRoomInfo();
 </script>
 <template>
-  <v-data-table :headers="headers" class="s-table" :items="assets">
+  <v-data-table
+    :headers="headers"
+    class="s-table"
+    :items="assets"
+    v-if="roomInfo"
+  >
     <template #item="{ item, index }">
-      <AssetItem :item="item" :index="index" :roomInfo="roomInfo" />
+      <AssetItem
+        :item="item"
+        :index="index"
+        :roomAssets="roomInfo?.interiorIds"
+      />
     </template>
   </v-data-table>
 </template>
