@@ -1,5 +1,4 @@
 import { defineStore } from "pinia";
-import { DEPOSITS } from "~/utils/endpoint";
 
 export const useDepositsStore = defineStore({
   id: "deposits",

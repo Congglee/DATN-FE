@@ -5,6 +5,8 @@ export const PREFIX_CLASS = "s-";
 
 export const ACCESS_TOKEN = "accessToken";
 
+export const GUEST_ACCESS_TOKEN = "guestAccessToken";
+
 export const CLASS_ID_COOKIE = "lms_class_id";
 
 export const ROOM_STATUS = [

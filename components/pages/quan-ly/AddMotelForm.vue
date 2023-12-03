@@ -53,7 +53,7 @@ const districts = ref([]);
 const wards = ref([]);
 const choosedDistrict = ref(null);
 const choosedWard = ref(null);
-const loading = ref(false)
+const loading = ref(false);
 
 //methods
 
@@ -78,7 +78,17 @@ watch(
 getDistrictOfHaNoi();
 
 const createMotel = handleSubmit(async () => {
-  loading.value = true
+  loading.value = true;
+  if (!choosedDistrict.value) {
+    loading.value = false;
+    toast.error("Thiếu thông tin quận/huyện!");
+    return;
+  }
+  if (!choosedWard.value) {
+    loading.value = false;
+    toast.error("Thiếu thông tin xã/phường!");
+    return;
+  }
   const payload = {
     ...values,
     city: province.value,
@@ -87,13 +97,13 @@ const createMotel = handleSubmit(async () => {
   };
   const res = await motelStore.createMotel(removeEmptyFields(payload));
   if (res.data) {
-    loading.value = false
+    loading.value = false;
     toast.success("Tạo nhà trọ thành công!");
     fetchListMotel.emit();
     emit("close");
   }
   if (res.error) {
-    loading.value = false
+    loading.value = false;
     toast.error("Tạo nhà trọ thất bại!");
   }
 });

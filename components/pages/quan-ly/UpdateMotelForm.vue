@@ -88,6 +88,16 @@ getDistrictOfHaNoi();
 
 const updateMotel = handleSubmit(async () => {
   loading.value = true;
+  if (!choosedDistrict.value) {
+    loading.value = false;
+    toast.error("Thiếu thông tin quận/huyện!");
+    return;
+  }
+  if (!choosedWard.value) {
+    loading.value = false;
+    toast.error("Thiếu thông tin xã/phường!");
+    return;
+  }
   const payload = {
     ...values,
     city: province.value,

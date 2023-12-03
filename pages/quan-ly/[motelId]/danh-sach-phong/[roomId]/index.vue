@@ -125,11 +125,16 @@ fetchRoomEventBus.on(() => {
             <span class="small-text">Trạng thái</span>
             <span class="large-text">{{ room.status }}</span>
           </div>
+          <IconBorder />
+            <div class="tw-flex tw-flex-col">
+              <span class="small-text">Mã phòng</span>
+              <span class="large-text">{{ room.verify_code }}</span>
+            </div>
         </div>
       </div>
       <div class="tw-mt-6">
         <div class="tw-flex tw-space-x-3">
-          <g-button
+          <!-- <g-button
             label=""
             variant="bezeled"
             @click="showUpdateClassModal = true"
@@ -140,7 +145,7 @@ fetchRoomEventBus.on(() => {
             <span class="tw-text-[14px] tw-font-semibold"
               >Chỉnh sửa thông tin phòng</span
             >
-          </g-button>
+          </g-button> -->
           <g-button
             variant="filled"
             @click="isShowAddMemberInRoom = true"

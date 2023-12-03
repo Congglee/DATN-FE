@@ -44,7 +44,6 @@ const tableHeaders = ref([
     title: "Ghi chú",
     key: "note",
     sortable: true,
-    width: "600px",
   },
   {
     title: "Chi phí",
@@ -62,7 +61,6 @@ const tableHeaders = ref([
     title: "Hành động",
     key: "action",
     sortable: false,
-    width: "100%",
   },
 ]);
 

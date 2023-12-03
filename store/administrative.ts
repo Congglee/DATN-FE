@@ -1,5 +1,4 @@
 import { defineStore } from "pinia";
-import { ADMINISTRATIVE } from "~/utils/endpoint";
 
 export const useAdministrativeStore = defineStore({
   id: "administrative",

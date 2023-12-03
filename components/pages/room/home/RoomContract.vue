@@ -84,7 +84,7 @@ async function handleExport() {
   var fileDownload = document.createElement("a");
   document.body.appendChild(fileDownload);
   fileDownload.href = source;
-  fileDownload.download = "document.doc";
+  fileDownload.download = "hop-dong.doc";
   fileDownload.click();
   document.body.removeChild(fileDownload);
 }

@@ -22,10 +22,12 @@ const assetStore = useAssetStore();
 
 const { values, errors, defineComponentBinds, handleSubmit } = useForm({
   validationSchema: yup.object({
-    name: yup.string().required(),
-    price: yup.number().required(),
+    name: yup.string().required("Tên không được bỏ trống"),
+    price: yup.number().required().positive("Giá phải lớn hơn 0").typeError("Giá phải là số"),
     description: yup.string(),
   }),
+  //  .positive("Số khách tối đa phải lớn hơn 0")
+  //   .required("Khách tối đa không được để trống"),
 });
 
 const validateFormData = reactive({

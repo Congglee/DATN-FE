@@ -35,7 +35,7 @@ export const ROOM = {
   UPDATE_ROOM: "/rooms/update-room-info",
   MOVE_MEMBER_ROOM: "/rooms/move-member-in-room",
   DELETE_ROOM: "/rooms/delete-room",
-  RETURN_ROOM: "/rooms/return-room"
+  RETURN_ROOM: "/rooms/return-room",
 };
 
 export const MEMBERS = {
@@ -127,4 +127,12 @@ export const ASSETS = {
   GET_ONE_ASSET: "/interiors/get-one-interior",
   ADD_ASSET_TO_ROOM: "/interiors/add-interior-to-room",
   DELETE_ASSET_FROM_ROOM: "/interiors/remove-interior-to-room",
+};
+
+export const GUEST = {
+  SIGN_IN: "/users/signin",
+  GET_INFO_ROOM: "/users/get-info-room",
+  GET_INFO_ELECTRICITY: "/users/get-info-electricity",
+  GET_INFO_WATER: "/users/get-info-water",
+  GET_INFO_BILL: "/users/get-info-bill",
 };
