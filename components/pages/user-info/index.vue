@@ -195,7 +195,7 @@ const onHandleAvt = (e) => {
 };
 </script>
 <template>
-  <div class="modal-change-information tw-max-w-3xl tw-m-auto tw-my-3">
+  <div class="tw-m-auto tw-my-3 tw-pt-5 tw-max-w-[534px]">
     <div class="">
       <h5
         class="tw-text-center tw-text-3xl tw-leading-6 tw-font-extrabold tw-mb-3 tw-mt-3"
@@ -204,7 +204,7 @@ const onHandleAvt = (e) => {
       </h5>
     </div>
     <div
-      class="modal-change-information__form"
+      class=""
       style="min-height: 103vh !important"
     >
       <div class="tw-mt-6 tw-flex-col tw-gap-y-4">

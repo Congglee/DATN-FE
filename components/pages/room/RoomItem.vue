@@ -41,7 +41,10 @@ const findRoomOwner = () => {
 findRoomOwner();
 
 const handleEnterRoomDetail = () => {
-  if (props.roomInfo.status === "Trống") {
+  if (
+    props.roomInfo.status === "Trống" ||
+    props.roomInfo.status === "Đã đặt cọc"
+  ) {
     toast.error("Bạn chưa thêm chủ phòng trọ này!");
     return;
   }
@@ -82,8 +85,11 @@ const handleRemoveRoom = async (e) => {
           </dd>
         </div>
         <div>
-          <dt class="tw-sr-only">Address</dt>
           <dd class="tw-font-bold">{{ roomInfo.name }}</dd>
+          <p>
+            <span class="tw-font-bold tw-text-[12px]">Mã phòng:</span>
+            {{ roomInfo.verify_code }}
+          </p>
           <p v-if="roomOwner">
             <span class="tw-font-bold tw-text-[12px]">Chủ phòng:</span>
             {{ roomOwner.name }}

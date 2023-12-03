@@ -1,5 +1,4 @@
 import { defineStore } from "pinia";
-import { ARISES } from "~/utils/endpoint";
 
 export const useArisesStore = defineStore({
   id: "arises",

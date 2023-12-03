@@ -1,4 +1,3 @@
-import { USER } from "./../utils/endpoint";
 import { defineStore } from "pinia";
 
 export const useUserStore = defineStore({

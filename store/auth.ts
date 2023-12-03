@@ -1,4 +1,3 @@
-import { AUTH } from "./../utils/endpoint";
 import { defineStore } from "pinia";
 
 interface ISignin {

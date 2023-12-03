@@ -5,8 +5,10 @@ import * as yup from "yup";
 import { useForm } from "vee-validate";
 import { useToast } from "vue-toastification";
 import { useArisesStore } from "~/store/arises";
-import { useMotelStore } from "~/store/motel";
+import { useRoomStore } from "@/store/room";
 import { convertMonthYear, formatMonthYear } from "~/utils/helps";
+import IconRequired from "@/assets/svg/required.svg";
+
 import { useUserStore } from "~/store/user";
 
 //props
@@ -23,7 +25,7 @@ const emit = defineEmits("close");
 
 //store
 const userStore = useUserStore();
-const motelStore = useMotelStore();
+const roomStore = useRoomStore();
 const arisesStore = useArisesStore();
 const owner = userStore.user;
 
@@ -31,9 +33,6 @@ const owner = userStore.user;
 const listMotel = ref(null);
 const listRoom = ref([]);
 const roomId = ref(null);
-const monthYear = ref(null);
-const msg_err_room = ref(null);
-const msg_err_note = ref(null);
 
 const { values, errors, defineComponentBinds, handleSubmit } = useForm({
   validationSchema: yup.object({
@@ -54,67 +53,51 @@ const validateFormData = reactive({
 });
 
 const formData = reactive({
+  roomId: "",
   note: "",
 });
 
 const loading = ref(false);
 
 //methods
-const getAllRoom = async (idMotel) => {
-  try {
-    listRoom.value = [];
-    const res = await motelStore.getOneMotels(idMotel);
-    if (res.data) {
-      listRoom.value = res.data.motelData.roomIds;
-    }
-  } catch (error) {
-    throw error;
+const getAllRoom = async () => {
+  const payload = {
+    motelId: route.params.motelId,
+    status: "Đã có người ở",
+  };
+  const res = await roomStore.getAllRoomOfMotel(payload);
+  if (res.data) {
+    listRoom.value = res.data.rooms;
+    console.log(res.data);
+  }
+  if (res.error) {
+    console.log(res.error);
   }
 };
-getAllRoom(idMotel);
-
-const getAllMotels = async () => {
-  try {
-    const res = await motelStore.getMotels(owner._id);
-    if (res.data) {
-      listMotel.value = res.data.motels.filter((item) => item._id == idMotel);
-    }
-  } catch (error) {
-    throw error;
-  }
-};
-getAllMotels();
-
-const onHandleRoom = (event) => {
-  if (event.target.value == "all") return (roomId.value = null);
-  roomId.value = event.target.value;
-};
+getAllRoom();
 
 const handleCreateArises = handleSubmit(async () => {
+  loading.value = true;
+  if (formData.roomId == "") {
+    loading.value = false;
+    return toast.error("Vui lòng chọn phòng");
+  }
+  if (formData.note.trim() == "") {
+    loading.value = false;
+    return toast.error("Nội dung chi phí không được bỏ trống");
+  }
   const payload = {
     ...values,
     monthYear: convertDateType(values.monthYear, "MM/YYYY"),
-    ...formData,
-    roomId: roomId?._value,
+    note: formData.note,
+    roomId: formData.roomId._id,
   };
-  if (payload.roomId == null) {
-    return toast.error("Vui lòng chọn phòng");
-  }
-  if (payload.note.trim() == "") {
-    return toast.error("Nội dung chi phí không được bỏ trống");
-  }
-  loading.value = true;
   const res = await arisesStore.createArises(payload);
   if (res.data) {
-    fetchListArisesEventBus.emit();
-    toast.success("Cập nhật chi phi phát sinh thành công!");
+    toast.success("Tạo chi phí phát sinh thành công!");
+    emit("close");
     loading.value = false;
-    emit("close");
-  }
-  if (res.error) {
     fetchListArisesEventBus.emit();
-    emit("close");
-    toast.error(res.error.data.message);
   }
 });
 </script>
@@ -135,42 +118,14 @@ const handleCreateArises = handleSubmit(async () => {
     </div>
     <div class="modal-change-information__form">
       <div class="tw-mt-6 tw-flex-col tw-gap-y-4">
-        <div class="tw-flex tw-flex-col tw-text-black">
-          <h5 class="tw-text-[14px] tw-py-2">Nhà Trọ</h5>
-          <select
-            class="form-control tw-h-[38px] tw-border-gray-400 focus:tw-outline-none tw-px-2 tw-bg-white tw-text-[16px] tw-text-gray-600"
-            style="
-              border: 1px solid rgb(218, 218, 218) !important ;
-              border-radius: 3px;
-            "
-          >
-            <option
-              v-for="item in listMotel"
-              :key="item?.id"
-              :value="item?._id"
-              selected
-            >
-              {{ item?.name }}
-            </option>
-          </select>
-        </div>
-        <div class="tw-flex tw-flex-col tw-text-black">
-          <h5 class="tw-text-[14px] tw-py-2">Nhà Trọ</h5>
-          <select
-            class="form-control tw-h-[38px] tw-border-gray-400 focus:tw-outline-none tw-px-2 tw-bg-white tw-text-[16px] tw-text-gray-600"
-            style="
-              border: 1px solid rgb(218, 218, 218) !important ;
-              border-radius: 3px;
-            "
-            @change="onHandleRoom($event)"
-          >
-            <option value="all" selected>Danh sách phòng</option>
-            <option v-for="item in listRoom" :key="item?.id" :value="item?._id">
-              {{ item?.name }}
-            </option>
-          </select>
-        </div>
-
+        <g-autocomplete
+          :items="listRoom"
+          item-title="name"
+          label="Chọn phòng"
+          v-model="formData.roomId"
+          required
+        >
+        </g-autocomplete>
         <g-date-picker
           class="tw-pt-4"
           label="Theo tháng"
@@ -183,10 +138,14 @@ const handleCreateArises = handleSubmit(async () => {
           placeholder="0"
           v-bind="validateFormData.price"
           :error="errors.price"
+          required
         >
         </g-input>
         <div class="tw-gap-y-1 tw-grid tw-pt-4">
-          <p>Ghi chú</p>
+          <div class="tw-flex tw-gap-x-1">
+            <p>Ghi chú</p>
+            <IconRequired />
+          </div>
           <textarea
             placeholder="Nội dung ...."
             v-model="formData.note"

@@ -1,5 +1,4 @@
 import { defineStore } from "pinia";
-import { UPLOAD_IMAGES } from "~/utils/endpoint";
 
 export const useUploadImagesStore = defineStore({
   id: "uploadImages",

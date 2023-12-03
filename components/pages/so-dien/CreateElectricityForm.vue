@@ -136,25 +136,7 @@ const updateElecUsed = (event) => {
     </div>
     <div class="modal-change-information__form">
       <div class="tw-mt-6 tw-flex-col tw-gap-y-4">
-        <div class="tw-flex tw-flex-col tw-text-black">
-          <h5 class="tw-text-[14px] tw-py-2">Nhà Trọ</h5>
-          <select
-            class="form-control tw-h-[38px] tw-border-gray-400 focus:tw-outline-none tw-px-2 tw-bg-white tw-text-[16px] tw-text-gray-600"
-            style="
-              border: 1px solid rgb(218, 218, 218) !important ;
-              border-radius: 3px;
-            "
-          >
-            <option
-              v-for="item in listMotel"
-              :key="item?.id"
-              :value="item?._id"
-              selected
-            >
-              {{ item?.name }}
-            </option>
-          </select>
-        </div>
+
         <div class="tw-flex tw-flex-col tw-text-black">
           <h5 class="tw-text-[14px] tw-py-2">Phòng trọ</h5>
           <select

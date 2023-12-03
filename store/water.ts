@@ -1,5 +1,4 @@
 import { defineStore } from "pinia";
-import { WATER } from "~/utils/endpoint";
 
 export const useWaterStore = defineStore({
   id: "water",

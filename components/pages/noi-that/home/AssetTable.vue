@@ -77,7 +77,7 @@ fetchListAssetEventBus.on(() => {
     <v-data-table :headers="tableHeaders" :items="assets" class="s-table">
       <template #item="{ item, index }">
         <tr class="tw-relative tw-group">
-          <td class="tw-text-center">{{ index }}</td>
+          <td class="tw-text-center">{{ index + 1 }}</td>
           <td>{{ item.name }}</td>
           <td>{{ formatCurrency(item.price) }}</td>
           <td>{{ item.note }}</td>

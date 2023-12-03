@@ -30,8 +30,8 @@ const props = defineProps({
 
 const { values, errors, defineComponentBinds, handleSubmit } = useForm({
   validationSchema: yup.object({
-    name: yup.string().required(),
-    price: yup.number().required(),
+    name: yup.string().required("Tên không được để trống"),
+    price: yup.number().required("Giá không được để trống").positive("Giá phải lớn hơn 0").typeError("Giá phải là số"),
     description: yup.string(),
   }),
   initialValues: {

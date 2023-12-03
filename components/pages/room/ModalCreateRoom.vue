@@ -34,23 +34,19 @@ const roomStore = useRoomStore();
 
 const { values, errors, defineComponentBinds, handleSubmit } = useForm({
   validationSchema: yup.object({
-    name: yup.string().trim().required(),
+    name: yup.string().trim().required("Tên phòng không được để trống"),
     // motelId: yup.string().trim().required(),
     price: yup
       .number()
       .typeError("Giá phòng phải là số")
       .positive("Giá phòng phải lớn hơn 0")
-      .required(),
+      .required("Giá phòng không được để trống"),
     max_customer: yup
       .number()
       .typeError("Số khách tối đa phải là số")
       .positive("Số khách tối đa phải lớn hơn 0")
-      .required(),
-    area: yup
-      .number()
-      .typeError("Diện tích phòng phải là số")
-      .positive("Diện tích phòng phải lớn hơn 0")
-      .required(),
+      .required("Khách tối đa không được để trống"),
+    area: yup.string().required("Diện tích không được để trống"),
   }),
 });
 

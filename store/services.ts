@@ -1,5 +1,4 @@
 import { defineStore } from "pinia";
-import { SERVICES } from "~/utils/endpoint";
 
 export const useServiceStore = defineStore({
   id: "service",

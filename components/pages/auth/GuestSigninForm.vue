@@ -5,17 +5,15 @@ import IconEye from "@/assets/svg/login/eye.svg";
 import IconEyeSlash from "@/assets/svg/login/eye-slash.svg";
 import { useForm } from "vee-validate";
 import * as yup from "yup";
-import { setAccessToken } from "@/utils/auth";
-import jwt_decode from "jwt-decode";
-import { useAuthStore } from "@/store/auth";
 import { useToast } from "vue-toastification";
+import { useGuestStore } from "~/store/guest";
 
 //composable
 
 const toast = useToast();
 
 //store
-const authStore = useAuthStore();
+const guestStore = useGuestStore();
 
 //state
 const requiredMessage = "Trường này không được bỏ trống";
@@ -27,7 +25,7 @@ const { values, errors, defineComponentBinds, handleSubmit } = useForm({
       .trim()
       .required(requiredMessage)
       .min(3, "Tên đăng nhập không thể nhỏ hơn 3 ký tự"),
-    password: yup
+    verify_code: yup
       .string()
       .trim()
       .required(requiredMessage)
@@ -38,7 +36,7 @@ const { values, errors, defineComponentBinds, handleSubmit } = useForm({
 
 const formData = reactive({
   email: defineComponentBinds("email"),
-  password: defineComponentBinds("password"),
+  verify_code: defineComponentBinds("verify_code"),
 });
 
 const isShowPassword = ref(false);
@@ -49,9 +47,9 @@ const isLoadingSignin = ref(false);
 const handleSignin = handleSubmit(async () => {
   isLoadingSignin.value = true;
   const payload = { ...values };
-  const res = await authStore.signin(payload);
+  const res = await guestStore.guestSignin(payload);
   if (res.data) {
-    useSetToken(res.data.accessToken);
+    useSetGuestToken(res.data.accessToken);
     isLoadingSignin.value = false;
     toast.success("Đăng nhập thành công");
     navigateTo("/");
@@ -90,11 +88,13 @@ const handleSignin = handleSubmit(async () => {
         <g-input
           label="Mật khẩu"
           placeholder="Nhập mật khẩu"
-          v-bind="formData.password"
+          v-bind="formData.verify_code"
           :type="isShowPassword ? 'text' : 'password'"
-          :error="errors.password"
+          :error="errors.verify_code"
         >
-          <template #prepend> <IconLock /></template>
+          <template #prepend>
+            <IconLock />
+          </template>
           <template #append>
             <div
               class="tw-cursor-pointer active:tw-opacity-70"
@@ -105,13 +105,6 @@ const handleSignin = handleSubmit(async () => {
             </div>
           </template>
         </g-input>
-      </div>
-      <div>
-        <span
-          @click="$emit('signup')"
-          class="tw-text-[#1a3b70] hover:tw-underline"
-          >Chưa có tài khoản?</span
-        >
       </div>
       <div class="tw-w-full tw-flex tw-mt-[10px]">
         <g-button
