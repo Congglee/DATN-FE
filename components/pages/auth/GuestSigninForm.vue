@@ -7,6 +7,7 @@ import { useForm } from "vee-validate";
 import * as yup from "yup";
 import { useToast } from "vue-toastification";
 import { useGuestStore } from "~/store/guest";
+import jwt_decode from "jwt-decode";
 
 //composable
 
@@ -49,12 +50,13 @@ const handleSignin = handleSubmit(async () => {
   const payload = { ...values };
   const res = await guestStore.guestSignin(payload);
   if (res.data) {
+    const decoded = jwt_decode(res.data.accessToken);
     useSetGuestToken(res.data.accessToken);
     isLoadingSignin.value = false;
     toast.success("Đăng nhập thành công");
-    navigateTo("/");
+    navigateTo(`/quan-ly-guest/${decoded.id}`);
   }
-  if (res.error.data.message.email) {
+  if (res.error?.data.message.email) {
     isLoadingSignin.value = false;
     toast.error(res.error.data.message.email);
     return;

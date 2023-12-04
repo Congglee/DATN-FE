@@ -46,8 +46,8 @@ export const useRoomStore = defineStore({
       });
       return res;
     },
-    async moveMember(payload: any, id: string) {
-      const res = await useFetchData(`${ROOM.MOVE_MEMBER_ROOM}/${id}`, {
+    async moveMember(payload: any) {
+      const res = await useFetchData(`${ROOM.MOVE_MEMBER_ROOM}`, {
         method: "PUT",
         body: payload,
       });

@@ -15,7 +15,6 @@ const props = defineProps({
   },
 });
 
-console.log(props.roomInfo);
 
 //composable
 const toast = useToast();
@@ -94,7 +93,6 @@ getAllRoom();
 
 const handleUpdateDepositInfo = handleSubmit(async () => {
   const payload = { ...values, note: note.value, roomId: room.value._id };
-  console.log(props.roomInfo);
   const res = await depositsStore.updateDeposits(props.roomInfo._id, payload);
   if (res.data) {
     toast.success("Cập nhật thông tin cọc phòng thành công");

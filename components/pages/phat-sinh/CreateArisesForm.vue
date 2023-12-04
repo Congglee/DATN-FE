@@ -68,10 +68,8 @@ const getAllRoom = async () => {
   const res = await roomStore.getAllRoomOfMotel(payload);
   if (res.data) {
     listRoom.value = res.data.rooms;
-    console.log(res.data);
   }
   if (res.error) {
-    console.log(res.error);
   }
 };
 getAllRoom();

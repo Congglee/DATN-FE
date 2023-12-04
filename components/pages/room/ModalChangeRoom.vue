@@ -24,14 +24,13 @@ const newRoom = ref("Chọn phòng");
 
 const getListEmptyRoom = async () => {
   const payload = {
-    status: "Trống",
+    motelId: props.roomInfo.motelId._id,
   };
-  const res = await roomStore.getAllEmptyRoomOfMotel(
-    props.roomInfo.motelId._id,
-    payload
-  );
+  const res = await roomStore.getAllRoomOfMotel(payload);
   if (res.data) {
-    emptyRooms.value = res.data.rooms;
+    emptyRooms.value = res.data.rooms.filter(
+      (item) => item._id !== props.roomInfo._id
+    );
   }
 };
 
@@ -40,12 +39,15 @@ getListEmptyRoom();
 const moveMemberInRoom = async () => {
   const payload = {
     idRoomNew: newRoom.value._id,
+    idRoomOld: props.roomInfo._id,
+    dateMoveRoom: convertDateType(new Date(), "DD/MM/YYYY"),
   };
+  console.log(payload);
   if (!payload.idRoomNew) {
     toast.error("Bạn chưa chọn phòng cần chuyển sang!");
     return;
   }
-  const res = await roomStore.moveMember(payload, route.params.roomId);
+  const res = await roomStore.moveMember(payload);
   if (res.data) {
     toast.success("Chuyển phòng thành công");
     emit("close");
