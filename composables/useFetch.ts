@@ -68,7 +68,7 @@ export const useFetchProvince = async (
   };
 };
 
-export const useFetcGuesthData = async (
+export const useFetchGuestData = async (
   url: string,
   options: UseFetchOptions<object>
 ) => {
