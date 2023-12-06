@@ -46,5 +46,11 @@ export const useBillStore = defineStore({
       });
       return res;
     },
+    async generateBillPdf(id: string) {
+      const res = await useFetchData(`${BILL.GENERATE_BILL_PDF}/${id}`, {
+        method: "GET",
+      });
+      return res;
+    },
   },
 });

@@ -42,7 +42,6 @@ const moveMemberInRoom = async () => {
     idRoomOld: props.roomInfo._id,
     dateMoveRoom: convertDateType(new Date(), "DD/MM/YYYY"),
   };
-  console.log(payload);
   if (!payload.idRoomNew) {
     toast.error("Bạn chưa chọn phòng cần chuyển sang!");
     return;

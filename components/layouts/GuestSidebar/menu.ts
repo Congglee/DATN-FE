@@ -17,24 +17,17 @@ const menu = computed(() => {
       icon: IconPhong,
       mainPath: "thong-tin-phong",
     },
-
-    {
-      text: "Số điện",
-      path: `/quan-ly-guest/${route.params.guestId}/so-dien`,
-      icon: IconSoDienNuoc,
-      mainPath: "so-dien",
-    },
-    {
-      text: "Số nước",
-      path: `/quan-ly-guest/${route.params.guestId}/so-nuoc`,
-      icon: IconSoDienNuoc,
-      mainPath: "so-nuoc",
-    },
     {
       text: "Hóa đơn",
       path: `/quan-ly-guest/${route.params.guestId}/hoa-don`,
-      icon: IconDichVu,
+      icon: IconSoDienNuoc,
       mainPath: "hoa-don",
+    },
+    {
+      text: "Thông báo",
+      path: `/quan-ly-guest/${route.params.guestId}/thong-bao`,
+      icon: IconDichVu,
+      mainPath: "thong-bao",
     },
   ];
 });

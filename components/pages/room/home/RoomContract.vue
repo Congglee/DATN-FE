@@ -21,17 +21,23 @@ const { values, errors, defineComponentBinds, handleSubmit } = useForm({
     ContractNo: yup.string(),
     ContractDate: yup.string().required(),
     DateStartContract: yup.string().required(),
-    DateEndContract: yup.string().required(),
   }),
 });
 
 const contract = ref(null);
+const contractTerm = ref("");
+const contractTermList = ref([
+  { _id: "1", value: 1, title: "1 tháng" },
+  { _id: "2", value: 3, title: "3 tháng" },
+  { _id: "3", value: 6, title: "6 tháng" },
+  { _id: "4", value: 9, title: "9 tháng" },
+  { _id: "5", value: 12, title: "12 tháng" },
+]);
 
 const contractData = reactive({
   ContractNo: randomString(6),
   ContractDate: defineComponentBinds("ContractDate"),
   DateStartContract: defineComponentBinds("DateStartContract"),
-  DateEndContract: defineComponentBinds("DateEndContract"),
 });
 
 if (props.roomInfo.contractId?.content) {
@@ -49,10 +55,7 @@ const handleCreateNewContract = handleSubmit(async () => {
       contractData.DateStartContract.modelValue,
       "DD/MM/YYYY"
     ),
-    DateEndContract: convertDateType(
-      contractData.DateEndContract.modelValue,
-      "DD/MM/YYYY"
-    ),
+    ContractTerm: contractTerm.value.value,
   };
   const res = await contractStore.createNewContractByRoom(
     removeEmptyFields(payload),
@@ -100,42 +103,50 @@ watch(
   <div class="tw-text-center tw-flex tw-justify-center" v-if="!contract">
     <div class="tw-pb-[300px]">
       <span class="tw-text-[24px] tw-font-bold">Tạo hợp đồng</span>
-      <div class="tw-grid tw-grid-cols-4 tw-gap-4 tw-mt-4">
-        <div class="tw-max-w-[300px]">
-          <g-input
-            label="Hợp đồng số"
-            v-model="contractData.ContractNo"
-            disabled
-          ></g-input>
+      <div class="tw-grid tw-grid-cols-2 tw-gap-10 tw-mt-4">
+        <div class="tw-flex tw-flex-col tw-gap-y-[20px]">
+          <div class="tw-max-w-[300px]">
+            <g-input
+              label="Hợp đồng số"
+              v-model="contractData.ContractNo"
+              disabled
+            ></g-input>
+          </div>
+          <div>
+            <g-autocomplete
+              v-model="contractTerm"
+              label="Kì hạn"
+              required
+              :items="contractTermList"
+              item-title="title"
+            ></g-autocomplete>
+            <!-- <g-input v-model="contractTerm" label="Kì hạn (tháng)" required> </g-input> -->
+          </div>
         </div>
-        <div>
-          <g-date-picker
-            label="Ngày kí kết"
-            required
-            v-bind="contractData.ContractDate"
-            :error="errors.ContractDate"
-          ></g-date-picker>
-        </div>
-        <div>
-          <g-date-picker
-            label="Ngày bắt đầu hợp đồng"
-            required
-            v-bind="contractData.DateStartContract"
-            :error="errors.DateStartContract"
-          ></g-date-picker>
-        </div>
-        <div>
-          <g-date-picker
-            label="Ngày kết thúc hợp đồng"
-            required
-            v-bind="contractData.DateEndContract"
-            :error="errors.DateEndContract"
-          ></g-date-picker>
+        <div class="tw-flex tw-flex-col tw-gap-y-[33px]">
+          <div>
+            <g-date-picker
+              label="Ngày kí kết"
+              required
+              v-bind="contractData.ContractDate"
+              :error="errors.ContractDate"
+            ></g-date-picker>
+          </div>
+          <div>
+            <g-date-picker
+              label="Ngày bắt đầu hợp đồng"
+              required
+              v-bind="contractData.DateStartContract"
+              :error="errors.DateStartContract"
+            ></g-date-picker>
+          </div>
         </div>
       </div>
-      <g-button class="tw-mt-3" @click="handleCreateNewContract"
-        >Tạo hợp đồng</g-button
-      >
+      <div class="tw-col-span-2 tw-flex tw-justify-center">
+        <g-button class="tw-mt-3" @click="handleCreateNewContract"
+          >Tạo hợp đồng</g-button
+        >
+      </div>
     </div>
   </div>
   <div v-else class="tw-flex tw-flex-col tw-gap-y-3">
