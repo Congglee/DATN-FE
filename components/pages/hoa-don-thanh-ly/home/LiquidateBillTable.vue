@@ -47,6 +47,17 @@ const headers = [
     sortable: false,
     key: "price",
   },
+   {
+    title: "Trạng thái thanh toán",
+    sortable: false,
+    key: "status",
+  },
+  {
+    title: "Hành động",
+    sortable: false,
+    key: "action",
+    width: '150px'
+  },
 ];
 
 const liquidateStore = useLiquidateStore();

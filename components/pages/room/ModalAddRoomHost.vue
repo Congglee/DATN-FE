@@ -61,6 +61,7 @@ const validateFormData = reactive({
   date_of_birth: defineComponentBinds("date_of_birth"),
 });
 const gender = ref(genders[0].value);
+const loading = ref(false);
 
 //method
 
@@ -69,6 +70,7 @@ const handleCreateRoomHost = handleSubmit(async () => {
   //   validateFormData.date_start.modelValue,
   //   "DD/MM/YYYY"
   // );
+  loading.value = true;
   const payload = {
     ...values,
     date_start: convertDateType(
@@ -88,11 +90,13 @@ const handleCreateRoomHost = handleSubmit(async () => {
   };
   const res = await memberStore.createRoomHost(removeEmptyFields(payload));
   if (res.data) {
+    loading.value = false;
     toast.success("Thêm chủ phòng thành công");
     fetchListRoomEventBus.emit();
     emit("close");
   }
   if (res.error) {
+    loading.value = false;
     toast.error(res.error.data.message);
   }
 });
@@ -213,7 +217,7 @@ const handleCreateRoomHost = handleSubmit(async () => {
         </template>
         Hủy
       </g-button>
-      <g-button @click="handleCreateRoomHost">Thêm</g-button>
+      <g-button @click="handleCreateRoomHost" :loading="loading">Thêm</g-button>
     </div>
   </div>
 </template>

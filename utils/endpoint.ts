@@ -85,6 +85,7 @@ export const BILL = {
   UPDATE_BILL_PAID_AMOUNT: "/bills/update-bill-paid-amount",
   DELETE_BILL: "/bills/delete-bill",
   SEND_MAIL_MONTHLY_BILL: "/bills/send-mail-monthly-bill",
+  GENERATE_BILL_PDF: '/bills/generate-bill-pdf'
 };
 
 export const UPLOAD_IMAGES = {
@@ -135,4 +136,17 @@ export const GUEST = {
   GET_INFO_ELECTRICITY: "/users/get-info-electricity",
   GET_INFO_WATER: "/users/get-info-water",
   GET_INFO_BILL: "/users/get-info-bill",
+};
+
+export const NOTIFICATIONS = {
+  GET_ALL_NOTI: "/notifications/get-all-notification",
+  GET_ONE_NOTI: "/notifications/get-one-notification",
+  CREATE_NOTI: "/notifications/create-notification",
+  UPDATE_NOTI: "/notifications/update-notification",
+  DELETE_NOTI: "/notifications/delete-notification",
+  GET_ALL_NOTI_OF_OWNER: "/notifications/get-all-notification-for-owner",
+  GET_ONE_NOTI_OF_OWNER: "/notifications/get-one-notification-for-owner",
+  UPDATE_STATUS_NOTI_FOR_OWNER:
+    "/notifications/update-status-notification-for-owner",
+  DELETE_NOTI_FOR_OWNER: "/notifications/delete-notification-for-owner",
 };

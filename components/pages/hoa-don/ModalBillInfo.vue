@@ -80,6 +80,14 @@ async function handleExport() {
   fileDownload.click();
   document.body.removeChild(fileDownload);
 }
+
+const generateBillPdf = async () => {
+  const res = await billStore.generateBillPdf(props.billId)
+  if(res.data){
+    res.data.download = 'hoa-don.pdf'
+  }
+}
+
 </script>
 <template>
   <div v-if="!billInfo"></div>
