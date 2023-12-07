@@ -56,7 +56,7 @@ const handleSignin = handleSubmit(async () => {
     toast.success("Đăng nhập thành công");
     navigateTo("/");
   }
-  if (res.error.data.message.email) {
+  if (res.error?.data?.message.email) {
     isLoadingSignin.value = false;
     toast.error(res.error.data.message.email);
     return;

@@ -8,6 +8,7 @@ import { render } from "vue";
 import ModalUpdateDeposits from "~/components/pages/coc-phong/ModalUpdateDeposits.vue";
 import { useDepositsStore } from "~/store/deposits";
 import { useToast } from "vue-toastification";
+import IconThreeDots from "@/assets/svg/bill-info.svg";
 // composable
 const emit = defineEmits("getListDeposit");
 const props = defineProps({
@@ -131,9 +132,9 @@ const handleDeniedDeposit = async () => {
           <td>
             <span
               v-if="!item.status"
-              class="tw-text-red-700 tw-font-semibold tw-cursor-pointer"
+              class="tw-text-red-700 tw-font-semibold tw-cursor-pointer tw-flex tw-items-center tw-gap-x-3 tw-w-[50%]"
             >
-              Đang chờ xử lý
+              <span>Đang chờ xử lý</span> <IconThreeDots />
               <v-menu activator="parent">
                 <div class="tw-bg-white tw-rounded-[10px] tw-flex tw-flex-col">
                   <p
