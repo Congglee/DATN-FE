@@ -3,14 +3,17 @@ import IncomeBarChart from "@/components/pages/analysis/IncomeBarChart.vue";
 import CompareIncomePieChart from "@/components/pages/analysis/CompareIncomePieChart.vue";
 import { useRoomStore } from "@/store/room";
 import RoomStatusPieChart from "@/components/pages/analysis/RoomStatusPieChart.vue";
+import { useStatisticalStore } from "~/store/statistical";
 
 //composable
 const route = useRoute();
 
 const roomStore = useRoomStore();
+const statisticalStore = useStatisticalStore();
 
 //state
 const roomData = ref({});
+const revenueData = ref({});
 
 const getRoomStatic = async () => {
   const res = await roomStore.getRoomStatic();
@@ -19,6 +22,16 @@ const getRoomStatic = async () => {
   }
 };
 getRoomStatic();
+
+const getRevenueInfo = async () => {
+  const res = await statisticalStore.getStatistical();
+  if (res.data) {
+    revenueData.value = res.data.message;
+    console.log(revenueData.value);
+  }
+};
+
+getRevenueInfo();
 
 const handleBack = () => {
   useRouter().back();
@@ -34,14 +47,17 @@ const handleBack = () => {
     </div>
     <div class="tw-grid tw-grid-cols-2 tw-gap-4">
       <div class="tw-p-10 tw-bg-white tw-rounded-xl">
-        <IncomeBarChart :roomData="roomData" />
+        <IncomeBarChart
+          :roomData="roomData"
+          :revenueData="revenueData"
+        />
       </div>
-      <div class="tw-p-10 tw-bg-white tw-rounded-xl">
+      <!-- <div class="tw-p-10 tw-bg-white tw-rounded-xl">
         <CompareIncomePieChart :roomData="roomData" />
       </div>
       <div class="tw-p-10 tw-bg-white tw-rounded-xl">
         <RoomStatusPieChart :roomData="roomData" />
-      </div>
+      </div> -->
     </div>
   </div>
 </template>

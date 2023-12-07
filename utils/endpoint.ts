@@ -85,7 +85,7 @@ export const BILL = {
   UPDATE_BILL_PAID_AMOUNT: "/bills/update-bill-paid-amount",
   DELETE_BILL: "/bills/delete-bill",
   SEND_MAIL_MONTHLY_BILL: "/bills/send-mail-monthly-bill",
-  GENERATE_BILL_PDF: '/bills/generate-bill-pdf'
+  GENERATE_BILL_PDF: "/bills/generate-bill-pdf",
 };
 
 export const UPLOAD_IMAGES = {
@@ -149,4 +149,8 @@ export const NOTIFICATIONS = {
   UPDATE_STATUS_NOTI_FOR_OWNER:
     "/notifications/update-status-notification-for-owner",
   DELETE_NOTI_FOR_OWNER: "/notifications/delete-notification-for-owner",
+};
+
+export const STATISTICAL = {
+  REVENUE_STATISTICAL: "/statistical/statistical-revenue",
 };

@@ -2,6 +2,8 @@
 import AllBillTable from "@/components/pages/hoa-don/home/AllBillTable.vue";
 import CreateBillTable from "@/components/pages/hoa-don/home/CreateBillTable.vue";
 
+const getBillEventBus = useEventBus(`get-bill-event-bus`);
+
 const billFactorList = ref([
   {
     _id: "1",
@@ -20,6 +22,13 @@ const listComponent = {
 };
 
 const tab = ref("");
+
+watch(
+  () => tab.value,
+  () => {
+    getBillEventBus.emit();
+  }
+);
 </script>
 <template>
   <v-card class="conduct-table">
