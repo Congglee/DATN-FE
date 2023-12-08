@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import IconDropDown from '@/assets/svg/drop.svg';
+import IconDropDown from "";
 
 const props = defineProps({
   modelValue: {
@@ -8,7 +8,7 @@ const props = defineProps({
   },
   label: {
     type: String,
-    default: '',
+    default: "",
   },
   items: {
     type: Array,
@@ -20,14 +20,14 @@ const props = defineProps({
   },
   error: {
     type: String,
-    default: '',
+    default: "",
   },
   itemTitle: {
     type: String,
-    default: 'title',
+    default: "title",
   },
   itemValue: {
-    default: 'value',
+    default: "value",
   },
   disabled: {
     type: Boolean,
@@ -43,10 +43,10 @@ const props = defineProps({
   },
 });
 
-const emits = defineEmits(['update:modelValue']);
+const emits = defineEmits(["update:modelValue"]);
 
 const handleChangeValue = (e: any) => {
-  emits('update:modelValue', e);
+  emits("update:modelValue", e);
 };
 </script>
 
@@ -58,7 +58,13 @@ const handleChangeValue = (e: any) => {
       v-if="label"
     >
       <span>{{ label }}</span>
-      <span v-if="required" :class="disabled ? 'tw-text-[rgba(60,60,67,0.42)]' : 'tw-text-[#E14B4B]'">*</span>
+      <span
+        v-if="required"
+        :class="
+          disabled ? 'tw-text-[rgba(60,60,67,0.42)]' : 'tw-text-[#E14B4B]'
+        "
+        >*</span
+      >
     </div>
     <v-select
       :disabled="disabled"
@@ -69,7 +75,6 @@ const handleChangeValue = (e: any) => {
       variant="outlined"
       rounded="10"
       persistent-placeholder
-      :menu-icon="IconDropDown"
       :items="items"
       @update:model-value="handleChangeValue"
       :model-value="modelValue"

@@ -2,7 +2,7 @@
 import IconClose from "@/assets/svg/close.svg";
 import IconXMark from "@/assets/svg/x-mark.svg";
 import IconRequired from "@/assets/svg/required.svg";
-import IconCalendar from "@/assets/svg/manage-student/calendar.svg";
+import IconCalendar from "@/assets/svg/calendar.svg";
 import * as yup from "yup";
 import { useForm } from "vee-validate";
 import { useToast } from "vue-toastification";

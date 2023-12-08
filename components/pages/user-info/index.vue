@@ -1,7 +1,7 @@
 <script setup>
 import IconXMark from "@/assets/svg/x-mark.svg";
 import IconClose from "@/assets/svg/close.svg";
-import IconCalendar from "@/assets/svg/manage-student/calendar.svg";
+import IconCalendar from "@/assets/svg/calendar.svg";
 import { useForm } from "vee-validate";
 import * as yup from "yup";
 import { useToast } from "vue-toastification";
@@ -203,10 +203,7 @@ const onHandleAvt = (e) => {
         Thông tin người dùng
       </h5>
     </div>
-    <div
-      class=""
-      style="min-height: 103vh !important"
-    >
+    <div class="" style="min-height: 103vh !important">
       <div class="tw-mt-6 tw-flex-col tw-gap-y-4">
         <g-input
           label="Tên"

@@ -1,7 +1,7 @@
 <script setup>
 import IconXMark from "@/assets/svg/x-mark.svg";
 import IconClose from "@/assets/svg/close.svg";
-import IconCalendar from "@/assets/svg/manage-student/calendar.svg";
+import IconCalendar from "@/assets/svg/calendar.svg";
 import { useForm } from "vee-validate";
 import { genders } from "@/utils/constants";
 import * as yup from "yup";

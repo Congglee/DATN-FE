@@ -1,6 +1,3 @@
-import imageDefault from "~/assets/images/default-thumbnail.jpg";
-import avatarDefault from "@/public/images/avatar-default.png";
-
 export const PREFIX_CLASS = "s-";
 
 export const ACCESS_TOKEN = "accessToken";
@@ -28,9 +25,6 @@ export const GENDER_TYPE: keyType = {
   FEMALE: "Nữ",
   OTHER: "Khác",
 };
-
-export const IMAGE_DEFAULT = imageDefault;
-export const AVATAR_DEFAULT = avatarDefault;
 
 export const genders = [
   {
