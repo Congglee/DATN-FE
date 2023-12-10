@@ -28,16 +28,6 @@ const headers = [
     key: "fullName",
   },
   {
-    title: "Điện thoại",
-    sortable: false,
-    key: "phone",
-  },
-  {
-    title: "Email",
-    sortable: false,
-    key: "email",
-  },
-  {
     title: "Ngày trả phòng",
     sortable: false,
     key: "date",
@@ -47,7 +37,7 @@ const headers = [
     sortable: false,
     key: "price",
   },
-   {
+  {
     title: "Trạng thái thanh toán",
     sortable: false,
     key: "status",
@@ -56,24 +46,38 @@ const headers = [
     title: "Hành động",
     sortable: false,
     key: "action",
-    width: '150px'
+    width: "250px",
   },
 ];
 
 const liquidateStore = useLiquidateStore();
 
 const liquidateBills = ref([]);
+const monthYear = ref(getCurrentDateString());
 
 const getAllLiquidateBill = async () => {
-  const res = await liquidateStore.getAllLiquidateBill();
+  const params = {
+    monthDate: convertDateType(monthYear.value, "MM/YYYY"),
+  };
+  const res = await liquidateStore.getAllLiquidateBill(params);
   if (res.data) {
     liquidateBills.value = res.data.bills;
   }
 };
 getAllLiquidateBill();
+
+watch(
+  () => monthYear.value,
+  (newVal) => {
+    getAllLiquidateBill();
+  }
+);
 </script>
 
 <template>
+  <div class="tw-mb-3 tw-w-[200px]">
+    <g-date-picker v-model="monthYear"></g-date-picker>
+  </div>
   <v-data-table :headers="headers" class="s-table" :items="liquidateBills">
     <template #item="{ item, index }">
       <LiquidateBillItem :item="item" :index="index" />
