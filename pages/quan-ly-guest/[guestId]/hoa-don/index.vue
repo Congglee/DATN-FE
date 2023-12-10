@@ -12,7 +12,6 @@ const getBillInfo = async () => {
   const res = await guestStore.guestRoomBill();
   if (res.data) {
     billInfo.value = res.data.data;
-    console.log(billInfo.value);
   }
 };
 getBillInfo();

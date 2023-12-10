@@ -2,7 +2,10 @@ import { defineStore } from "pinia";
 
 export const useServiceStore = defineStore({
   id: "service",
-  state: () => ({}),
+  state: () => ({
+    waterPrice: null,
+    electricityPrice: null,
+  }),
   actions: {
     async getAllServices(payload: any) {
       const res = await useFetchData(`${SERVICES.GET_SERVICES}`, {
@@ -11,6 +14,12 @@ export const useServiceStore = defineStore({
           isActive: payload?.isActive,
         },
       });
+      this.waterPrice = res.data.services.find(
+        (el: any) => el.name === "Nước"
+      ).price;
+      this.electricityPrice = res.data.services.find(
+        (el: any) => el.name === "Điện"
+      ).price;
       return res;
     },
     async getOneService(id: string) {
