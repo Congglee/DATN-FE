@@ -154,3 +154,8 @@ export const NOTIFICATIONS = {
 export const STATISTICAL = {
   REVENUE_STATISTICAL: "/statistical/statistical-revenue",
 };
+export const MAILS = {
+  CREATE_MAIL: "/mails/create-new-mail",
+  GET_ALL_MAIL: "/mails/get-all-mail",
+  GET_ONE_MAIL: "/mails/get-one-mail/",
+};
