@@ -1,4 +1,28 @@
 <script setup>
+import { useUserStore } from "~/store/user";
+
+const fetchDataUserEventBus = useEventBus(`fetch-data-user`);
+
+const userStore = useUserStore();
+const userData = ref(null);
+const getUser = async () => {
+  try {
+    const res = await userStore.getOneUser();
+    if (res.data) {
+      userData.value = res.data.message;
+      console.log(res.data.message);
+    }
+  } catch (error) {
+    throw error;
+  }
+};
+
+getUser();
+fetchDataUserEventBus.on(() => {
+  userData._value = null;
+  getUser();
+});
+
 const handleLogout = () => {
   useRemoveToken();
   navigateTo("/dang-nhap");
@@ -37,7 +61,8 @@ const handleLogout = () => {
       </aside>
       <aside class="tw-w-1/3 tw-flex tw-justify-end">
         <div class="tw-relative">
-          <button
+          <!-- <button
+            v-if="userData?.avatar == null"
             class="btn_account tw-rounded-full tw-h-10 tw-w-10 tw-bg-[#f88125] hover:tw-bg-[#ee6060] active:tw-transition-all tw-flex tw-justify-center tw-items-center tw-text-white"
           >
             <svg
@@ -50,6 +75,14 @@ const handleLogout = () => {
                 d="M304 128a80 80 0 1 0 -160 0 80 80 0 1 0 160 0zM96 128a128 128 0 1 1 256 0A128 128 0 1 1 96 128zM49.3 464H398.7c-8.9-63.3-63.3-112-129-112H178.3c-65.7 0-120.1 48.7-129 112zM0 482.3C0 383.8 79.8 304 178.3 304h91.4C368.2 304 448 383.8 448 482.3c0 16.4-13.3 29.7-29.7 29.7H29.7C13.3 512 0 498.7 0 482.3z"
               />
             </svg>
+          </button> -->
+          <button
+            class="btn_account tw-rounded-full tw-h-10 tw-w-10 tw-flex tw-justify-center tw-border-solid tw-border-2 tw-border-[#f88125] tw-items-center tw-overflow-hidden"
+          >
+            <img
+              :src="userData?.avatar == null ? '' : userData?.avatar"
+              class="tw-w-full tw-object-cover"
+            />
           </button>
           <div class="drop_menu_account">
             <ul>

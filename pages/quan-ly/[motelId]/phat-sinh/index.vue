@@ -46,7 +46,7 @@ getAllMotels();
 const getAllArises = async (monthYear) => {
   try {
     const res = await arisesStore.getAllArises(
-      `?motelId=${idMotel}&monthDate=${monthYear}&limit=100&page=1`
+      `?motelId=${idMotel}&monthDate=${monthYear}&limit=10000000000000&page=1`
     );
     if (res.data) {
       dataArises.value = null;

@@ -1,5 +1,6 @@
 <script setup>
 import IconSave from "@/assets/svg/save.svg";
+import IconViewers from "@/assets/svg/view-details.svg";
 import { VDataTable } from "vuetify/lib/labs/components.mjs";
 import { useMailsStore } from "~/store/mails";
 import { useToast } from "vue-toastification";
@@ -27,13 +28,19 @@ const tableHeaders = ref([
     title: "STT",
     key: "index",
     sortable: false,
-    width: "50px",
+    width: "20px",
   },
   {
     title: "Chi tiết",
     key: "content",
     sortable: false,
-    width: "200px",
+    width: "40px",
+  },
+  {
+    title: "Tiêu đề",
+    key: "title",
+    sortable: true,
+    width: "250px",
   },
   {
     title: "Người nhận",
@@ -42,16 +49,10 @@ const tableHeaders = ref([
     width: "200px",
   },
   {
-    title: "Tiêu đề",
-    key: "title",
-    sortable: true,
-    width: "200px",
-  },
-  {
     title: "Trạng thái",
     key: "status",
     sortable: true,
-    width: "150px",
+    width: "40px",
   },
   {
     title: "Thời gian gửi",
@@ -77,19 +78,23 @@ const onViewDetailsMail = (item) => {
           </td>
           <td class="tw-cursor-pointer" @click="onViewDetailsMail(item)">
             <div
-              class="tw-line-clamp-2 tw-max-w-sm tw-overflow-hidden tw-h-10 tw-flex tw-items-start"
+              class="tw-line-clamp-2 tw-max-w-sm tw-overflow-hidden tw-flex tw-justify-start tw-items-center"
             >
-              <div v-html="item.content"></div>
+              <button class="tw-px-3 tw-py-2 tw-bg-gray-300 tw-rounded-md">
+                <IconViewers />
+              </button>
+              <!-- <div v-html="item.content"></div> -->
             </div>
-          </td>
-          <td>
-            {{ item.email_to }}
           </td>
           <td>
             {{ item.title }}
           </td>
           <td>
-            <img
+            {{ item.email_to }}
+          </td>
+
+          <td>
+            <!-- <img
               src="https://i.ibb.co/MZ3ps00/t-i-xu-ng-1.png"
               v-if="item.status == 'success'"
               alt=""
@@ -102,7 +107,21 @@ const onViewDetailsMail = (item) => {
               alt=""
               class="tw-w-[18px] tw-h-[18px] tw-ml-2"
               title="Gửi mail thất bại"
-            />
+            /> -->
+            <span
+              v-if="item.status == 'success'"
+              alt=""
+              class="tw-w-[18px] tw-h-[18px] tw-font-bold tw-ml-2 tw-text-green-800"
+              title="Đã gửi mail thành công"
+              >Thành công</span
+            >
+            <span
+              v-if="item.status == 'fail'"
+              alt=""
+              class="tw-w-[18px] tw-h-[18px] tw-font-bold tw-ml-2 tw-text-red"
+              title="Gửi mail thất bại"
+              >Thất bại</span
+            >
           </td>
           <td>
             {{ item.createdAt }}

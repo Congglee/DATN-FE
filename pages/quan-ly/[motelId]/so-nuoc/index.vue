@@ -45,7 +45,7 @@ getAllMotels();
 const getAllWater = async (params) => {
   try {
     const res = await waterStore.getAllWater(
-      `motel=${idMotel}&monthDate=${params}&limit=25&page=1`
+      `motel=${idMotel}&monthDate=${params}&limit=1000000000000&page=1`
     );
     if (res.data) {
       dataWater.value = null;
