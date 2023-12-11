@@ -27,7 +27,6 @@ const getRevenueInfo = async () => {
   const res = await statisticalStore.getStatistical();
   if (res.data) {
     revenueData.value = res.data.message;
-    console.log(revenueData.value);
   }
 };
 

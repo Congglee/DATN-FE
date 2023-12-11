@@ -4,11 +4,12 @@ export const useLiquidateStore = defineStore({
   id: "liquidate-bill",
   state: () => ({}),
   actions: {
-    async getAllLiquidateBill() {
+    async getAllLiquidateBill(params: any) {
       const res = await useFetchData(
         `${LIQUIDATE_BILL.GET_ALL_LIQUIDATE_BILL}`,
         {
           method: "GET",
+          params: params,
         }
       );
       return res;

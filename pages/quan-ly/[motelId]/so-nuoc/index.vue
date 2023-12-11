@@ -72,26 +72,7 @@ fetchListWaterEventBus.on(() => {
 });
 </script>
 <template>
-  <header class="tw-grid tw-grid-cols-4 tw-items-end tw-gap-x-3">
-    <div class="tw-flex tw-flex-col tw-text-black">
-      <h5 class="tw-text-[14px]">Nhà Trọ</h5>
-      <select
-        class="form-control tw-h-[38px] tw-border-gray-400 focus:tw-outline-none tw-px-2 tw-bg-white tw-text-[16px] tw-text-gray-600"
-        style="
-          border: 1px solid rgb(218, 218, 218) !important ;
-          border-radius: 3px;
-        "
-      >
-        <option
-          v-for="item in DataMotels"
-          :key="item.id"
-          :value="item.id"
-          selected
-        >
-          {{ item.title }}
-        </option>
-      </select>
-    </div>
+  <div class="tw-flex tw-items-end tw-gap-x-3 tw-mb-3">
     <g-date-picker
       class="tw-pt-4"
       label="Theo tháng"
@@ -105,7 +86,7 @@ fetchListWaterEventBus.on(() => {
     >
       Cập nhật số nước
     </g-button>
-  </header>
+  </div>
   <section>
     <WaterTable v-if="dataWater !== null" :data="dataWater" />
     <div v-if="dataWater == null">
