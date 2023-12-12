@@ -98,6 +98,7 @@ const handleSendMails = handleSubmit(async () => {
             contentType="html"
             toolbar="full"
             theme="snow"
+            style="height: 230px"
           />
         </div>
       </div>
@@ -117,4 +118,7 @@ const handleSendMails = handleSubmit(async () => {
 </template>
 <style lang="scss" scoped>
 @import url("./index.scss");
+#exportAll > .ql-editor > .ql-blank {
+  height: 300px;
+}
 </style>

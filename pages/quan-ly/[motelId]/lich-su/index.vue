@@ -13,7 +13,7 @@ const fetchListMailsEventBus = useEventBus(`fetch-list-mails`);
 // function
 const getAllMails = async (params) => {
   const res = await mailsStore.getAllMails(
-    `page=1&limit=100000000&sortBy=createdAt&sortOrder=asc`
+    `page=1&limit=10000000000&sortBy=createdAt&sortOrder=desc`
   );
   if (res.data) {
     dataMails.value = null;

@@ -45,7 +45,7 @@ getAllMotels();
 const getAllElectricity = async (params) => {
   try {
     const res = await electricityStore.getAllElectricity(
-      `motel=${idMotel}&monthDate=${params}&limit=25&page=1`
+      `motel=${idMotel}&monthDate=${params}&limit=10000000000000&page=1`
     );
     if (res.data) {
       dataElectricity.value = null;
@@ -79,9 +79,7 @@ fetchListElectricityEventBus.on(() => {
       @vnode-updated="onHandleDate($event)"
       v-model="DateFilter"
     ></g-date-picker>
-    <g-button @click="isDisplayCreateElec = true">
-      Cập nhật số điện
-    </g-button>
+    <g-button @click="isDisplayCreateElec = true"> Cập nhật số điện </g-button>
   </div>
   <section>
     <ElectricTable v-if="dataElectricity !== null" :data="dataElectricity" />
