@@ -13,9 +13,7 @@ definePageMeta({
 const route = useRoute();
 const toast = useToast();
 
-const getListNotiEventBus = useEventBus(
-  `get-list-noti-${route.params.guestId}`
-);
+const getListNotiEventBus = useEventBus(`get-list-noti`);
 
 //store
 
@@ -42,8 +40,10 @@ getListNotiEventBus.on(() => {
   <div class="">
     <CreateNotiForm />
     <hr class="tw-my-5" />
-    <div v-for="item in notiList">
-      <NotiItem :item="item" />
+    <div class="tw-grid tw-grid-cols-2 tw-gap-4">
+      <div v-for="item in notiList">
+        <NotiItem :item="item" />
+      </div>
     </div>
   </div>
 </template>

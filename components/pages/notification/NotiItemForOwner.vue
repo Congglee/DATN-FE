@@ -2,6 +2,7 @@
 import IconDelete from "@/assets/svg/delete.svg";
 import { useToast } from "vue-toastification";
 import { useNotificationStore } from "~/store/notification";
+import IconThreeDots from "@/assets/svg/bill-info.svg";
 import IconDone from "@/assets/svg/done.svg";
 const props = defineProps({
   item: {
@@ -13,6 +14,8 @@ const props = defineProps({
 const route = useRoute();
 const toast = useToast();
 
+console.log(props.item);
+
 const getListNotiEventBus = useEventBus(`get-list-noti`);
 
 const notificationStore = useNotificationStore();
@@ -20,10 +23,26 @@ const notificationStore = useNotificationStore();
 const isShowConfirmDeleteNoti = ref(false);
 
 const handleRemoveNoti = async () => {
-  const res = await notificationStore.deleteNotification(props.item._id);
+  const res = await notificationStore.deleteNotificationForOwner(
+    props.item._id
+  );
   if (res.data) {
     toast.success("Xóa thông báo thành công!");
     isShowConfirmDeleteNoti.value = false;
+    getListNotiEventBus.emit();
+  }
+};
+
+const handleUpdateNotiStatus = async (e) => {
+  const payload = {
+    status: e,
+  };
+  const res = await notificationStore.updateNotificationStatusForOwner(
+    props.item._id,
+    payload
+  );
+  if (res.data) {
+    toast.success(`Đã cập nhật trạng thái thành ${e}`);
     getListNotiEventBus.emit();
   }
 };
@@ -33,8 +52,34 @@ const handleRemoveNoti = async () => {
     class="tw-rounded-xl tw-border-2 tw-border-gray-100 tw-bg-white tw-mb-5"
   >
     <div class="tw-w-full tw-justify-end tw-flex tw-p-4">
+      <div v-if="item.status !== 'Đã hoàn thành'">
+        <IconThreeDots class="tw-cursor-pointer" />
+        <v-menu activator="parent" class="tw-mt-3">
+          <ul
+            class="tw-bg-white tw-p-3 tw-rounded-t-[10px] tw-cursor-pointer hover:tw-bg-[#e3e3e3]"
+            @click="handleUpdateNotiStatus('Chưa xử lý')"
+            v-if="item.status !== 'Chưa xử lý'"
+          >
+            Cập nhật thành chưa xử lý
+          </ul>
+          <ul
+            class="tw-bg-white tw-p-3 tw-rounded-t-[10px] tw-cursor-pointer hover:tw-bg-[#e3e3e3]"
+            @click="handleUpdateNotiStatus('Đang xử lý')"
+            v-if="item.status !== 'Đang xử lý'"
+          >
+            Cập nhật thành đang xử lý
+          </ul>
+          <ul
+            class="tw-bg-white tw-p-3 tw-rounded-b-[10px] tw-cursor-pointer hover:tw-bg-[#e3e3e3]"
+            @click="handleUpdateNotiStatus('Đã hoàn thành')"
+            v-if="item.status !== 'Đã hoàn thành'"
+          >
+            Cập nhật thành đã hoàn thành
+          </ul>
+        </v-menu>
+      </div>
       <IconDelete
-        class="tw-cursor-pointer"
+        class="tw-cursor-pointer tw-ml-3"
         @click="isShowConfirmDeleteNoti = true"
       />
     </div>
@@ -97,9 +142,8 @@ const handleRemoveNoti = async () => {
         class="tw--mb-[2px] tw--me-[2px] tw-inline-flex tw-items-center tw-gap-1 tw-rounded-ee-xl tw-rounded-ss-xl tw-bg-green-600 px-3 tw-py-1.5 tw-text-white"
       >
         <IconDone />
-
         <span class="tw-text-[10px]tw-font-medium sm:tw-text-xs"
-          >Đã xử lý!</span
+          >Đã hoàn thành!</span
         >
       </strong>
     </div>
