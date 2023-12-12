@@ -5,9 +5,7 @@ import { useToast } from "vue-toastification";
 const toast = useToast();
 const route = useRoute();
 
-const getListNotiEventBus = useEventBus(
-  `get-list-noti-${route.params.guestId}`
-);
+const getListNotiEventBus = useEventBus(`get-list-noti`);
 
 const notificationStore = useNotificationStore();
 
