@@ -154,8 +154,17 @@ export const NOTIFICATIONS = {
 export const STATISTICAL = {
   REVENUE_STATISTICAL: "/statistical/statistical-revenue",
 };
+
 export const MAILS = {
   CREATE_MAIL: "/mails/create-new-mail",
   GET_ALL_MAIL: "/mails/get-all-mail",
   GET_ONE_MAIL: "/mails/get-one-mail/",
+};
+
+export const PAYMENT = {
+  CREATE_PAYMENT: "/payment-methods/create-new-payment-method",
+  GET_ALL_PAYMENT: "/payment-methods/get-all-payment-methods",
+  GET_ONE_PAYMENT: "/payment-methods/get-one-payment-method",
+  UPDATE_PAYMENT: "/payment-methods/update-payment-method",
+  DELETE_PAYMENT: "/payment-methods/delete-payment-method",
 };

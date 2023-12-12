@@ -27,7 +27,7 @@ const headers = [
     title: "Tên phòng",
     sortable: false,
     key: "roomName",
-    width: "120px",
+    width: "200px",
   },
   {
     title: "Họ và tên chủ",
