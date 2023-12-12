@@ -203,10 +203,7 @@ const onHandleAvt = (e) => {
         Thông tin người dùng
       </h5>
     </div>
-    <div
-      class=""
-      style="min-height: 103vh !important"
-    >
+    <div class="" style="min-height: 103vh !important">
       <div class="tw-mt-6 tw-flex-col tw-gap-y-4">
         <g-input
           label="Tên"
