@@ -18,7 +18,7 @@ const fetchListArisesEventBus = useEventBus(`fetch-list-arises`);
 
 //emit
 
-const emit = defineEmits("close");
+const emit = defineEmits(["close", "dateCreate"]);
 
 //store
 const roomStore = useRoomStore();
@@ -76,11 +76,11 @@ const handleCreateArises = handleSubmit(async () => {
   } else {
     err_msg_room.value = "";
   }
-  if (formData.note.trim() == "") {
-    loading.value = false;
-    check = false;
-    toast.error("Nội dung chi phí không được bỏ trống");
-  }
+  // if (formData.note.trim() == "") {
+  //   loading.value = false;
+  //   check = false;
+  //   toast.error("Nội dung chi phí không được bỏ trống");
+  // }
 
   if (check == true) {
     const payload = {
@@ -89,9 +89,10 @@ const handleCreateArises = handleSubmit(async () => {
       note: formData.note,
       roomId: formData?.roomId?._id,
     };
-    const res = await arisesStore.createArises(payload);
+    const res = await arisesStore.createArises(removeEmptyFields(payload));
     if (res.data) {
       toast.success("Tạo chi phí phát sinh thành công!");
+      emit("dateCreate", values.monthYear);
       emit("close");
       loading.value = false;
       fetchListArisesEventBus.emit();
@@ -144,7 +145,7 @@ const handleCreateArises = handleSubmit(async () => {
         <div class="tw-gap-y-1 tw-grid tw-pt-4">
           <div class="tw-flex tw-gap-x-1">
             <p>Ghi chú</p>
-            <IconRequired />
+            <!-- <IconRequired /> -->
           </div>
           <textarea
             placeholder="Ghi chú ..."

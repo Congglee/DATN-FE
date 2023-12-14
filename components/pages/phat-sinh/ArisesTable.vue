@@ -44,7 +44,7 @@ const tableHeaders = ref([
     title: "Ghi chú",
     key: "note",
     sortable: true,
-    width: "600px",
+    width: "400px",
   },
   {
     title: "Chi phí",
@@ -70,20 +70,20 @@ const onHandleSave = async (item) => {
   if (item.roomId == null) {
     return toast.error("Nhà trọ đã bị xoá !");
   }
-  if (item.note == null || item.note == "") {
-    return toast.error("Ghi chú không được bỏ trống");
-  }
+  // if (item.note == null || item.note == "") {
+  //   return toast.error("Ghi chú không được bỏ trống");
+  // }
   if (item.price < 0) {
-    return toast.warning("Giá phải là một số dương");
+    return toast.warning("Chi phí là một số dương");
   }
   const payload = {
     _id: item._id,
-    data: {
+    data: removeEmptyFields({
       note: item.note,
       price: item.price,
       monthYear: item.monthYear,
       roomId: item.roomId._id,
-    },
+    }),
   };
   try {
     const res = await arisesStore.updateArises(payload);
