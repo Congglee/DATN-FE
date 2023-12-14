@@ -27,9 +27,9 @@ const paymentStore = usePaymentStore();
 
 const { values, errors, defineComponentBinds, handleSubmit } = useForm({
   validationSchema: yup.object({
-    name: yup.string().trim().required(),
-    type: yup.string().trim().required(),
-    details: yup.string().trim().required(),
+    name: yup.string().trim().required("Tên không được để trống"),
+    type: yup.string().trim().required("Kiểu không được để trống"),
+    details: yup.string().trim().required("Chi tiết không được để trống"),
     image: yup.string().trim(),
     isActive: yup.boolean().required(),
   }),

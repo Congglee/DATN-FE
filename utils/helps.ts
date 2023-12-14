@@ -2,12 +2,14 @@ import dayjs from "dayjs";
 import avatarDefault from "@/assets/images/defaultAvt.png";
 import { useToast } from "vue-toastification";
 
-export const convertDateType = (date: Date, format: string) => {
-  if (date === undefined) {
-    return undefined;
+export const convertDateType = (date: any, format:string) => {
+  if(!date) return undefined;
+  if(dayjs(date).format(format) === date) {
+    return date;
   }
+
   return dayjs(date).format(format);
-};
+}
 
 export const getDifferenceObject = (oldObj: any, newObj: any) => {
   const keys = Object.keys(oldObj);

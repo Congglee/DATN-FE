@@ -35,7 +35,6 @@ const roomStore = useRoomStore();
 const { values, errors, defineComponentBinds, handleSubmit } = useForm({
   validationSchema: yup.object({
     name: yup.string().trim().required("Tên phòng không được để trống"),
-    // motelId: yup.string().trim().required(),
     price: yup
       .number()
       .typeError("Giá phòng phải là số")
