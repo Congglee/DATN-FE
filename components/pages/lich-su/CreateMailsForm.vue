@@ -39,20 +39,19 @@ const handleSendMails = handleSubmit(async () => {
     ...values,
     ...{ html: contract.value },
   };
-  if (payload.html.trim() == "") {
+  if (payload.html === null) {
     return toast.warning("Nội dung không được bỏ trống !!!");
   }
-  try {
-    loading.value = true;
-    const res = await mailsStore.createMails(payload);
-    if (res.data) {
-      fetchListMailsEventBus.emit();
-      toast.success("Gửi mail thành công!");
-      loading.value = false;
-      emit("close");
-    }
-  } catch (error) {
-    throw error;
+  loading.value = true;
+  const res = await mailsStore.createMails(payload);
+  if (res.data) {
+    fetchListMailsEventBus.emit();
+    toast.success("Gửi mail thành công!");
+    loading.value = false;
+    emit("close");
+  } else {
+    loading.value = false;
+    toast.error("Lỗi gửi mail");
   }
 });
 </script>
