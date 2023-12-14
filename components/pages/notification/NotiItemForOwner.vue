@@ -141,9 +141,8 @@ const handleUpdateNotiStatus = async (e) => {
       <strong
         class="tw--mb-[2px] tw--me-[2px] tw-inline-flex tw-items-center tw-gap-1 tw-rounded-ee-xl tw-rounded-ss-xl tw-bg-green-600 px-3 tw-py-1.5 tw-text-white"
       >
-        <IconDone />
         <span class="tw-text-[10px]tw-font-medium sm:tw-text-xs"
-          >Đã hoàn thành!</span
+          >Đã xử lý!</span
         >
       </strong>
     </div>

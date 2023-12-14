@@ -93,11 +93,7 @@ const handleRemoveNoti = async () => {
       </strong>
     </div>
     <div class="tw-flex tw-justify-end" v-if="item.status === 'Đã hoàn thành'">
-      <strong
-        class="tw--mb-[2px] tw--me-[2px] tw-inline-flex tw-items-center tw-gap-1 tw-rounded-ee-xl tw-rounded-ss-xl tw-bg-green-600 px-3 tw-py-1.5 tw-text-white"
-      >
-        <IconDone />
-
+      <strong class="tw--mb-[2px] tw--me-[2px] tw-inline-flex tw-items-center tw-gap-1 tw-rounded-ee-xl tw-rounded-ss-xl tw-bg-green-600 px-3 tw-py-1.5 tw-text-white">
         <span class="tw-text-[10px]tw-font-medium sm:tw-text-xs"
           >Đã xử lý!</span
         >

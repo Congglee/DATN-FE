@@ -18,18 +18,19 @@ getBillInfo();
 </script>
 <template>
   <div class="tw-grid tw-grid-cols-3 tw-gap-5">
-    <a
-      href=""
+    <nuxt-link
+      to="thanh-toan"
       class="tw-group tw-relative tw-block tw-h-64 sm:tw-h-80 lg:tw-h-96"
       v-for="(item, index) in billInfo"
     >
       <span
-        class="tw-absolute tw-inset-0 tw-border-2 tw-border-dashed tw-border-black"
+        class="tw-absolute tw-inset-0 tw-border-2 tw-border-dashed tw-border-black tw-rounded-lg"
       >
       </span>
 
       <div
-        class="tw-relative tw-flex tw-h-full tw-transform tw-items-end tw-border-2 tw-border-black tw-bg-white tw-transition-transform group-hover:tw--translate-x-2 group-hover:tw--translate-y-2"
+        :class="[item.isPaid ? 'tw-border-green-600' : 'tw-border-red-600']"
+        class="tw-relative tw-flex tw-h-full tw-transform tw-items-end tw-border-2 tw-rounded-lg tw-bg-white tw-transition-transform group-hover:tw--translate-x-2 group-hover:tw--translate-y-2"
       >
         <div
           class="tw-p-4 !tw-pt-0 tw-transition-opacity group-hover:tw-absolute group-hover:tw-opacity-0 sm:tw-p-6 lg:tw-p-8"
@@ -41,7 +42,6 @@ getBillInfo();
             {{ item.monthYear }}
           </h2>
         </div>
-
         <div
           class="tw-absolute tw-p-4 tw-opacity-0 tw-transition-opacity group-hover:tw-relative group-hover:tw-opacity-100 sm:tw-p-6 lg:tw-p-8"
         >
@@ -60,6 +60,6 @@ getBillInfo();
           </p>
         </div>
       </div>
-    </a>
+    </nuxt-link>
   </div>
 </template>
