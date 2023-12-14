@@ -11,6 +11,10 @@ const props = defineProps({
     type: Object,
     default: {},
   },
+  DataMotels: {
+    type: Object,
+    default: {},
+  },
 });
 const DeepData = cloneDeep(props.data);
 const JsonData = JSON.parse(JSON.stringify(DeepData));
@@ -97,7 +101,7 @@ const onChangeWater = (item) => {
     <v-data-table :headers="tableHeaders" :items="dataTable" class="s-table">
       <template #item="{ item, index }">
         <tr class="tw-relative tw-group">
-          <td>{{ item?.roomId?.motelId?.name }}</td>
+          <td>{{ JSON.parse(JSON.stringify(props.DataMotels))[0]?.title }}</td>
           <td>{{ item?.roomId?.name }}</td>
           <td>
             <g-input

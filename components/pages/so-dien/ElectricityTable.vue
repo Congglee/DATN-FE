@@ -11,6 +11,10 @@ const props = defineProps({
     type: Object,
     default: {},
   },
+  DataMotels: {
+    type: Object,
+    default: {},
+  },
 });
 const DeepData = cloneDeep(props.data);
 const JsonData = JSON.parse(JSON.stringify(DeepData));
@@ -65,8 +69,11 @@ const onHandleSave = async (item) => {
   if (item.roomId == null) {
     return toast.error("Nhà trọ đã bị xoá !");
   }
-  if (Number(item.currentWaterIndex) - Number(item.prevWaterIndex) < 0) {
-    return toast.error(" Giá nước không phải là số âm!");
+  if (
+    Number(item.currentElectricityIndex) - Number(item.prevElectricityIndex) <
+    0
+  ) {
+    return toast.error("Số điện không phải là số âm!");
   }
   const payload = {
     monthYear: item.monthYear,
@@ -98,7 +105,7 @@ const onChangeElec = (item) => {
     <v-data-table :headers="tableHeaders" :items="dataTable" class="s-table">
       <template #item="{ item, index }">
         <tr class="tw-relative tw-group">
-          <td>{{ item?.roomId?.motelId?.name }}</td>
+          <td>{{ JSON.parse(JSON.stringify(props.DataMotels))[0]?.title }}</td>
           <td>{{ item?.roomId?.name }}</td>
 
           <td>

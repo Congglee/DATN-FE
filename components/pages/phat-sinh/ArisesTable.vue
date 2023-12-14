@@ -44,6 +44,7 @@ const tableHeaders = ref([
     title: "Ghi chú",
     key: "note",
     sortable: true,
+    width: "600px",
   },
   {
     title: "Chi phí",
@@ -121,7 +122,6 @@ const onHandleRemove = async (item) => {
         <tr class="tw-relative tw-group">
           <td class="tw-text-center">{{ index + 1 }}</td>
           <td>{{ item?.roomId?.name }}</td>
-
           <td>
             <g-input type="text" v-model="item.note"> </g-input>
           </td>
