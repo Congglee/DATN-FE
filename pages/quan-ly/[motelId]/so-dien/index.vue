@@ -139,7 +139,7 @@ const searchRoom = async () => {
 <template>
   <div class="tw-flex tw-items-end tw-gap-x-3 tw-mb-3">
     <g-date-picker
-      class=""
+      class="tw-pt-4"
       label="Theo tháng"
       :placeholder="formatMonthYear(Date())"
       @vnode-updated="onHandleDate($event)"
