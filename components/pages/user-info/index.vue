@@ -54,45 +54,32 @@ const { values, errors, defineComponentBinds, handleSubmit } = useForm({
         }
       )
       .required("Số điện là trường bắt buộc"),
-    date_of_birth: yup
-      .date()
-      .required("Ngày sinh là trường bắt buộc")
-      .test(
-        "age",
-        "Bạn quá nhỏ tuổi (Chưa đủ tuổi quản lý trọ >=18)",
-        function (birthdate) {
-          const cutoff = new Date();
-          cutoff.setFullYear(cutoff.getFullYear() - 18);
-          return birthdate <= cutoff;
-        }
-      ),
-    date_of_identify_code: yup
-      .date()
-      .required("Ngày đăng ký CCCD/CMND")
-      .test(
-        "date_of_identify_code",
-        "Ngày đăng ký CCCD/CMND không được lớn hơn ngày hiện tại",
-        function (date) {
-          if (date !== undefined) {
-            const today = new Date();
-            return date <= today;
-          }
-        }
-      ),
-    address: yup
-      .string()
-      .strict(true)
-      .trim("Địa chỉ không được bỏ trống")
-      .min(3, "Tối thiểu 3 ký tự")
-      .max(128, "Tối đa 128 ký tự")
-      .required("Địa chỉ là trường bắt buộc"),
+    date_of_birth: yup.date("").nullable(true),
+    // .required("Ngày sinh là trường bắt buộc")
+    // .test(
+    //   "age",
+    //   "Bạn quá nhỏ tuổi (Chưa đủ tuổi quản lý trọ >=18)",
+    //   function (birthdate) {
+    //     const cutoff = new Date();
+    //     cutoff.setFullYear(cutoff.getFullYear() - 18);
+    //     return birthdate <= cutoff;
+    //   }
+    // ),
+    date_of_identify_code: yup.date("").nullable(true),
+    // .required("Ngày đăng ký CCCD/CMND")
+    // .test(
+    //   "date_of_identify_code",
+    //   "Ngày đăng ký CCCD/CMND không được lớn hơn ngày hiện tại",
+    //   function (date) {
+    //     if (date !== undefined) {
+    //       const today = new Date();
+    //       return date <= today;
+    //     }
+    //   }
+    // ),
+    address: yup.string(),
     avatar: yup.string(),
-    address_issue_identify_code: yup
-      .string()
-      .trim("Nơi cấp CCCD/CMND không phải là khoảng trống")
-      .min(3, "Tối thiểu 3 ký tự")
-      .max(128, "Tối đa 128 ký tự")
-      .strict(true),
+    address_issue_identify_code: yup.string(),
   }),
   initialValues: props.data,
 });
@@ -165,7 +152,10 @@ const handleUpdateUser = handleSubmit(async () => {
     sendData.avatar = props.data.avatar;
   }
   try {
-    const res = await userStore.updateUser(sendData, props.data._id);
+    const res = await userStore.updateUser(
+      removeEmptyFields(sendData),
+      props.data._id
+    );
     if (res.data) {
       fetchDataUserEventBus.emit();
       loadding.value = false;

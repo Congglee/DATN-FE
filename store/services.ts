@@ -16,10 +16,10 @@ export const useServiceStore = defineStore({
       });
       this.waterPrice = res.data.services.find(
         (el: any) => el.name === "Nước"
-      ).price;
+      )?.price;
       this.electricityPrice = res.data.services.find(
         (el: any) => el.name === "Điện"
-      ).price;
+      )?.price;
       return res;
     },
     async getOneService(id: string) {
