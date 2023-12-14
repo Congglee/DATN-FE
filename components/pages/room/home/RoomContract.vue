@@ -19,8 +19,10 @@ const contractStore = useContractStore();
 const { values, errors, defineComponentBinds, handleSubmit } = useForm({
   validationSchema: yup.object({
     ContractNo: yup.string(),
-    ContractDate: yup.string().required(),
-    DateStartContract: yup.string().required(),
+    ContractDate: yup.string().required("Ngày ký kết không được để trống"),
+    DateStartContract: yup
+      .string()
+      .required("Ngày bắt đầu không được để trống"),
   }),
 });
 

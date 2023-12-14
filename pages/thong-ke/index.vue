@@ -51,10 +51,10 @@ const handleBack = () => {
           :revenueData="revenueData"
         />
       </div>
-      <!-- <div class="tw-p-10 tw-bg-white tw-rounded-xl">
+      <div class="tw-p-10 tw-bg-white tw-rounded-xl">
         <CompareIncomePieChart :roomData="roomData" />
       </div>
-      <div class="tw-p-10 tw-bg-white tw-rounded-xl">
+      <!-- <div class="tw-p-10 tw-bg-white tw-rounded-xl">
         <RoomStatusPieChart :roomData="roomData" />
       </div> -->
     </div>

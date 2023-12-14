@@ -26,8 +26,8 @@ const memberStore = useMemberStore();
 
 const { values, errors, defineComponentBinds, handleSubmit } = useForm({
   validationSchema: yup.object({
-    name: yup.string().trim().required(),
-    phone: yup.string().length(10),
+    name: yup.string().trim().required("Tên không được để trống"),
+    phone: yup.string().length(10, 'Độ dài số điện thoại phải là 10 chữ số'),
     // gender: yup.string(),
     // vehicle_number: yup.string(),
     // identify_code: yup.string(),
