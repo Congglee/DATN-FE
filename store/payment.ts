@@ -37,5 +37,12 @@ export const usePaymentStore = defineStore({
       });
       return res;
     },
+    async getAllPaymentMethodByGuest(params: any) {
+      const res = await useFetchGuestData(`${PAYMENT.GET_ALL_PAYMENT}`, {
+        method: "GET",
+        params: params,
+      });
+      return res;
+    },
   },
 });
