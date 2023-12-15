@@ -79,6 +79,7 @@ const { values, errors, defineComponentBinds, handleSubmit } = useForm({
     // ),
     address: yup.string(),
     avatar: yup.string(),
+    identify_code: yup.string(),
     address_issue_identify_code: yup.string(),
   }),
   initialValues: props.data,
@@ -92,6 +93,7 @@ const validateFormData = reactive({
   address: defineComponentBinds("address"),
   email: defineComponentBinds("email"),
   avatar: defineComponentBinds("avatar"),
+  identify_code: defineComponentBinds("identify_code"),
   address_issue_identify_code: defineComponentBinds(
     "address_issue_identify_code"
   ),
@@ -156,10 +158,20 @@ const handleUpdateUser = handleSubmit(async () => {
       removeEmptyFields(sendData),
       props.data._id
     );
-    if (res.data) {
+    if (res.data !== null) {
+      // console.log(res);
       fetchDataUserEventBus.emit();
       loadding.value = false;
       toast.success("Cập nhật thông tin người dùng thành công !!!");
+    }
+    if (res.error !== null) {
+      loadding.value = false;
+      // console.log(res.error.data.message);
+      for (const key in res.error.data.message) {
+        if (Object.prototype.hasOwnProperty.call(res.error.data.message, key)) {
+          toast.error(`${res.error.data.message[key]}`);
+        }
+      }
     }
   } catch (error) {
     loadding.value = false;
@@ -245,7 +257,15 @@ const onHandleAvt = (e) => {
             />
           </div>
         </div>
-        <g-date-picker
+        <g-input
+          class="tw-pt-4"
+          label="Số CCCD/CMND"
+          placeholder="Số CCCD/CMND 9 hoặc 12 số"
+          v-bind="validateFormData.identify_code"
+          :error="errors.identify_code"
+        >
+        </g-input
+        ><g-date-picker
           v-bind="validateFormData.date_of_identify_code"
           :error="errors.date_of_identify_code"
           class="tw-pt-4"

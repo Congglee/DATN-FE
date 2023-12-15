@@ -44,14 +44,21 @@ const handleSendMails = handleSubmit(async () => {
   }
   loading.value = true;
   const res = await mailsStore.createMails(payload);
-  if (res.data) {
+  if (res.data !== null) {
     fetchListMailsEventBus.emit();
     toast.success("Gửi mail thành công!");
     loading.value = false;
     emit("close");
-  } else {
+  }
+  if (res.error !== null) {
+    // console.log(res.error.data.message);
     loading.value = false;
     toast.error("Lỗi gửi mail");
+    for (const key in res.error.data.message) {
+      if (Object.prototype.hasOwnProperty.call(res.error.data.message, key)) {
+        toast.error(`${res.error.data.message[key]}`);
+      }
+    }
   }
 });
 </script>
