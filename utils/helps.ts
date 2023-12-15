@@ -2,12 +2,14 @@ import dayjs from "dayjs";
 import avatarDefault from "@/assets/images/defaultAvt.png";
 import { useToast } from "vue-toastification";
 
-export const convertDateType = (date: Date, format: string) => {
-  if (date === undefined) {
-    return undefined;
+export const convertDateType = (date: any, format:string) => {
+  if(!date) return undefined;
+  if(dayjs(date).format(format) === date) {
+    return date;
   }
+
   return dayjs(date).format(format);
-};
+}
 
 export const getDifferenceObject = (oldObj: any, newObj: any) => {
   const keys = Object.keys(oldObj);
@@ -144,4 +146,28 @@ export const convertMonthYear = (ngayThang: string) => {
   } else {
     return null;
   }
+};
+
+export const searchAndSortByName = (data: any, searchTerm: string) => {
+  searchTerm = searchTerm.toLowerCase();
+
+  // Sắp xếp mảng sao cho các phần tử thỏa mãn điều kiện tìm kiếm xuất hiện đầu tiên
+  data.sort((a: any, b: any) => {
+    const nameA = a.roomId.name.toLowerCase();
+    const nameB = b.roomId.name.toLowerCase();
+
+    // So sánh vị trí của searchTerm trong nameA và nameB
+    const isSearchTermInA = nameA.includes(searchTerm);
+    const isSearchTermInB = nameB.includes(searchTerm);
+
+    if (isSearchTermInA && !isSearchTermInB) {
+      return -1;
+    } else if (!isSearchTermInA && isSearchTermInB) {
+      return 1;
+    } else {
+      return 0;
+    }
+  });
+
+  return data;
 };

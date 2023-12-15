@@ -10,7 +10,8 @@ import {
   VCardText,
   VWindow,
   VWindowItem,
-} from "vuetify/lib/components";``
+} from "vuetify/lib/components";
+``;
 import ListMemberTable from "@/components/pages/room/home/ListMemberTable.vue";
 import ListServiceTable from "@/components/pages/room/home/ListServiceTable.vue";
 import RoomContract from "~/components/pages/room/home/RoomContract.vue";
@@ -37,6 +38,7 @@ const isShowAddMemberInRoom = ref(false);
 const isShowModalChangeRoom = ref(false);
 const isFullMember = ref(false);
 const isShowModalConfirmLiquidate = ref(false);
+const isShowModalConfirmReturnRoom = ref(false);
 const roomFactorList = ref([
   {
     _id: "1",
@@ -50,7 +52,7 @@ const roomFactorList = ref([
   },
   {
     _id: "3",
-    title: "Tài sản",
+    title: "Nội thất",
     value: "ASSET",
   },
   {
@@ -99,6 +101,15 @@ const handleCreateLiquidateBill = async () => {
   }
 };
 
+const handleReturnRoom = async () => {
+  const res = await roomStore.returnRoom(route.params.roomId);
+  if (res.data) {
+    isShowModalConfirmReturnRoom.value = false;
+    toast.success("Trả phòng trọ thành công");
+    useRouter().back();
+  }
+};
+
 fetchRoomEventBus.on(() => {
   getRoomDetail();
 });
@@ -126,10 +137,10 @@ fetchRoomEventBus.on(() => {
             <span class="large-text">{{ room.status }}</span>
           </div>
           <IconBorder />
-            <div class="tw-flex tw-flex-col">
-              <span class="small-text">Mã phòng</span>
-              <span class="large-text">{{ room.verify_code }}</span>
-            </div>
+          <div class="tw-flex tw-flex-col">
+            <span class="small-text">Mã phòng</span>
+            <span class="large-text">{{ room.verify_code }}</span>
+          </div>
         </div>
       </div>
       <div class="tw-mt-6">
@@ -165,6 +176,12 @@ fetchRoomEventBus.on(() => {
             <span class="tw-text-[14px] tw-font-semibold">
               Thanh lý phòng trọ
             </span>
+          </g-button>
+          <g-button
+            variant="filled"
+            @click="isShowModalConfirmReturnRoom = true"
+          >
+            <span class="tw-text-[14px] tw-font-semibold"> Trả phòng </span>
           </g-button>
         </div>
       </div>
@@ -217,6 +234,13 @@ fetchRoomEventBus.on(() => {
     description="Hành động này không thể hoàn tác!"
     @ok="handleCreateLiquidateBill"
   ></g-modal-confirm>
+  <g-modal-confirm
+    v-model="isShowModalConfirmReturnRoom"
+    title="Trả phòng?"
+    description="Hành động này không thể hoàn tác!"
+    @ok="handleReturnRoom"
+  >
+  </g-modal-confirm>
 </template>
 <style scoped>
 @import url("./index.scss");

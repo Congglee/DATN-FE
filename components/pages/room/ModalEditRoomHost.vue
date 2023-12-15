@@ -32,9 +32,16 @@ const contractStore = useContractStore();
 
 const { values, errors, defineComponentBinds, handleSubmit } = useForm({
   validationSchema: yup.object({
-    name: yup.string().trim(),
-    email: yup.string().email().trim(),
-    phone: yup.string().trim().length(10),
+    name: yup.string().trim().required("Tên không được để trống"),
+    email: yup
+      .string()
+      .email("Định dạng email chưa hợp lệ")
+      .trim()
+      .required("Email không được để trống"),
+    phone: yup
+      .string()
+      .trim()
+      .length(10, "Độ dài số điện thoại phải là 10 chữ số"),
     date_start: yup.string().trim(),
     room_deposit_amount: yup
       .number()
@@ -107,7 +114,9 @@ const handleUpdateRoomHost = handleSubmit(async () => {
   }
   if (res.error) {
     loading.value = false;
-    toast.error(res.error.data.message);
+    if (res.error.data.message?.email) {
+      toast.error(res.error.data.message?.email);
+    }
   }
 });
 </script>

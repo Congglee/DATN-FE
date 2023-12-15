@@ -15,7 +15,6 @@ const props = defineProps({
   },
 });
 
-
 //composable
 const toast = useToast();
 const route = useRoute();
@@ -53,8 +52,14 @@ const { values, errors, defineComponentBinds, handleSubmit } = useForm({
         }
       )
       .required("Số điện thoại là trường bắt buộc"),
-    bookingDate: yup.string().trim().required("Ngày đặt cọc"),
-    expectedArrivalDate: yup.string().trim().required("Ngày bắt đầu vào ở"),
+    bookingDate: yup
+      .string()
+      .trim()
+      .required("Ngày đặt cọc không được để trống"),
+    expectedArrivalDate: yup
+      .string()
+      .trim()
+      .required("Ngày bắt đầu vào ở không được để trống"),
   }),
   initialValues: {
     name: props.roomInfo.name || "",
@@ -93,6 +98,9 @@ getAllRoom();
 
 const handleUpdateDepositInfo = handleSubmit(async () => {
   const payload = { ...values, note: note.value, roomId: room.value._id };
+  payload.bookingDate = convertDateType(validateFormData.bookingDate.modelValue, 'DD/MM/YYYY')
+  payload.expectedArrivalDate = convertDateType(validateFormData.expectedArrivalDate.modelValue, 'DD/MM/YYYY')
+  console.log(payload)
   const res = await depositsStore.updateDeposits(props.roomInfo._id, payload);
   if (res.data) {
     toast.success("Cập nhật thông tin cọc phòng thành công");
@@ -151,12 +159,14 @@ const handleUpdateDepositInfo = handleSubmit(async () => {
         <g-date-picker
           class="tw-pt-4"
           label="Ngày đặt cọc"
+          required
           v-bind="validateFormData.bookingDate"
           :error="errors.bookingDate"
         ></g-date-picker>
         <g-date-picker
           class="tw-pt-4"
           label="Ngày bắt đầu ở"
+          required
           v-bind="validateFormData.expectedArrivalDate"
           :error="errors.expectedArrivalDate"
         ></g-date-picker>

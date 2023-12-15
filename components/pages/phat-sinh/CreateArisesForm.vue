@@ -9,31 +9,23 @@ import { useRoomStore } from "@/store/room";
 import { convertMonthYear, formatMonthYear } from "~/utils/helps";
 import IconRequired from "@/assets/svg/required.svg";
 
-import { useUserStore } from "~/store/user";
-
 //props
 
 //composable
 const toast = useToast();
 const route = useRoute();
-const idMotel = route.params?.motelId;
 const fetchListArisesEventBus = useEventBus(`fetch-list-arises`);
 
 //emit
 
-const emit = defineEmits("close");
+const emit = defineEmits(["close", "dateCreate"]);
 
 //store
-const userStore = useUserStore();
 const roomStore = useRoomStore();
 const arisesStore = useArisesStore();
-const owner = userStore.user;
-
 //state
-const listMotel = ref(null);
 const listRoom = ref([]);
-const roomId = ref(null);
-
+const err_msg_room = ref("");
 const { values, errors, defineComponentBinds, handleSubmit } = useForm({
   validationSchema: yup.object({
     monthYear: yup
@@ -75,27 +67,36 @@ const getAllRoom = async () => {
 getAllRoom();
 
 const handleCreateArises = handleSubmit(async () => {
+  let check = true;
   loading.value = true;
-  if (formData.roomId == "") {
+  if (formData.roomId == "" || formData?.roomId?._id == undefined) {
     loading.value = false;
-    return toast.error("Vui lòng chọn phòng");
+    err_msg_room.value = "Lựa chọn phòng phát sinh chi phí";
+    check = false;
+  } else {
+    err_msg_room.value = "";
   }
-  if (formData.note.trim() == "") {
-    loading.value = false;
-    return toast.error("Nội dung chi phí không được bỏ trống");
-  }
-  const payload = {
-    ...values,
-    monthYear: convertDateType(values.monthYear, "MM/YYYY"),
-    note: formData.note,
-    roomId: formData.roomId._id,
-  };
-  const res = await arisesStore.createArises(payload);
-  if (res.data) {
-    toast.success("Tạo chi phí phát sinh thành công!");
-    emit("close");
-    loading.value = false;
-    fetchListArisesEventBus.emit();
+  // if (formData.note.trim() == "") {
+  //   loading.value = false;
+  //   check = false;
+  //   toast.error("Nội dung chi phí không được bỏ trống");
+  // }
+
+  if (check == true) {
+    const payload = {
+      ...values,
+      monthYear: convertDateType(values.monthYear, "MM/YYYY"),
+      note: formData.note,
+      roomId: formData?.roomId?._id,
+    };
+    const res = await arisesStore.createArises(removeEmptyFields(payload));
+    if (res.data) {
+      toast.success("Tạo chi phí phát sinh thành công!");
+      emit("dateCreate", values.monthYear);
+      emit("close");
+      loading.value = false;
+      fetchListArisesEventBus.emit();
+    }
   }
 });
 </script>
@@ -114,6 +115,7 @@ const handleCreateArises = handleSubmit(async () => {
         Chi phí phát sinh
       </h5>
     </div>
+
     <div class="modal-change-information__form">
       <div class="tw-mt-6 tw-flex-col tw-gap-y-4">
         <g-autocomplete
@@ -121,6 +123,7 @@ const handleCreateArises = handleSubmit(async () => {
           item-title="name"
           label="Chọn phòng"
           v-model="formData.roomId"
+          :error="err_msg_room"
           required
         >
         </g-autocomplete>
@@ -142,10 +145,10 @@ const handleCreateArises = handleSubmit(async () => {
         <div class="tw-gap-y-1 tw-grid tw-pt-4">
           <div class="tw-flex tw-gap-x-1">
             <p>Ghi chú</p>
-            <IconRequired />
+            <!-- <IconRequired /> -->
           </div>
           <textarea
-            placeholder="Nội dung ...."
+            placeholder="Ghi chú ..."
             v-model="formData.note"
             class="tw-resize-none tw-rounded-[10px] tw-bg-white tw-outline tw-p-3 !tw-outline-[#c0c0c0] tw-outline-[1px] focus:!tw-outline-[#f88125] tw-w-full tw-h-[158px] focus:!tw-shadow-[0px_0px_0px_2px_rgba(248,129,37,0.2)]"
           ></textarea>
@@ -161,9 +164,7 @@ const handleCreateArises = handleSubmit(async () => {
         </template>
         Hủy
       </g-button>
-      <g-button @click="handleCreateArises" :loading="loading"
-        >Cập nhật</g-button
-      >
+      <g-button @click="handleCreateArises" :loading="loading">Thêm</g-button>
     </div>
   </div>
 </template>

@@ -68,8 +68,15 @@ const onHandleDate = async (event) => {
 };
 fetchListArisesEventBus.on(() => {
   dataArises.value = null;
-  getAllArises(convertDateType(Date(), "MM/YYYY"));
+  if (DateFilter._value == null) {
+    getAllArises(convertDateType(Date(), "MM/YYYY"));
+  } else {
+    getAllArises(convertDateType(DateFilter._value, "MM/YYYY"));
+  }
 });
+const handleEmitDateCreate = (e) => {
+  DateFilter.value = e;
+};
 </script>
 <template>
   <header class="tw-grid tw-grid-cols-4 tw-items-end tw-gap-x-3">
@@ -92,6 +99,9 @@ fetchListArisesEventBus.on(() => {
     <ArisesTable v-if="dataArises !== null" :data="dataArises" />
   </section>
   <v-dialog v-model="isDisplayCreateArises" width="544">
-    <CreateArisesForm @close="isDisplayCreateArises = false" />
+    <CreateArisesForm
+      @dateCreate="handleEmitDateCreate"
+      @close="isDisplayCreateArises = false"
+    />
   </v-dialog>
 </template>

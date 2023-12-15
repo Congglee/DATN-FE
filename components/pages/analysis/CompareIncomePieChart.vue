@@ -1,5 +1,6 @@
 <script setup>
 import { Doughnut } from "vue-chartjs";
+import { useStatisticalStore } from "@/store/statistical";
 const data = {
   labels: ["Dịch vụ", "Tiền điện", "Tiền nước", "Tiền phòng"],
   datasets: [
@@ -9,7 +10,14 @@ const data = {
   ],
 };
 
-const options = {};
+const statStore = useStatisticalStore();
+
+const getStat = async () => {
+  const res = await statStore.getStatistical();
+  if (res.data) {
+    console.log(res.data);
+  }
+};
 </script>
 <template>
   <div class="tw-max-h-[300px]">

@@ -28,15 +28,15 @@ const memberStore = useMemberStore();
 
 const { values, errors, defineComponentBinds, handleSubmit } = useForm({
   validationSchema: yup.object({
-    name: yup.string().trim().required(),
-    email: yup.string().email().trim().required(),
-    phone: yup.string().trim().required().length(10),
-    date_start: yup.string().trim().required(),
+    name: yup.string().trim().required("Tên không được để trống"),
+    email: yup.string().email("Định dạng email chưa hợp lệ").trim().required("Email không được để trống"),
+    phone: yup.string().trim().required("Số điện thoại không được để trống").length(10, 'Độ dài số điện thoại phải là 10 chữ số'),
+    date_start: yup.string().trim().required("Ngày bắt đầu không được để trống"),
     room_deposit_amount: yup
       .number()
       .typeError("Tiền cọc phải là số")
       .min(0, "Tiền cọc không được âm")
-      .required(),
+      .required("Tiền cọc không được để trống"),
     vehicle_number: yup.string().trim(),
     identify_code: yup.string().trim(),
     date_of_identify_code: yup.string(),
