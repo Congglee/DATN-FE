@@ -36,6 +36,7 @@ const headers = [
     title: "Kích hoạt",
     sortable: false,
     key: "activeService",
+    width: '200px'
   },
 ];
 
