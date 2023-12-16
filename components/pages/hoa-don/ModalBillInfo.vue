@@ -82,12 +82,11 @@ async function handleExport() {
 }
 
 const generateBillPdf = async () => {
-  const res = await billStore.generateBillPdf(props.billId)
-  if(res.data){
-    res.data.download = 'hoa-don.pdf'
+  const res = await billStore.generateBillPdf(props.billId);
+  if (res.data) {
+    res.data.download = "hoa-don.pdf";
   }
-}
-
+};
 </script>
 <template>
   <div v-if="!billInfo"></div>
@@ -125,9 +124,8 @@ const generateBillPdf = async () => {
           :value="formatCurrency(item.price)"
         />
       </span>
-
       <BillItemField
-        v-if="billInfo.roomElectricityUsed"
+        v-if="billInfo.roomElectricityUsed.electricityUsed !== 0"
         :label="
           'Số điện đã sử dụng: ' +
           billInfo.roomElectricityUsed?.currentElectricityIndex +
@@ -144,7 +142,7 @@ const generateBillPdf = async () => {
         "
       />
       <BillItemField
-        v-if="billInfo.roomWaterUsed"
+        v-if="billInfo.roomWaterUsed.waterUsed !== 0"
         :label="
           'Số nước đã sử dụng: ' +
           billInfo.roomWaterUsed?.currentWaterIndex +

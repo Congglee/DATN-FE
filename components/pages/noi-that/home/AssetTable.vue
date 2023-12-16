@@ -52,7 +52,7 @@ const isShowConfirmDeleteAsset = ref(false);
 const getAllAssets = async () => {
   const res = await assetStore.getAllAssets();
   if (res.data) {
-    assets.value = res.data.listInterior;
+    assets.value = res.data.Interiors;
   }
 };
 

@@ -23,11 +23,13 @@ const electricityPrice = computed(() => serviceStore.electricityPrice);
 const waterPrice = computed(() => serviceStore.waterPrice);
 
 const billInfo = ref(null);
+const billDetail = ref(null);
 
 const getBillInfo = async () => {
   const res = await billStore.getOneBill(props.billId);
   if (res.data) {
     billInfo.value = res.data.billData;
+    billDetail.value = res.data.detailBill;
   }
 };
 
@@ -72,7 +74,6 @@ getBillInfo();
           :value="formatCurrency(item.price)"
         />
       </span>
-
       <BillItemField
         v-if="billInfo.roomElectricityUsed"
         :label="

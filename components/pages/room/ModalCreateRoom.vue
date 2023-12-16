@@ -93,9 +93,7 @@ const createRoom = handleSubmit(async () => {
       >
         <IconClose />
       </button>
-      <h5
-        class="tw-text-center tw-text-xl tw-leading-6 tw-font-extrabold tw-mb-3 tw-mt-3"
-      >
+      <h5 class="tw-text-center tw-text-xl tw-leading-6 tw-font-extrabold tw-mb-3 tw-mt-3">
         Thêm phòng trọ mới
       </h5>
     </div>
