@@ -33,7 +33,7 @@ const handleLogout = () => {
       >
       <span
         class="tw-text-[20px] tw-font-extrabold tw-uppercase tw-text-[#f88125]"
-        >Poly Home Rent</span
+        >Poly Home Rental</span
       >
     </div>
     <NuxtLink to="/quan-ly">

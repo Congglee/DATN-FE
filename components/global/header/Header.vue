@@ -10,7 +10,6 @@ const getUser = async () => {
     const res = await userStore.getOneUser();
     if (res.data) {
       userData.value = res.data.message;
-      // console.log(res.data.message);
     }
   } catch (error) {
     throw error;
@@ -44,7 +43,7 @@ const handleLogout = () => {
           <h5
             class="tw-text-[#f88125] max-lg:tw-py-3 tw-font-bold tw-text-center"
           >
-            POLY HOME RENT
+            POLY HOME RENTAL
           </h5>
         </div>
       </aside>

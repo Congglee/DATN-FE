@@ -15,7 +15,6 @@ const roomStore = useRoomStore();
 const getStat = async () => {
   const res = await roomStore.getRoomStatic();
   if (res.data) {
-    // console.log(res.data);
   }
 };
 

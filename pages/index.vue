@@ -29,7 +29,7 @@ getOwner();
           </a>
           <h3 class="tw-py-7 max-lg:tw-py-3 tw-font-bold tw-text-center">
             QUẢN LÝ PHÒNG TRỌ <br />
-            <span class="tw-text-[#f88125]"> POLY HOME RENT</span>
+            <span class="tw-text-[#f88125]"> POLY HOME RENTAL</span>
           </h3>
         </aside>
         <aside

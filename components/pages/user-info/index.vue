@@ -159,14 +159,12 @@ const handleUpdateUser = handleSubmit(async () => {
       props.data._id
     );
     if (res.data !== null) {
-      // console.log(res);
       fetchDataUserEventBus.emit();
       loadding.value = false;
       toast.success("Cập nhật thông tin người dùng thành công !!!");
     }
     if (res.error !== null) {
       loadding.value = false;
-      // console.log(res.error.data.message);
       for (const key in res.error.data.message) {
         if (Object.prototype.hasOwnProperty.call(res.error.data.message, key)) {
           toast.error(`${res.error.data.message[key]}`);

@@ -100,7 +100,6 @@ const handleUpdateDepositInfo = handleSubmit(async () => {
   const payload = { ...values, note: note.value, roomId: room.value._id };
   payload.bookingDate = convertDateType(validateFormData.bookingDate.modelValue, 'DD/MM/YYYY')
   payload.expectedArrivalDate = convertDateType(validateFormData.expectedArrivalDate.modelValue, 'DD/MM/YYYY')
-  console.log(payload)
   const res = await depositsStore.updateDeposits(props.roomInfo._id, payload);
   if (res.data) {
     toast.success("Cập nhật thông tin cọc phòng thành công");
