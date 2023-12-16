@@ -97,15 +97,20 @@ const updateService = handleSubmit(async () => {
   };
   try {
     const res = await serviceStore.updateService(payload);
-    if (res.data) {
+    if (res.data !== null) {
       fetchListServiceEventBus.emit();
       toast.success("Cập nhật dịch vụ thành công!");
       loading.value = false;
       emit("close");
     }
-    if (res.error) {
+    if (res.error !== null) {
       loading.value = false;
-      toast.error(res.error.data.message);
+      // console.log(res.error.data.message);
+      for (const key in res.error.data.message) {
+        if (Object.prototype.hasOwnProperty.call(res.error.data.message, key)) {
+          toast.error(`${res.error.data.message[key]}`);
+        }
+      }
     }
   } catch (error) {
     loading.value = false;

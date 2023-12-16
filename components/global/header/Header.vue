@@ -10,7 +10,7 @@ const getUser = async () => {
     const res = await userStore.getOneUser();
     if (res.data) {
       userData.value = res.data.message;
-      console.log(res.data.message);
+      // console.log(res.data.message);
     }
   } catch (error) {
     throw error;
