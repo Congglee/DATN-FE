@@ -23,11 +23,6 @@ const headers = [
     key: "roomName",
   },
   {
-    title: "Họ và tên chủ phòng",
-    sortable: false,
-    key: "fullName",
-  },
-  {
     title: "Ngày trả phòng",
     sortable: false,
     key: "date",

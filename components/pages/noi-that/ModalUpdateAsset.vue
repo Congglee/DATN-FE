@@ -31,7 +31,11 @@ const props = defineProps({
 const { values, errors, defineComponentBinds, handleSubmit } = useForm({
   validationSchema: yup.object({
     name: yup.string().required("Tên không được để trống"),
-    price: yup.number().required("Giá không được để trống").positive("Giá phải lớn hơn 0").typeError("Giá phải là số"),
+    price: yup
+      .number()
+      .required("Giá không được để trống")
+      .positive("Giá phải lớn hơn 0")
+      .typeError("Giá phải là số"),
     description: yup.string(),
   }),
   initialValues: {
@@ -52,6 +56,7 @@ const handleAddAsset = handleSubmit(async () => {
     name: validateFormData.name.modelValue,
     price: validateFormData.price.modelValue,
     note: validateFormData.description.modelValue,
+    motelId: route.params.motelId,
   };
   const res = await assetStore.updateAsset(props.assetInfo._id, payload);
   if (res.data) {

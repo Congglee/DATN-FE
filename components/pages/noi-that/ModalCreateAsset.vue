@@ -23,7 +23,11 @@ const assetStore = useAssetStore();
 const { values, errors, defineComponentBinds, handleSubmit } = useForm({
   validationSchema: yup.object({
     name: yup.string().required("Tên không được bỏ trống"),
-    price: yup.number().required("Giá không được để trống").positive("Giá phải lớn hơn 0").typeError("Giá phải là số"),
+    price: yup
+      .number()
+      .required("Giá không được để trống")
+      .positive("Giá phải lớn hơn 0")
+      .typeError("Giá phải là số"),
     description: yup.string(),
   }),
   //  .positive("Số khách tối đa phải lớn hơn 0")
@@ -41,6 +45,7 @@ const handleAddAsset = handleSubmit(async () => {
     name: validateFormData.name.modelValue,
     price: validateFormData.price.modelValue,
     note: validateFormData.description.modelValue,
+    motelId: route.params.motelId,
   };
   const res = await assetStore.createNewAsset(payload);
   if (res.data) {

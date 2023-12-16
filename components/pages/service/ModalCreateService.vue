@@ -88,6 +88,7 @@ const createService = handleSubmit(async () => {
     ...values,
     isActive: values.isActive == "Hoạt động" ? true : false,
     note: String(note?._value),
+    motelId: route.params.motelId,
   };
   const res = await serviceStore.createService(payload);
   if (res.data !== null) {

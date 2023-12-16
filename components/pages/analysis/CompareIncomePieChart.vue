@@ -1,6 +1,6 @@
 <script setup>
 import { Doughnut } from "vue-chartjs";
-import { useStatisticalStore } from "@/store/statistical";
+import { useRoomStore } from "@/store/room";
 const data = {
   labels: ["Dịch vụ", "Tiền điện", "Tiền nước", "Tiền phòng"],
   datasets: [
@@ -10,14 +10,16 @@ const data = {
   ],
 };
 
-const statStore = useStatisticalStore();
+const roomStore = useRoomStore();
 
 const getStat = async () => {
-  const res = await statStore.getStatistical();
+  const res = await roomStore.getRoomStatic();
   if (res.data) {
-    console.log(res.data);
+    // console.log(res.data);
   }
 };
+
+getStat();
 </script>
 <template>
   <div class="tw-max-h-[300px]">

@@ -14,6 +14,7 @@ const props = defineProps({
 });
 //composable
 const toast = useToast();
+const route = useRoute();
 const fetchListServiceEventBus = useEventBus(`fetch-list-service`);
 //emit
 const emit = defineEmits("close");
@@ -92,6 +93,7 @@ const updateService = handleSubmit(async () => {
       ...values,
       isActive: values.isActive == "Hoạt động" ? true : false,
       note: note._value.trim(),
+      motelId: route.params.motelId,
     },
     _id: props.data._id,
   };
