@@ -14,8 +14,6 @@ const props = defineProps({
 const route = useRoute();
 const toast = useToast();
 
-console.log(props.item);
-
 const getListNotiEventBus = useEventBus(`get-list-noti`);
 
 const notificationStore = useNotificationStore();

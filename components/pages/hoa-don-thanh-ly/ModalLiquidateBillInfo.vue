@@ -59,8 +59,8 @@ getBillInfo();
     </div>
     <div class="modal-change-information__form tw-flex tw-flex-col tw-gap-y-3">
       <BillItemField
-        label="Tên chủ phòng"
-        :value="billInfo.roomId?.motelId?.name"
+        label="Tên phòng"
+        :value="billDetail.roomName"
       />
       <hr class="tw-mt-3" />
       <BillItemField

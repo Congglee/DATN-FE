@@ -6,7 +6,6 @@ const props = defineProps({
   },
 });
 
-console.log(props.image);
 </script>
 <template>
   <img 

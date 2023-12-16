@@ -99,7 +99,6 @@ const handleCreateArises = handleSubmit(async () => {
     }
     if (res.error !== null) {
       loading.value = false;
-      // console.log(res.error.data.message);
       for (const key in res.error.data.message) {
         if (Object.prototype.hasOwnProperty.call(res.error.data.message, key)) {
           toast.error(`${res.error.data.message[key]}`);

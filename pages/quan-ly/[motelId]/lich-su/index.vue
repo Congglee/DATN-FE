@@ -20,7 +20,6 @@ const getAllMails = async (params) => {
     dataMails.value = res.data.mails;
   }
   if (res.error !== null) {
-    console.log(res.error);
   }
 };
 getAllMails(0);
