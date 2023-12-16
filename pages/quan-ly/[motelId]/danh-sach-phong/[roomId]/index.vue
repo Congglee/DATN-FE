@@ -108,6 +108,10 @@ const handleReturnRoom = async () => {
     toast.success("Trả phòng trọ thành công");
     useRouter().back();
   }
+  if (res.error) {
+    toast.error(res.error.data.message);
+    isShowModalConfirmReturnRoom.value = false;
+  }
 };
 
 fetchRoomEventBus.on(() => {

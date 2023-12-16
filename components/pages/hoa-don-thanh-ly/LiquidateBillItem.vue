@@ -46,7 +46,6 @@ getServiceInfo();
   <tr>
     <td class="tw-text-center">{{ index + 1 }}</td>
     <td>{{ item.roomId?.name }}</td>
-    <td>{{ item.memberId?.name }}</td>
     <td>{{ convertDateType(item?.billDate, "DD/MM/YYYY") }}</td>
     <td>{{ formatCurrency(item?.totalBill) }}</td>
     <td>{{ item.isPaid ? "Đã thanh toán" : "Chưa thanh toán" }}</td>
