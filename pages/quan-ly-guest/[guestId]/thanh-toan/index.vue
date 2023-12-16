@@ -12,7 +12,6 @@ const getAllPaymentMethod = async () => {
   const res = await paymentStore.getAllPaymentMethodByGuest();
   if (res.data) {
     paymentMethods.value = res.data.paymentMethods;
-    console.log(paymentMethods.value);
   }
 };
 

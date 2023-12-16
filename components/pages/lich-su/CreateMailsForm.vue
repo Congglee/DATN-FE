@@ -51,7 +51,6 @@ const handleSendMails = handleSubmit(async () => {
     emit("close");
   }
   if (res.error !== null) {
-    // console.log(res.error.data.message);
     loading.value = false;
     toast.error("Lỗi gửi mail");
     for (const key in res.error.data.message) {

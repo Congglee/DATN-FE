@@ -28,7 +28,6 @@ const avatarName = ref("");
 const handleFileChange = async (event: any) => {
   emit("loading", true);
   const file = event.target.files[0];
-  console.log(event.target.files[0]);
   const formData = new FormData();
   formData.append("images", file);
   const res: any = await uploadStore.uploadImages(formData);

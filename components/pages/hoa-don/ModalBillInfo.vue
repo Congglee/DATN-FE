@@ -25,6 +25,7 @@ const toast = useToast();
 const billStore = useBillStore();
 
 const billInfo = ref(null);
+const billDetail = ref(null);
 const loadingSendEmail = ref(false);
 const body = ref("");
 
@@ -32,6 +33,7 @@ const getBillInfo = async () => {
   const res = await billStore.getOneBill(props.billId);
   if (res.data) {
     billInfo.value = res.data.billData;
+    billDetail.value = res.data.detailBill;
     body.value = `<div class="ql-editor"><h2 class="ql-align-center" style="text-align: center;"><strong>Chi tiết hợp đồng</strong></h2><p><br></p><h4 class="ql-align-justify"><strong>Tên chủ trọ: </strong>${
       billInfo.value?.memberId?.name
     }</h4><p class="ql-align-justify"><strong>Thời hạn thanh toán: </strong>${convertDateType(
@@ -111,7 +113,7 @@ const generateBillPdf = async () => {
       <hr class="tw-w-[80%]" />
     </div>
     <div class="modal-change-information__form tw-flex tw-flex-col tw-gap-y-3">
-      <BillItemField label="Tên chủ trọ" :value="billInfo.memberId?.name" />
+      <BillItemField label="Tên chủ trọ" :value="billDetail.nameMember" />
       <hr class="tw-mt-3" />
       <BillItemField
         label="Tiền phòng"

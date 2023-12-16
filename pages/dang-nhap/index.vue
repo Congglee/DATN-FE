@@ -46,7 +46,7 @@ signUpSuccessEventBus.on(() => {
       </span>
       <span
         class="tw-text-[64px] tw-font-extrabold tw-leading-[78px] tw-uppercase tw-justify-end tw-text-[#f88125]"
-        >Poly Home Rent
+        >Poly Home Rental
       </span>
     </div>
   </div>

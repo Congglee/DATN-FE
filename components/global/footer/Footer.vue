@@ -139,7 +139,7 @@
     </div>
     <div class="tw-text-center tw-py-4 tw-pb">
       © 2023 QUẢN LÝ PHÒNG TRỌ
-      <NuxtLink to="/" class="tw-text-amber-600">POLY HOME RENT</NuxtLink>
+      <NuxtLink to="/" class="tw-text-amber-600">POLY HOME RENTAL</NuxtLink>
     </div>
   </footer>
 </template>

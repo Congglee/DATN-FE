@@ -13,7 +13,6 @@ const props = defineProps({
   },
 });
 
-console.log(props.item);
 
 const toast = useToast();
 const route = useRoute();
