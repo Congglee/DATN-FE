@@ -15,9 +15,12 @@ const getAllMails = async (params) => {
   const res = await mailsStore.getAllMails(
     `page=1&limit=10000000000&sortBy=createdAt&sortOrder=desc`
   );
-  if (res.data) {
+  if (res.data !== null) {
     dataMails.value = null;
     dataMails.value = res.data.mails;
+  }
+  if (res.error !== null) {
+    console.log(res.error);
   }
 };
 getAllMails(0);

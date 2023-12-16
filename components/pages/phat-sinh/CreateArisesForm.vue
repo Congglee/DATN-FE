@@ -90,12 +90,21 @@ const handleCreateArises = handleSubmit(async () => {
       roomId: formData?.roomId?._id,
     };
     const res = await arisesStore.createArises(removeEmptyFields(payload));
-    if (res.data) {
+    if (res.data !== null) {
       toast.success("Tạo chi phí phát sinh thành công!");
       emit("dateCreate", values.monthYear);
       emit("close");
       loading.value = false;
       fetchListArisesEventBus.emit();
+    }
+    if (res.error !== null) {
+      loading.value = false;
+      // console.log(res.error.data.message);
+      for (const key in res.error.data.message) {
+        if (Object.prototype.hasOwnProperty.call(res.error.data.message, key)) {
+          toast.error(`${res.error.data.message[key]}`);
+        }
+      }
     }
   }
 });
