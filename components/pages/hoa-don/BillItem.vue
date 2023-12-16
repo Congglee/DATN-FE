@@ -45,7 +45,7 @@ const handleDeleteBill = async () => {
   <tr class="tw-relative tw-group hover:tw-bg-[e3e3e3]">
     <td class="tw-text-center">{{ index + 1 }}</td>
     <td>{{ item.roomId?.name }}</td>
-    <td>{{ item.memberId?.name }}</td>
+    <!-- <td>{{ item.memberId?.name }}</td> -->
     <td>{{ formatCurrency(item.totalBill) }}</td>
     <td>{{ formatCurrency(item.paidAmount) }}</td>
     <td>{{ formatCurrency(item.totalBill - item.paidAmount) }}</td>

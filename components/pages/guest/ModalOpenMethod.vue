@@ -5,12 +5,9 @@ const props = defineProps({
     default: "",
   },
 });
-
 </script>
 <template>
-  <img 
-    alt="Home"
-    :src="image"
-    class="tw-rounded-[12px]"
-  />
+  <div class="tw-rounded-[12px] tw-p-5 tw-bg-white">
+    <img alt="Home" :src="image"  />
+  </div>
 </template>

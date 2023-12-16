@@ -29,12 +29,12 @@ const headers = [
     key: "roomName",
     width: "200px",
   },
-  {
-    title: "Họ và tên chủ",
-    sortable: false,
-    key: "fullName",
-    width: "200px",
-  },
+  // {
+  //   title: "Họ và tên chủ",
+  //   sortable: false,
+  //   key: "fullName",
+  //   width: "200px",
+  // },
   {
     title: "Tổng hóa đơn",
     sortable: false,
