@@ -61,9 +61,9 @@ getWaterInfo();
       <tr class="tw-relative tw-group hover:tw-bg-[e3e3e3]">
         <td class="tw-text-center">{{ index + 1 }}</td>
         <td>{{ item.monthYear }}</td>
-        <td>{{ item.prevElectricityIndex }}</td>
-        <td>{{ item.currentElectricityIndex }}</td>
-        <td>{{ item.electricityUsed }}</td>
+        <td>{{ item.prevWaterIndex }}</td>
+        <td>{{ item.currentWaterIndex }}</td>
+        <td>{{ item.currentWaterIndex - item.prevWaterIndex }}</td>
       </tr>
     </template>
   </v-data-table>
