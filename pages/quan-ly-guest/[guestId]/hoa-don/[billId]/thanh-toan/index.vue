@@ -12,6 +12,7 @@ const paymentMethods = ref([]);
 const isOpenModalMethod = ref(false);
 const image = ref("");
 const billDetail = ref(null);
+const total = ref(0);
 
 const getAllPaymentMethod = async () => {
   const res = await paymentStore.getAllPaymentMethodByGuest();
@@ -25,7 +26,7 @@ const getBillDetail = async () => {
   const res = await guestStore.guestRoomBill(route.params.billId);
   if (res.data) {
     billDetail.value = res.data.detailBill[0];
-    console.log(billDetail.value);
+    total.value = res.data.bill.totalBill;
   }
 };
 
@@ -110,44 +111,50 @@ const handleOpenModalMethod = (e) => {
             <div class="tw-w-full tw-justify-between tw-flex">
               <p class="tw-font-bold">Chi phí phát sinh:</p>
               <p class="tw-font-bold">
-                {{ formatCurrency(billDetail?.roomPrice) }}
+                {{ formatCurrency(billDetail?.totalPriceArise) }}
               </p>
             </div>
           </div>
         </div>
       </div>
+      <div class="tw-flex tw-justify-end tw-mt-4">
+        <p class="tw-font-bold tw-text-[20px]">
+          Tổng số tiền cần thanh toán: {{ formatCurrency(total) }}
+        </p>
+      </div>
+    </div>
+    <div class="tw-grid tw-grid-cols-3 tw-p-5 tw-gap-3">
+      <div v-for="item in paymentMethods">
+        <a
+          class="tw-block tw-rounded-lg tw-p-4 tw-shadow-indigo-100 tw-shadow-xl tw-min-w-[300px]"
+        >
+          <img
+            @click="handleOpenModalMethod(item.image)"
+            alt="Home"
+            :src="item.image"
+            class="tw-h-56 tw-w-full tw-rounded-md tw-object-cover tw-cursor-pointer"
+          />
+          <div class="tw-mt-2">
+            <dl>
+              <div>
+                <dt class="tw-sr-only">Price</dt>
+                <dd class="tw-text-sm tw-text-gray-500">
+                  {{ item.name }}
+                </dd>
+              </div>
+              <div>
+                <dd class="tw-font-bold">{{ item.type }}</dd>
+                <p>
+                  {{ item.details }}
+                </p>
+              </div>
+            </dl>
+          </div>
+        </a>
+      </div>
     </div>
   </div>
-  <!-- <div class="tw-grid tw-grid-cols-3 tw-p-5 tw-gap-3">
-    <div v-for="item in paymentMethods">
-      <a
-        class="tw-block tw-rounded-lg tw-p-4 tw-shadow-indigo-100 tw-shadow-xl tw-min-w-[300px]"
-      >
-        <img
-          @click="handleOpenModalMethod(item.image)"
-          alt="Home"
-          :src="item.image"
-          class="tw-h-56 tw-w-full tw-rounded-md tw-object-cover tw-cursor-pointer"
-        />
-        <div class="tw-mt-2">
-          <dl>
-            <div>
-              <dt class="tw-sr-only">Price</dt>
-              <dd class="tw-text-sm tw-text-gray-500">
-                {{ item.name }}
-              </dd>
-            </div>
-            <div>
-              <dd class="tw-font-bold">{{ item.type }}</dd>
-              <p>
-                {{ item.details }}
-              </p>
-            </div>
-          </dl>
-        </div>
-      </a>
-    </div>
-  </div> -->
+
   <v-dialog v-model="isOpenModalMethod" width="544">
     <ModalOpenMethod @close="isOpenModalMethod = false" :image="image" />
   </v-dialog>
