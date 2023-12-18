@@ -2,14 +2,14 @@ import dayjs from "dayjs";
 import avatarDefault from "@/assets/images/defaultAvt.png";
 import { useToast } from "vue-toastification";
 
-export const convertDateType = (date: any, format:string) => {
-  if(!date) return undefined;
-  if(dayjs(date).format(format) === date) {
+export const convertDateType = (date: any, format: string) => {
+  if (!date) return undefined;
+  if (dayjs(date).format(format) === date) {
     return date;
   }
 
   return dayjs(date).format(format);
-}
+};
 
 export const getDifferenceObject = (oldObj: any, newObj: any) => {
   const keys = Object.keys(oldObj);
@@ -170,4 +170,27 @@ export const searchAndSortByName = (data: any, searchTerm: string) => {
   });
 
   return data;
+};
+
+export const convertDateType123 = (
+  date: string,
+  format: string
+): string | undefined => {
+  if (!date) return undefined;
+
+  const inputDate = new Date(date);
+  const utcDate = new Date(
+    inputDate.getTime() + inputDate.getTimezoneOffset() * 60000
+  ); // Điều chỉnh múi giờ
+
+  const day = utcDate.getUTCDate().toString().padStart(2, "0");
+  const month = (utcDate.getUTCMonth() + 1).toString().padStart(2, "0");
+  const year = utcDate.getUTCFullYear();
+
+  const formattedDate = format
+    .replace("DD", day)
+    .replace("MM", month)
+    .replace("YYYY", year.toString());
+
+  return formattedDate;
 };

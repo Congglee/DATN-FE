@@ -27,6 +27,7 @@ const { values, errors, defineComponentBinds, handleSubmit } = useForm({
 });
 
 const contract = ref(null);
+const isShowConfirmCreateContract = ref(false);
 const contractTerm = ref("");
 const contractTermList = ref([
   { _id: "1", value: 1, title: "1 tháng" },
@@ -66,9 +67,11 @@ const handleCreateNewContract = handleSubmit(async () => {
   if (res.data) {
     contract.value = res.data.contract.content;
     toast.success("Tạo hợp đồng thành công");
+    isShowConfirmCreateContract.value = false;
   }
   if (res.error) {
     toast.error(res.error.data.message);
+    isShowConfirmCreateContract.value = false;
   }
 });
 
@@ -145,7 +148,7 @@ watch(
         </div>
       </div>
       <div class="tw-col-span-2 tw-flex tw-justify-center">
-        <g-button class="tw-mt-3" @click="handleCreateNewContract"
+        <g-button class="tw-mt-3" @click="isShowConfirmCreateContract = true"
           >Tạo hợp đồng</g-button
         >
       </div>
@@ -163,4 +166,10 @@ watch(
     <g-button class="tw-w-[150px]" @click="handleExport">Tải hợp đồng</g-button>
     <!-- <g-button class="tw-w-[150px]" @click="handleCreateNewContract">Cập nhật hợp đồng</g-button> -->
   </div>
+  <g-modal-confirm
+    v-model="isShowConfirmCreateContract"
+    title="Tạo hợp đồng?"
+    description="Hành động không thể hoàn tác, hãy chắc chắn những thông tin đã nhập là chính xác"
+    @ok="handleCreateNewContract"
+  ></g-modal-confirm>
 </template>

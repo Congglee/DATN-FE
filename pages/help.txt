@@ -1,8 +1,0 @@
-thứ tự khai báo trong thẻ 
-<script>
-//composable
-const route = useRoute()
-
-//state
-
-</script>
