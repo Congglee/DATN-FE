@@ -10,5 +10,11 @@ export const useStatisticalStore = defineStore({
       });
       return res;
     },
+    async getDeptStatistical() {
+      const res = await useFetchData(`${STATISTICAL.DEPT_STATISTICAL}`, {
+        method: "GET",
+      });
+      return res;
+    },
   },
 });

@@ -1,25 +1,39 @@
 <script setup>
 import { Doughnut } from "vue-chartjs";
-import { useRoomStore } from "@/store/room";
-const data = {
-  labels: ["Dịch vụ", "Tiền điện", "Tiền nước", "Tiền phòng"],
+
+const props = defineProps({
+  roomData: {
+    type: Object,
+    default: {},
+  },
+});
+
+const data = ref({
+  labels: ["Phòng trống", "Phòng đang cho thuê", "Phòng đang đặt cọc"],
   datasets: [
     {
-      data: [300, 50, 100, 500],
+      data: [
+        props.roomData.emptyRooms,
+        props.roomData.rentingRooms,
+        props.roomData.depositRooms,
+      ],
     },
   ],
-};
+});
 
-const roomStore = useRoomStore();
-
-const getStat = async () => {
-  const res = await roomStore.getRoomStatic();
-  if (res.data) {
-    console.log(res.data)
+watch(
+  () => props.roomData,
+  (newVal) => {
+    data.value = {
+      labels: ["Phòng trống", "Phòng đang cho thuê", "Phòng đang đặt cọc"],
+      datasets: [
+        {
+          data: [newVal.emptyRooms, newVal.rentingRooms, newVal.depositRooms],
+        },
+      ],
+    };
   }
-};
-
-getStat();
+);
 </script>
 <template>
   <div class="tw-max-h-[300px]">

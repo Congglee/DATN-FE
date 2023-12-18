@@ -93,8 +93,6 @@ const handleCreateLiquidateBill = async () => {
     isShowModalConfirmLiquidate.value = false;
     toast.success("Tạo hóa đơn thanh lý phòng thành công!");
     await liquidateStore.sendingLiquidateBillMail(res.data.liquidateBill._id);
-    // await roomStore.returnRoom(route.params.roomId);
-    // router.replace(``);
   }
   if (res.error) {
     toast.error(res.error.data.message);

@@ -4,6 +4,7 @@ import CompareIncomePieChart from "@/components/pages/analysis/CompareIncomePieC
 import { useRoomStore } from "@/store/room";
 import RoomStatusPieChart from "@/components/pages/analysis/RoomStatusPieChart.vue";
 import { useStatisticalStore } from "~/store/statistical";
+import DeptStatic from "@/components/pages/analysis/DeptStatic.vue";
 
 //composable
 const route = useRoute();
@@ -14,6 +15,7 @@ const statisticalStore = useStatisticalStore();
 //state
 const roomData = ref({});
 const revenueData = ref({});
+const deptData = ref([]);
 
 const getRoomStatic = async () => {
   const res = await roomStore.getRoomStatic();
@@ -32,6 +34,15 @@ const getRevenueInfo = async () => {
 
 getRevenueInfo();
 
+const getDeptInfo = async () => {
+  const res = await statisticalStore.getDeptStatistical();
+  if (res.data) {
+    deptData.value = res.data.message;
+  }
+};
+
+getDeptInfo();
+
 const handleBack = () => {
   useRouter().back();
 };
@@ -46,13 +57,13 @@ const handleBack = () => {
     </div>
     <div class="tw-grid tw-grid-cols-2 tw-gap-4">
       <div class="tw-p-10 tw-bg-white tw-rounded-xl">
-        <IncomeBarChart
-          :roomData="roomData"
-          :revenueData="revenueData"
-        />
+        <IncomeBarChart :roomData="roomData" :revenueData="revenueData" />
       </div>
       <div class="tw-p-10 tw-bg-white tw-rounded-xl">
         <CompareIncomePieChart :roomData="roomData" />
+      </div>
+      <div class="tw-p-10 tw-bg-white tw-rounded-xl">
+        <DeptStatic :deptData="deptData" v-if="deptData.length > 0" />
       </div>
       <!-- <div class="tw-p-10 tw-bg-white tw-rounded-xl">
         <RoomStatusPieChart :roomData="roomData" />

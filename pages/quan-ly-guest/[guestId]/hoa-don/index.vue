@@ -19,7 +19,7 @@ getBillInfo();
 <template>
   <div class="tw-grid tw-grid-cols-3 tw-gap-5">
     <nuxt-link
-      to="thanh-toan"
+      :to="'hoa-don/' + item._id + '/thanh-toan'"
       class="tw-group tw-relative tw-block tw-h-64 sm:tw-h-80 lg:tw-h-96"
       v-for="(item, index) in billInfo"
     >
