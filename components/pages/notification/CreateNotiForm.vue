@@ -13,6 +13,14 @@ const title = ref("");
 const content = ref("");
 
 const handleCreateNoti = async () => {
+  if(title.value === ""){
+    toast.error("Chưa nhập tiêu đề thông báo!")
+    return;
+  }
+  if (content.value === "") {
+    toast.error("Chưa nhập nội dung thông báo!")
+    return;
+  }
   const payload = {
     title: title.value,
     content: content.value,

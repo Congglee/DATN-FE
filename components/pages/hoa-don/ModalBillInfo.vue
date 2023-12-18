@@ -81,12 +81,12 @@ async function handleExport() {
   document.body.removeChild(fileDownload);
 }
 
-const generateBillPdf = async () => {
-  const res = await billStore.generateBillPdf(props.billId);
-  if (res.data) {
-    res.data.download = "hoa-don.pdf";
-  }
-};
+// const generateBillPdf = async () => {
+//   const res = await billStore.generateBillPdf(props.billId);
+//   if (res.data) {
+//     res.data.download = "hoa-don.pdf";
+//   }
+// };
 </script>
 <template>
   <div v-if="!billInfo"></div>
@@ -115,10 +115,7 @@ const generateBillPdf = async () => {
         label="Tên chủ trọ"
         :value="billInfo.detailBill.nameMember"
       />
-      <BillItemField
-        label="Thời gian"
-        :value="billInfo.monthYear"
-      />
+      <BillItemField label="Thời gian" :value="billInfo.monthYear" />
       <hr class="tw-mt-3" />
       <BillItemField
         label="Tiền phòng"
@@ -180,7 +177,15 @@ const generateBillPdf = async () => {
       <g-button @click="handleSendingMail" :loading="loadingSendEmail"
         >Thông báo</g-button
       >
-      <g-button @click="handleExport" :loading="loading">Tải hóa đơn</g-button>
+      <nuxt-link
+        :to="
+          'http://localhost:8080/api/bills/generate-bill-pdf/' + props.billId
+        "
+      >
+        <g-button @click="generateBillPdf" :loading="loading"
+          >Tải hóa đơn</g-button
+        >
+      </nuxt-link>
     </div>
   </div>
 </template>
