@@ -3,6 +3,7 @@ import { useRoomStore } from "~/store/room";
 import { VDataTable } from "vuetify/lib/labs/components.mjs";
 import { useLiquidateStore } from "~/store/liquidate-bill";
 import LiquidateBillItem from "../LiquidateBillItem.vue";
+import { useServiceStore } from "~/store/services";
 
 const route = useRoute();
 
@@ -46,13 +47,16 @@ const headers = [
 ];
 
 const liquidateStore = useLiquidateStore();
+const serviceStore = useServiceStore()
 
 const liquidateBills = ref([]);
 const monthYear = ref(getCurrentDateString());
+const services = ref([])
 
 const getAllLiquidateBill = async () => {
   const params = {
     monthDate: convertDateType(monthYear.value, "MM/YYYY"),
+    motel: route.params.motelId
   };
   const res = await liquidateStore.getAllLiquidateBill(params);
   if (res.data) {
@@ -60,6 +64,14 @@ const getAllLiquidateBill = async () => {
   }
 };
 getAllLiquidateBill();
+
+const getServiceInfo = async () => {
+  const res = await serviceStore.getAllServices();
+  if (res.data) {
+    services.value = res.data.services;
+  }
+};
+getServiceInfo();
 
 watch(
   () => monthYear.value,
@@ -75,7 +87,7 @@ watch(
   </div>
   <v-data-table :headers="headers" class="s-table" :items="liquidateBills">
     <template #item="{ item, index }">
-      <LiquidateBillItem :item="item" :index="index" />
+      <LiquidateBillItem :item="item" :index="index" :services="services"/>
     </template>
   </v-data-table>
 </template>

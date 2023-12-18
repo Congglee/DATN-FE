@@ -13,6 +13,10 @@ const props = defineProps({
     type: Object,
     default: {},
   },
+  services: {
+    type: Array,
+    default: [],
+  },
 });
 
 const toast = useToast();
@@ -33,19 +37,11 @@ const handleSendLiquidateMail = async () => {
     toast.success("Gửi thông báo thành công!");
   }
 };
-
-const getServiceInfo = async () => {
-  const res = await serviceStore.getAllServices();
-  if (res.data) {
-    services.value = res.data.services;
-  }
-};
-getServiceInfo();
 </script>
 <template>
   <tr>
     <td class="tw-text-center">{{ index + 1 }}</td>
-    <td>{{ item.roomId?.name }}</td>
+    <td>{{ item.billDetail.roomName }}</td>
     <td>{{ convertDateType(item?.billDate, "DD/MM/YYYY") }}</td>
     <td>{{ formatCurrency(item?.totalBill) }}</td>
     <td>{{ item.isPaid ? "Đã thanh toán" : "Chưa thanh toán" }}</td>

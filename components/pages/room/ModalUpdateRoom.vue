@@ -37,14 +37,19 @@ const { values, errors, defineComponentBinds, handleSubmit } = useForm({
     name: yup.string().trim().required("Tên không được để trống"),
     price: yup
       .number()
-      .required("Gía không được để trống")
       .typeError("Giá phòng phải là số")
-      .positive("Giá phòng không được âm"),
-    max_customer: yup.number().required("Số khách tối đa không được để trống"),
+      .positive("Giá phòng phải lớn hơn 0")
+      .required("Giá phòng không được để trống"),
+    max_customer: yup
+      .number()
+      .typeError("Khách tối đa phòng phải là số")
+      .positive("Khách tối đa phòng phải lớn hơn 0")
+      .required("Khách tối đa phòng không được để trống"),
     area: yup
       .number()
       .typeError("Diện tích phải là số")
-      .min(0, "Diện tích phải lớn hơn 0").required("Diện tích không được để trống"),
+      .min(0, "Diện tích phải lớn hơn 0")
+      .required("Diện tích không được để trống"),
   }),
   initialValues: {
     name: props.roomInfo.name,
@@ -112,7 +117,7 @@ const updateRoom = handleSubmit(async () => {
           label="Giá phòng"
           required
           v-bind="validateFormData.price"
-          :error="errors.name"
+          :error="errors.price"
         >
         </g-input>
         <g-input

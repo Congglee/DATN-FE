@@ -15,6 +15,6 @@ export default defineNuxtRouteMiddleware((to, from) => {
     return navigateTo("/dang-nhap-guest");
   }
   if (guestAccessToken && to.name === "quan-ly-guest") {
-    return navigateTo(`/quan-ly-guest/${decoded.id}`);
+    return navigateTo(`/quan-ly-guest/${decoded.id}/thong-tin-phong`);
   }
 });

@@ -10,7 +10,10 @@ const notificationStore = useNotificationStore();
 const notifications = ref([]);
 
 const getAllNoti = async () => {
-  const res = await notificationStore.getAllNotificationForOwner();
+  const params = {
+    motelId: useRoute().params.motelId,
+  };
+  const res = await notificationStore.getAllNotificationForOwner(params);
   if (res.data) {
     notifications.value = res.data.data;
   }

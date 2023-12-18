@@ -30,8 +30,7 @@ const { values, errors, defineComponentBinds, handleSubmit } = useForm({
     name: yup
       .string()
       .trim("Tên không được bỏ trống ")
-      .required("Tên dịch vụ là trường bắt buộc")
-      .min(3, "Tên tối thiểu 3 ký tự"),
+      .required("Tên dịch vụ là trường bắt buộc"),
     price: yup
       .number()
       .typeError("Giá dịch vụ phải là số")
@@ -40,8 +39,7 @@ const { values, errors, defineComponentBinds, handleSubmit } = useForm({
     type: yup
       .string()
       .trim("Loại dịch vụ không được bỏ trống ")
-      .required("Loại dịch vụ là trường bắt buộc")
-      .min(3, "Loại dịch vụ tối thiểu 3 ký tự"),
+      .required("Loại dịch vụ là trường bắt buộc"),
     isActive: yup.string().required("Trạng thái là trường bắt buộc"),
   }),
   initialValues: {

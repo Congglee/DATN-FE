@@ -33,7 +33,7 @@ const getBillInfo = async () => {
   const res = await billStore.getOneBill(props.billId);
   if (res.data) {
     billInfo.value = res.data.billData;
-    billDetail.value = res.data.detailBill;
+    console.log(billInfo.value);
     body.value = `<div class="ql-editor"><h2 class="ql-align-center" style="text-align: center;"><strong>Chi tiết hợp đồng</strong></h2><p><br></p><h4 class="ql-align-justify"><strong>Tên chủ trọ: </strong>${
       billInfo.value?.memberId?.name
     }</h4><p class="ql-align-justify"><strong>Thời hạn thanh toán: </strong>${convertDateType(
@@ -113,13 +113,16 @@ const generateBillPdf = async () => {
       <hr class="tw-w-[80%]" />
     </div>
     <div class="modal-change-information__form tw-flex tw-flex-col tw-gap-y-3">
-      <BillItemField label="Tên chủ trọ" :value="billDetail.nameMember" />
+      <BillItemField
+        label="Tên chủ trọ"
+        :value="billInfo.detailBill.nameMember"
+      />
       <hr class="tw-mt-3" />
       <BillItemField
         label="Tiền phòng"
-        :value="formatCurrency(billInfo.housePrice)"
+        :value="formatCurrency(billInfo.detailBill.roomPrice)"
       />
-      <span v-for="item in billInfo.roomId.serviceIds">
+      <span v-for="item in billInfo.detailBill.serviceOrther">
         <BillItemField
           v-if="item?.type !== 'ĐIỆN' && item?.type !== 'NƯỚC'"
           :label="'Tiền ' + item.name"
@@ -127,35 +130,28 @@ const generateBillPdf = async () => {
         />
       </span>
       <BillItemField
-        v-if="billInfo.roomElectricityUsed.electricityUsed !== 0"
+        v-if="billInfo.detailBill.electricityUsed !== 0"
         :label="
           'Số điện đã sử dụng: ' +
-          billInfo.roomElectricityUsed?.currentElectricityIndex +
+          billInfo.detailBill?.newElectricityIndex +
           ' - ' +
-          billInfo.roomElectricityUsed?.prevElectricityIndex +
+          billInfo.detailBill?.oldElectricityIndex +
           ' = ' +
-          billInfo.roomElectricityUsed?.electricityUsed
+          billInfo.detailBill?.electricityUsed
         "
-        :value="
-          formatCurrency(
-            billInfo.roomElectricityUsed?.electricityUsed *
-              electricService.price
-          )
-        "
+        :value="formatCurrency(billInfo.detailBill.electricityPrice)"
       />
       <BillItemField
-        v-if="billInfo.roomWaterUsed.waterUsed !== 0"
+        v-if="billInfo.detailBill.waterUsed !== 0"
         :label="
           'Số nước đã sử dụng: ' +
-          billInfo.roomWaterUsed?.currentWaterIndex +
+          billInfo.detailBill?.newWaterIndex +
           ' - ' +
-          billInfo.roomWaterUsed?.prevWaterIndex +
+          billInfo.detailBill?.oldWaterIndex +
           ' = ' +
-          billInfo.roomWaterUsed?.waterUsed
+          billInfo.detailBill?.waterUsed
         "
-        :value="
-          formatCurrency(billInfo.roomWaterUsed?.waterUsed * waterService.price)
-        "
+        :value="formatCurrency(billInfo.detailBill.waterPrice)"
       />
       <BillItemField
         label="Tổng hóa đơn"
