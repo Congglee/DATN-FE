@@ -27,7 +27,7 @@ const memberStore = useMemberStore();
 const { values, errors, defineComponentBinds, handleSubmit } = useForm({
   validationSchema: yup.object({
     name: yup.string().trim().required("Tên không được để trống"),
-    phone: yup.string().length(10, 'Độ dài số điện thoại phải là 10 chữ số'),
+    phone: yup.string().length(10, "Độ dài số điện thoại phải là 10 chữ số"),
     vehicle_number: yup.string(),
     identify_code: yup.string(),
     date_of_birth: yup.string(),
@@ -40,7 +40,6 @@ const { values, errors, defineComponentBinds, handleSubmit } = useForm({
     date_of_birth: props.userInfo.date_of_birth,
   },
 });
-
 
 const validateFormData = reactive({
   name: defineComponentBinds("name"),
@@ -63,7 +62,10 @@ const handleCreateRoomMember = handleSubmit(async () => {
     date_of_birth: dateOfBirthConverted,
     gender: gender.value,
   };
-  const res = await memberStore.updateRoomMember(payload, props.userInfo._id);
+  const res = await memberStore.updateRoomMember(
+    removeEmptyFields(payload),
+    props.userInfo._id
+  );
   if (res.data) {
     toast.success("Chỉnh sửa thông tin thành viên thành công!");
     fetchRoomEventBus.emit();
@@ -86,7 +88,7 @@ const handleCreateRoomMember = handleSubmit(async () => {
       <h5
         class="tw-text-center tw-text-xl tw-leading-6 tw-font-extrabold tw-mb-3 tw-mt-3"
       >
-        Thêm thành viên vào phòng
+        Cập nhật thông tin thành viên
       </h5>
     </div>
     <div class="modal-change-information__form">

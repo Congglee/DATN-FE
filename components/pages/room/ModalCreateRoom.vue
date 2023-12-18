@@ -45,7 +45,11 @@ const { values, errors, defineComponentBinds, handleSubmit } = useForm({
       .typeError("Số khách tối đa phải là số")
       .positive("Số khách tối đa phải lớn hơn 0")
       .required("Khách tối đa không được để trống"),
-    area: yup.string().required("Diện tích không được để trống"),
+    area: yup
+      .number()
+      .typeError("Diện tích phải là số")
+      .min(0, "Diện tích phải lớn hơn 0")
+      .required("Diện tích không được để trống"),
   }),
 });
 
@@ -93,7 +97,9 @@ const createRoom = handleSubmit(async () => {
       >
         <IconClose />
       </button>
-      <h5 class="tw-text-center tw-text-xl tw-leading-6 tw-font-extrabold tw-mb-3 tw-mt-3">
+      <h5
+        class="tw-text-center tw-text-xl tw-leading-6 tw-font-extrabold tw-mb-3 tw-mt-3"
+      >
         Thêm phòng trọ mới
       </h5>
     </div>

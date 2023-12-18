@@ -40,6 +40,7 @@ const roomInfo = ref(null);
 const getAllService = async () => {
   const payload = {
     isActive: true,
+    motelId: route.params.motelId,
   };
   const res = await serviceStore.getAllServices(payload);
   if (res.data) {

@@ -29,9 +29,20 @@ const memberStore = useMemberStore();
 const { values, errors, defineComponentBinds, handleSubmit } = useForm({
   validationSchema: yup.object({
     name: yup.string().trim().required("Tên không được để trống"),
-    email: yup.string().email("Định dạng email chưa hợp lệ").trim().required("Email không được để trống"),
-    phone: yup.string().trim().required("Số điện thoại không được để trống").length(10, 'Độ dài số điện thoại phải là 10 chữ số'),
-    date_start: yup.string().trim().required("Ngày bắt đầu không được để trống"),
+    email: yup
+      .string()
+      .email("Định dạng email chưa hợp lệ")
+      .trim()
+      .required("Email không được để trống"),
+    phone: yup
+      .string()
+      .trim()
+      .required("Số điện thoại không được để trống")
+      .length(10, "Độ dài số điện thoại phải là 10 chữ số"),
+    date_start: yup
+      .string()
+      .trim()
+      .required("Ngày bắt đầu không được để trống"),
     room_deposit_amount: yup
       .number()
       .typeError("Tiền cọc phải là số")
@@ -97,7 +108,9 @@ const handleCreateRoomHost = handleSubmit(async () => {
   }
   if (res.error) {
     loading.value = false;
-    toast.error(res.error.data.message);
+    if (res.error.data.message?.email) {
+      toast.error(res.error.data.message.email);
+    }
   }
 });
 </script>

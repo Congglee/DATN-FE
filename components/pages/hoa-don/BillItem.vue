@@ -21,6 +21,9 @@ const props = defineProps({
   },
 });
 
+console.log(props.item)
+
+
 const toast = useToast();
 const getBillEventBus = useEventBus(`get-bill-event-bus`);
 
@@ -44,7 +47,7 @@ const handleDeleteBill = async () => {
 <template>
   <tr class="tw-relative tw-group hover:tw-bg-[e3e3e3]">
     <td class="tw-text-center">{{ index + 1 }}</td>
-    <td>{{ item.roomId?.name }}</td>
+    <td>{{ item.billDetail.roomName }}</td>
     <!-- <td>{{ item.memberId?.name }}</td> -->
     <td>{{ formatCurrency(item.totalBill) }}</td>
     <td>{{ formatCurrency(item.paidAmount) }}</td>

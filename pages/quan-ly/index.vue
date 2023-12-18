@@ -49,10 +49,10 @@ fetchListMotel.on(() => {
           <div class="tw-flex tw-items-center tw-gap-x-3">
             <g-button
               @click="isDisplayAddMotel = true"
-              class="tw-w-[220px]"
+              class="tw-w-[250px]"
               variant="bezeled"
             >
-              <IconAddMotel class="tw-mr-1" /> Thêm nhà trọ</g-button
+              <IconAddMotel class="tw-mr-1" />Thêm nhà trọ</g-button
             >
             <v-dialog width="544" v-model="isDisplayAddMotel">
               <AddMotelForm @close="isDisplayAddMotel = false" />
