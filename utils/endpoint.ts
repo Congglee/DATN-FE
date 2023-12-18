@@ -153,6 +153,7 @@ export const NOTIFICATIONS = {
 
 export const STATISTICAL = {
   REVENUE_STATISTICAL: "/statistical/statistical-revenue",
+  DEPT_STATISTICAL: "/statistical/statistical-member-unpaid",
 };
 
 export const MAILS = {

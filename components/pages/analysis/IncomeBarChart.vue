@@ -12,7 +12,7 @@ const chartData = ref({
   labels: ["Tháng 08", "Tháng 09", "Tháng 10", "Tháng 11", "Tháng 12"],
   datasets: [
     {
-      label: "Data One",
+      label: "Doanh thu",
       backgroundColor: "#f87979",
       data: [0, 0, 0, 0, 0],
     },
