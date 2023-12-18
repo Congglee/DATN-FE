@@ -89,6 +89,7 @@ const tableHeaders = ref([
 const isShowConfirmAcceptDeposit = ref(false);
 const isShowConfirmDenineDeposit = ref(false);
 const isDisplayUpdateDeposits = ref(false);
+const isDisplayConfirmDeleteDeposit = ref(false);
 const roomInfo = ref({});
 
 // function
@@ -109,10 +110,19 @@ const handleDeniedDeposit = async () => {
   const payload = {
     status: "Hủy",
   };
-  const res = await depositStore.deleteDeposits(roomInfo.value._id);
+  const res = await depositStore.updateDeposits(roomInfo.value._id, payload);
   if (res.data) {
     toast.success("Hủy cọc thành công");
     isShowConfirmDenineDeposit.value = false;
+    emit("getListDeposit");
+  }
+};
+
+const handleDeleteDeposit = async () => {
+  const res = await depositStore.deleteDeposits(roomInfo.value._id);
+  if (res.data) {
+    toast.success("Xóa cọc thành công");
+    isDisplayConfirmDeleteDeposit.value = false;
     emit("getListDeposit");
   }
 };
@@ -186,6 +196,17 @@ const handleDeniedDeposit = async () => {
                 <IconEdit />
               </g-button>
             </span>
+            <span class="tw-flex tw-gap-x-3 tw-ml-3">
+              <g-button
+                @click="
+                  (isDisplayConfirmDeleteDeposit = true), (roomInfo = item)
+                "
+                variant="bezeled"
+                size="none"
+              >
+                <IconRemove />
+              </g-button>
+            </span>
           </td>
         </tr>
       </template>
@@ -207,6 +228,12 @@ const handleDeniedDeposit = async () => {
       title="Hủy bỏ cọc?"
       description="Hành động không thể hoàn tác"
       @ok="handleDeniedDeposit"
+    ></g-modal-confirm>
+    <g-modal-confirm
+      v-model="isDisplayConfirmDeleteDeposit"
+      title="Xóa cọc?"
+      description="Hành động không thể hoàn tác"
+      @ok="handleDeleteDeposit"
     ></g-modal-confirm>
   </div>
 </template>

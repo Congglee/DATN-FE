@@ -29,7 +29,7 @@ const getBillInfo = async () => {
   const res = await billStore.getOneBill(props.billId);
   if (res.data) {
     billInfo.value = res.data.billData;
-    billDetail.value = res.data.detailBill;
+    console.log(billInfo.value);
   }
 };
 
@@ -58,16 +58,13 @@ getBillInfo();
       <hr class="tw-w-[80%]" />
     </div>
     <div class="modal-change-information__form tw-flex tw-flex-col tw-gap-y-3">
-      <BillItemField
-        label="Tên phòng"
-        :value="billDetail.roomName"
-      />
+      <BillItemField label="Tên phòng" :value="billInfo.detailBill.roomName" />
       <hr class="tw-mt-3" />
       <BillItemField
         label="Tiền phòng"
-        :value="formatCurrency(billInfo.housePrice)"
+        :value="formatCurrency(billInfo.detailBill.roomPrice)"
       />
-      <span v-for="item in billInfo.roomId.serviceIds">
+      <span v-for="item in billInfo.detailBill.serviceOrther">
         <BillItemField
           v-if="item?.type !== 'ĐIỆN' && item?.type !== 'NƯỚC'"
           :label="'Tiền ' + item.name"
@@ -75,32 +72,28 @@ getBillInfo();
         />
       </span>
       <BillItemField
-        v-if="billInfo.roomElectricityUsed"
+        v-if="billInfo.detailBill.electricityUsed"
         :label="
           'Số điện đã sử dụng: ' +
-          billInfo.roomElectricityUsed?.currentElectricityIndex +
+          billInfo.detailBill?.newElectricityIndex +
           ' - ' +
-          billInfo.roomElectricityUsed?.prevElectricityIndex +
+          billInfo.detailBill?.oldElectricityIndex +
           ' = ' +
-          billInfo.roomElectricityUsed?.electricityUsed
+          billInfo.detailBill?.electricityUsed
         "
-        :value="
-          formatCurrency(
-            billInfo.roomElectricityUsed?.electricityUsed * electricityPrice
-          )
-        "
+        :value="formatCurrency(billInfo.detailBill?.electricityPrice)"
       />
       <BillItemField
-        v-if="billInfo.roomWaterUsed"
+        v-if="billInfo.detailBill.waterUsed"
         :label="
           'Số nước đã sử dụng: ' +
-          billInfo.roomWaterUsed?.currentWaterIndex +
+          billInfo.detailBill?.newWaterIndex +
           ' - ' +
-          billInfo.roomWaterUsed?.prevWaterIndex +
+          billInfo.detailBill?.oldWaterIndex +
           ' = ' +
-          billInfo.roomWaterUsed?.waterUsed
+          billInfo.detailBill?.waterUsed
         "
-        :value="formatCurrency(billInfo.roomWaterUsed?.waterUsed * waterPrice)"
+        :value="formatCurrency(billInfo.detailBill?.waterPrice)"
       />
       <BillItemField
         label="Tổng hóa đơn"

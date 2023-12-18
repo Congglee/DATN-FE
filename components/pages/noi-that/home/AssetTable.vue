@@ -50,10 +50,13 @@ const isShowConfirmDeleteAsset = ref(false);
 // function
 
 const getAllAssets = async () => {
-  const res = await assetStore.getAllAssets();
+  const params = {
+    motelId: route.params.motelId,
+  };
+  const res = await assetStore.getAllAssets(params);
   if (res.data) {
     assets.value = res.data.Interiors;
-    
+    console.log(res.data)
   }
 };
 

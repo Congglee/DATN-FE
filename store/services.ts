@@ -10,9 +10,7 @@ export const useServiceStore = defineStore({
     async getAllServices(payload: any) {
       const res = await useFetchData(`${SERVICES.GET_SERVICES}`, {
         method: "GET",
-        params: {
-          isActive: payload?.isActive,
-        },
+        params: payload
       });
       this.waterPrice = res.data.services.find(
         (el: any) => el.name === "Nước"

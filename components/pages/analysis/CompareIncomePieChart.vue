@@ -15,6 +15,7 @@ const roomStore = useRoomStore();
 const getStat = async () => {
   const res = await roomStore.getRoomStatic();
   if (res.data) {
+    console.log(res.data)
   }
 };
 
@@ -23,6 +24,6 @@ getStat();
 <template>
   <div class="tw-max-h-[300px]">
     <span class="tw-text-[16px] tw-font-bold">Tổng doanh thu</span>
-    <Doughnut :data="data" :options="options" />
+    <Doughnut :data="data" />
   </div>
 </template>

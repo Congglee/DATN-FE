@@ -15,6 +15,8 @@ const props = defineProps({
   },
 });
 
+console.log(props.roomInfo);
+
 //composable
 const toast = useToast();
 const route = useRoute();
@@ -78,6 +80,9 @@ const validateFormData = reactive({
   expectedArrivalDate: defineComponentBinds("expectedArrivalDate"),
 });
 
+console.log(validateFormData.bookingDate);
+console.log(validateFormData.expectedArrivalDate);
+
 const listRoom = ref([]);
 const room = ref(props.roomInfo.roomId);
 const loading = ref(false);
@@ -98,8 +103,14 @@ getAllRoom();
 
 const handleUpdateDepositInfo = handleSubmit(async () => {
   const payload = { ...values, note: note.value, roomId: room.value._id };
-  payload.bookingDate = convertDateType(validateFormData.bookingDate.modelValue, 'DD/MM/YYYY')
-  payload.expectedArrivalDate = convertDateType(validateFormData.expectedArrivalDate.modelValue, 'DD/MM/YYYY')
+  payload.bookingDate = convertDateType(
+    validateFormData.bookingDate.modelValue,
+    "DD/MM/YYYY"
+  );
+  payload.expectedArrivalDate = convertDateType(
+    validateFormData.expectedArrivalDate.modelValue,
+    "DD/MM/YYYY"
+  );
   const res = await depositsStore.updateDeposits(props.roomInfo._id, payload);
   if (res.data) {
     toast.success("Cập nhật thông tin cọc phòng thành công");

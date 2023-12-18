@@ -5,6 +5,7 @@ import { useServiceStore } from "~/store/services";
 import ModalCreateService from "~/components/pages/service/ModalCreateService.vue";
 
 // composable
+const route = useRoute();
 const fetchListServiceEventBus = useEventBus(`fetch-list-service`);
 
 // state
@@ -14,14 +15,16 @@ const isDisplayCreateService = ref(false);
 // store
 const serviceStore = useServiceStore();
 const getAllServices = async () => {
-  const res = await serviceStore.getAllServices();
+  const params = {
+    motelId: route.params.motelId,
+  };
+  const res = await serviceStore.getAllServices(params);
   if (res.data) {
     dataServices.value = res.data.services;
   }
 };
 
 getAllServices();
-const searchKeyword = ref("");
 
 fetchListServiceEventBus.on(() => {
   getAllServices();

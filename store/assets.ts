@@ -4,9 +4,10 @@ export const useAssetStore = defineStore({
   id: "assets",
   state: () => ({}),
   actions: {
-    async getAllAssets() {
+    async getAllAssets(params: any) {
       const res = await useFetchData(`${ASSETS.GET_ALL_ASSETS}`, {
         method: "GET",
+        params: params,
       });
       return res;
     },

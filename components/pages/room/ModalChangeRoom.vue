@@ -20,6 +20,7 @@ const emit = defineEmits(["close"]);
 const roomStore = useRoomStore();
 
 const emptyRooms = ref([]);
+const loading = ref(false);
 const newRoom = ref("Chọn phòng");
 
 const getListEmptyRoom = async () => {
@@ -37,22 +38,27 @@ const getListEmptyRoom = async () => {
 getListEmptyRoom();
 
 const moveMemberInRoom = async () => {
+  loading.value = true;
+
   const payload = {
     idRoomNew: newRoom.value._id,
     idRoomOld: props.roomInfo._id,
     dateMoveRoom: convertDateType(new Date(), "DD/MM/YYYY"),
   };
   if (!payload.idRoomNew) {
+    loading.value = false;
     toast.error("Bạn chưa chọn phòng cần chuyển sang!");
     return;
   }
   const res = await roomStore.moveMember(payload);
   if (res.data) {
+    loading.value = false;
     toast.success("Chuyển phòng thành công");
     emit("close");
     router.replace(`/quan-ly/${route.params.motelId}/danh-sach-phong`);
   }
   if (res.error) {
+    loading.value = false;
     toast.error(res.error.data.message);
   }
 };
@@ -82,7 +88,11 @@ const moveMemberInRoom = async () => {
               </template>
               Hủy
             </g-button>
-            <g-button @click="moveMemberInRoom" class="tw-w-[48%]">
+            <g-button
+              @click="moveMemberInRoom"
+              class="tw-w-[48%]"
+              :loading="loading"
+            >
               Xác nhận
             </g-button>
           </div>
