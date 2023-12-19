@@ -42,7 +42,7 @@ const headers = [
     title: "Hành động",
     sortable: false,
     key: "action",
-    width: "250px",
+    width: "370px",
   },
 ];
 
@@ -87,7 +87,7 @@ watch(
   </div>
   <v-data-table :headers="headers" class="s-table" :items="liquidateBills">
     <template #item="{ item, index }">
-      <LiquidateBillItem :item="item" :index="index" :services="services"/>
+      <LiquidateBillItem :item="item" :index="index" :services="services" @fetch-list-bill="getAllLiquidateBill"/>
     </template>
   </v-data-table>
 </template>

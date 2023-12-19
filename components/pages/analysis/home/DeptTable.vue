@@ -22,6 +22,11 @@ const headers = [
     key: "hostName",
   },
   {
+    title: "Tên nhà",
+    sortable: false,
+    key: "houseName",
+  },
+  {
     title: "Tên phòng",
     sortable: false,
     key: "roomName",
@@ -40,6 +45,7 @@ const headers = [
         <td>{{ index + 1 }}</td>
         <td>{{ item.memberName }}</td>
         <td>{{ item.roomName }}</td>
+        <td>{{ item.motelName }}</td>
         <td>{{ formatCurrency(item.totalBill) }}</td>
       </tr>
     </template>
