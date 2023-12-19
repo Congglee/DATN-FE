@@ -32,7 +32,13 @@ export const useGuestStore = defineStore({
       });
       return res;
     },
-    async guestRoomBill(id: string) {
+    async guestRoomAllBill() {
+      const res = await useFetchGuestData(`${GUEST.GET_INFO_BILL}`, {
+        method: "GET",
+      });
+      return res;
+    },
+    async guestRoomBill(id?: string) {
       const res = await useFetchGuestData(`${GUEST.GET_INFO_BILL}/${id}`, {
         method: "GET",
       });
