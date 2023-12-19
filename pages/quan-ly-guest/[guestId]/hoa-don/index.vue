@@ -9,7 +9,7 @@ const guestStore = useGuestStore();
 const billInfo = ref([]);
 
 const getBillInfo = async () => {
-  const res = await guestStore.guestRoomBill();
+  const res = await guestStore.guestRoomAllBill();
   if (res.data) {
     billInfo.value = res.data.data;
   }
