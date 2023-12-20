@@ -10,10 +10,7 @@ const notificationStore = useNotificationStore();
 const notifications = ref([]);
 
 const getAllNoti = async () => {
-  const params = {
-    motelId: useRoute().params.motelId,
-  };
-  const res = await notificationStore.getAllNotificationForOwner(params);
+  const res = await notificationStore.getAllNotificationForOwner();
   if (res.data) {
     notifications.value = res.data.data;
   }
@@ -26,9 +23,12 @@ getListNotiEventBus.on(() => {
 });
 </script>
 <template>
-  <div class="tw-grid tw-grid-cols-2 tw-gap-4">
-    <div v-for="item in notifications">
-      <NotiItemForOwner :item="item" />
+  <div class="tw-p-10">
+    <span class="tw-text-[20px] tw-font-bold">Danh sách thông báo</span>
+    <div class="tw-grid tw-grid-cols-2 tw-gap-4 tw-mt-3">
+      <div v-for="item in notifications">
+        <NotiItemForOwner :item="item" />
+      </div>
     </div>
   </div>
 </template>

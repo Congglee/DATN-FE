@@ -31,12 +31,6 @@ const menu = computed(() => {
       mainPath: "coc-phong",
     },
     {
-      text: "Thông báo",
-      path: `/quan-ly/${motelId}/thong-bao`,
-      icon: IconDichVu,
-      mainPath: "thong-bao",
-    },
-    {
       text: "Dịch vụ",
       path: `/quan-ly/${motelId}/dich-vu`,
       icon: IconDichVu,

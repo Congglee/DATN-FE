@@ -62,7 +62,7 @@ const handleBack = () => {
       <div class="tw-p-10 tw-bg-white tw-rounded-xl">
         <CompareIncomePieChart :roomData="roomData" />
       </div>
-      <div class="tw-p-10 tw-bg-white tw-rounded-xl">
+      <div class="tw-p-10 tw-bg-white tw-rounded-xl tw-col-span-2">
         <DeptStatic :deptData="deptData" v-if="deptData.length > 0" />
       </div>
       <!-- <div class="tw-p-10 tw-bg-white tw-rounded-xl">

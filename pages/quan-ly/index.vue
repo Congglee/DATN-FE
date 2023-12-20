@@ -47,17 +47,12 @@ fetchListMotel.on(() => {
         </h3>
         <div class="">
           <div class="tw-flex tw-items-center tw-gap-x-3">
-            <g-button
-              @click="isDisplayAddMotel = true"
-              class="tw-w-[250px]"
-              variant="bezeled"
-            >
-              <IconAddMotel class="tw-mr-1" />Thêm nhà trọ</g-button
-            >
-            <v-dialog width="544" v-model="isDisplayAddMotel">
-              <AddMotelForm @close="isDisplayAddMotel = false" />
-            </v-dialog>
-            <g-input></g-input>
+            <g-button @click="isDisplayAddMotel = true" variant="bezeled">
+              <span>Thêm nhà trọ</span>
+            </g-button>
+            <g-button @click="$router.push('/thong-bao')">
+              <span>Thông báo</span>
+            </g-button>
           </div>
         </div>
       </div>
@@ -78,4 +73,7 @@ fetchListMotel.on(() => {
     </aside>
   </section>
   <Footer></Footer>
+  <v-dialog width="544" v-model="isDisplayAddMotel">
+    <AddMotelForm @close="isDisplayAddMotel = false" />
+  </v-dialog>
 </template>

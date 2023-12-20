@@ -29,6 +29,10 @@ const handleRemoveNoti = async () => {
     isShowConfirmDeleteNoti.value = false;
     getListNotiEventBus.emit();
   }
+  if (res.error) {
+    isShowConfirmDeleteNoti.value = false;
+    toast.error(res.error.data.message);
+  }
 };
 
 const handleUpdateNotiStatus = async (e) => {
@@ -101,19 +105,17 @@ const handleUpdateNotiStatus = async (e) => {
           {{ item.content }}
         </p>
 
-        <!-- <div class="tw-mt-2 sm:tw-flex sm:tw-items-center">
-          <span class="tw-hidden sm:tw-block" aria-hidden="true">&middot;</span>
-
+        <div class="tw-mt-2 sm:tw-flex sm:tw-items-center">
           <p class="tw-hidden sm:tw-block sm:tw-text-xs sm:tw-text-gray-500">
-            Người gửi
+            Thông báo của:
             <a
               href="#"
-              class="tw-font-medium tw-underline hover:tw-text-gray-700"
+              class="tw-font-medium hover:tw-text-gray-700"
             >
-              John
+              {{ item.roomId.name }} (nhà {{ item.roomId.motelId.name }})
             </a>
           </p>
-        </div> -->
+        </div>
       </div>
     </div>
 

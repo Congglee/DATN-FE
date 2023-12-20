@@ -44,7 +44,8 @@ const tab = ref("");
 </script>
 <template>
   <div class="tw-pt-[24px]">
-    <v-card class="conduct-table">
+    <span class="tw-text-[16px] tw-font-bold">Danh sách nợ</span>
+    <v-card class="conduct-table tw-mt-4">
       <v-tabs v-model="tab" class="s-tabs" id="">
         <v-tab v-for="item in props.deptData" :value="item._id">
           <span class="tw-flex tw-items-center">{{ item._id }}</span>
